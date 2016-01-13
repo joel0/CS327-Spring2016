@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "hyperbinary.h"
 
-int main(char* args[]) {
+int main(int argc, char* argv[]) {
     printHyperbinary(100000000);
     return 0;
 }
