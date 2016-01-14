@@ -1,6 +1,8 @@
-//
-// Created by joelm on 2016-01-13.
-//
+/*
+ * Created by Joel May on 2016-01-13.
+ *
+ * This program calculates the specified number of rational numbers.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,20 +11,21 @@
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         printf("Please provide a count of numbers to calculate (n).\n");
-        return 1;
+        return -1;
     }
     int count;
-    sscanf(argv[1], "%d", &count);
+    count = atoi(argv[1]);
     printRationals(count);
     return 0;
 }
 
+/*
+ * count:   the number of rational numbers to print
+ *
+ * Prints the desired number of rational numbers, each on a separate line.
+ */
 void printRationals(int count) {
     Fraction* tree;
-//    int* numeratorTree;
-//    int* denominatorTree;
-//    numeratorTree = malloc(sizeof(int) * count);
-//    denominatorTree = malloc(sizeof(int) * count);
     tree = malloc(sizeof(Fraction) * count);
     calculateRationalsRecursive(count, 1, 1, 1, tree);
     for (int i = 0; i < count; i++) {
@@ -30,6 +33,12 @@ void printRationals(int count) {
     }
 }
 
+/*
+ * node:    the node in the provided tree to print
+ * tree:    the tree (stored in an array) containing the node to print
+ *
+ * Prints the desired node from the tree.
+ */
 void printNode(int node, Fraction* tree) {
     printf("%d/%d\n", tree[node].numerator, tree[node].denominator);
 }
