@@ -1,3 +1,6 @@
+2016-01-14
+Added a README and Makefile
+
 2016-01-13
 Created part 2 and tested it.  Everything seems to be working.  I believe a queue could make it run faster, but the
 current implementation gets the job done.
