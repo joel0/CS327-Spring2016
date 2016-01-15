@@ -5,18 +5,22 @@
 #ifndef PROJECT_RATIONALNUMBERS_H
 #define PROJECT_RATIONALNUMBERS_H
 
+struct node {
+    int depth;
+    int inset;
+};
+#define Node struct node
+
 struct fraction {
     int numerator;
     int denominator;
 };
 #define Fraction struct fraction
 
-void printRationals(int count);
-void printNode(int node, Fraction* tree);
-void calculateRationalsRecursive(int count, int numerator, int denominator, int node, Fraction* tree);
-int calculateLeftChildren(int count);
-int calculateRightChildren(int count);
-int leftChild(int n);
-int rightChild(int n);
+void printFraction(Fraction f);
+void printRational(int index);
+Fraction calculateNode(int index);
+Fraction calculateNodeRecursive(int width, int relativeInset, Fraction value);
+Node locationOfNode(int node);
 
 #endif //PROJECT_RATIONALNUMBERS_H

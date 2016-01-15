@@ -1,3 +1,7 @@
+2016-01-15
+Re-created part 2 to conform to the specification.  It was much easier to implement, but I enjoyed the challenge of
+implementing in-order traversal without a queue.  I believe the code is done and ready to submit.
+
 2016-01-14
 A bit of documentation in rationalNumbers
 
