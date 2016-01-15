@@ -10,7 +10,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 set(SOURCE_FILES )
 set(PROJECT0.0 project0/src/hyperbinary.c)
-set(PROJECT0.1 project0/src/rationalNumbers.c)
+set(PROJECT0.1 project0/src/rationalNumber.c)
 #set(PROJECT1 project1.c)
 add_executable(project0.0 ${SOURCE_FILES} ${PROJECT0.0})
 add_executable(project0.1 ${SOURCE_FILES} ${PROJECT0.1})

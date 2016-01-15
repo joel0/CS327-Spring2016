@@ -1,10 +1,10 @@
-Hyperbinary Sequence Generator And Unique Rational Number Lister
+Hyperbinary Sequence Generator And Rational Number Finder
 Created by Joel May.
 
 --- Summary ---
 This project is two parts.  The first part generates the first 100,000,000 numbers
-of a hyperbinary sequence.  The second part generates the first unique rational numbers.
+of a hyperbinary sequence.  The second part finds the nth rational number.
 
 --- Usage ---
 -run make
--run bin/hyperbinary or bin/rationalNumbers <n>
+-run bin/hyperbinary or bin/rationalNumber <n>
