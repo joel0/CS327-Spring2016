@@ -15,3 +15,9 @@ environment:
 
 clean:
 	rm -f $(EXEDIR)/* $(ODIR)/*.o
+
+tar: clean
+	cp -rf . ../may_joel.assignment-1.01/
+	mv ../may_joel.assignment-1.01/ ./may_joel.assignment-1.01/
+	tar cvfz may_joel.assignment-1.01.tar.gz may_joel.assignment-1.01/
+	rm -rf may_joel.assignment-1.01
