@@ -2,7 +2,7 @@ CC=gcc
 SDIR=src
 ODIR=obj
 EXEDIR=bin
-CFLAGS=-g -Wall -Werror -std=c11
+CFLAGS=-g -Wall -Werror -std=c11 -lm
 
 all: environment $(ODIR)/main.o
 	$(CC) -o $(EXEDIR)/main $(ODIR)/main.o $(CFLAGS)
