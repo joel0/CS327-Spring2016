@@ -14,6 +14,8 @@
 #define ROOM_HEIGHT_MIN 2
 #define ROOM_HEIGHT_MAX 10
 
+#define ROCK_HARDNESS_MAX 5
+
 enum material_enum {
     room = '.',
     corridor = '#',

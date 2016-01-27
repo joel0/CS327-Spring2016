@@ -63,10 +63,10 @@ void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2) {
     int curX, curY;
     direction_t desiredDir;
 
-    curX = room1.x + room1.width / 2;
-    curY = room1.y + room1.height / 2;
-    targetX = room2.x + room2.width / 2;
-    targetY = room2.y + room2.height / 2;
+    curX = room1.x + (rand() % room1.width);
+    curY = room1.y + (rand() % room1.height);
+    targetX = room2.x + (rand() % room2.width);
+    targetY = room2.y + (rand() % room2.height);
 
     do {
         desiredDir = calculateDirection(curX, curY, targetX, targetY);
@@ -93,6 +93,7 @@ void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2) {
         }
         if (grid[curY][curX].material == rock) {
             grid[curY][curX].material = corridor;
+            grid[curY][curX].hardness = -1;
         }
     } while (desiredDir != nowhere);
 }
@@ -116,8 +117,8 @@ int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount) {
     int generationTry = 0;
     room_t room;
     do {
-        room.x = 1 + rand() % (WIDTH - ROOM_WIDTH_MAX - 2); // 2 for the immutable border
-        room.y = 1 + rand() % (HEIGHT - ROOM_HEIGHT_MAX - 2);
+        room.x = 1 + rand() % (WIDTH - 2); // 2 for the immutable border
+        room.y = 1 + rand() % (HEIGHT - 2);
         room.width = ROOM_WIDTH_MIN + rand() % (ROOM_WIDTH_MAX - ROOM_WIDTH_MIN);
         room.height = ROOM_HEIGHT_MIN + rand() % (ROOM_HEIGHT_MAX - ROOM_HEIGHT_MIN);
         if (generationTry++ >= 3000) {
@@ -129,6 +130,10 @@ int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount) {
 }
 
 int validateRoom(room_t* rooms, int roomCount, room_t room) {
+    if (room.x + room.width > WIDTH - 1 ||
+            room.y + room.height > HEIGHT - 1) {
+        return -1;
+    }
     for (int i = 0; i < roomCount; i++) {
         if (validateTwoRooms(rooms[i], room) != 0) {
             return -1;
@@ -173,6 +178,7 @@ gridCell_t** populateGrid(room_t* rooms, int roomCount) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             grid[y][x].material = rock;
+            grid[y][x].hardness = rand() % ROCK_HARDNESS_MAX;
         }
     }
     populateRooms(grid, rooms, roomCount);
@@ -187,6 +193,7 @@ void populateRooms(gridCell_t** grid, room_t* rooms, int roomCount) {
                 x = rooms[i].x + xOffset;
                 y = rooms[i].y + yOffset;
                 grid[y][x].material = room;
+                grid[y][x].hardness = -1;
             }
         }
     }
