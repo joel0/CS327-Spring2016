@@ -2,58 +2,114 @@
 // Created by joelm on 2016-01-25.
 //
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 #include "main.h"
 
-int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount);
-int validateRoom(room_t* rooms, int roomCount, room_t room);
-int validateTwoRooms(room_t room1, room_t room2);
-void printGrid(gridCell_t** grid);
-gridCell_t** populateGrid(room_t* rooms, int roomCount);
-void populateRooms(gridCell_t** grid, room_t* rooms, int roomCount);
-int malloc2DGrid(gridCell_t*** grid, int width, int height);
-void free2DGrid(gridCell_t** grid, int height);
-
 int main(int argc, char* argv[]) {
     int roomCount;
-    unsigned int seed = (unsigned int)time(NULL);
+    unsigned int seed = (unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 
-    roomCount = 5 + (rand() % 6);
+    roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
     printf("Room count: %d\n", roomCount);
 
     room_t rooms[roomCount];
-    
-//    rooms[0].x = 5;
-//    rooms[0].y = 5;
-//    rooms[0].height = 3;
-//    rooms[0].width = 4;
-//    rooms[1].x = 30;
-//    rooms[1].y = 10;
-//    rooms[1].height = 8;
-//    rooms[1].width = 5;
-//    generateRoom(&rooms[0], rooms, 0);
-//    generateRoom(&rooms[1], rooms, 1);
+
     for (int i = 0; i < roomCount; i++) {
         generateRoom(&rooms[i], rooms, i);
     }
 
-//    printf("rooms[0]: (%d, %d) (%dx%d)\n", rooms[0].x, rooms[0].y, rooms[0].width, rooms[0].height);
-//    printf("rooms[1]: (%d, %d) (%dx%d)\n", rooms[1].x, rooms[1].y, rooms[1].width, rooms[1].height);
     for (int i = 0; i < roomCount; i++) {
         printf("rooms[%d]: (%d, %d) (%dx%d)\n", i, rooms[i].x, rooms[i].y, rooms[i].width, rooms[i].height);
     }
 
     gridCell_t** dungeonGrid = populateGrid(rooms, roomCount);
+    connectRooms(dungeonGrid, rooms, roomCount);
     printGrid(dungeonGrid);
     free2DGrid(dungeonGrid, HEIGHT);
 
-    printf("Done\n");
     return 0;
+}
+
+int roomDist(room_t room1, room_t room2) {
+    return (int)sqrt(pow(abs(room1.x - room2.x), 2) + pow(abs(room1.y - room2.y), 2));
+}
+
+void connectRooms(gridCell_t **grid, room_t* rooms, int roomCount) {
+    connectTwoRooms(grid, rooms[0], rooms[1]);
+    int leastDist, leastDistI;
+    int tmpDist;
+    for (int i = 2; i < roomCount; i++) {
+        leastDistI = 0;
+        leastDist = roomDist(rooms[0], rooms[i]);
+        for (int j = 1; j < i; j++) {
+            tmpDist = roomDist(rooms[j], rooms[i]);
+            if (tmpDist < leastDist) {
+                leastDist = tmpDist;
+                leastDistI = j;
+            }
+        }
+        connectTwoRooms(grid, rooms[i], rooms[leastDistI]);
+    }
+}
+
+void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2) {
+    int targetX, targetY;
+    int curX, curY;
+    direction_t desiredDir;
+
+    curX = room1.x + room1.width / 2;
+    curY = room1.y + room1.height / 2;
+    targetX = room2.x + room2.width / 2;
+    targetY = room2.y + room2.height / 2;
+
+    do {
+        desiredDir = calculateDirection(curX, curY, targetX, targetY);
+        if ((curX + curY) % 2) {
+            if (desiredDir & north) {
+                curX--;
+            } else if (desiredDir & south) {
+                curX++;
+            } else if (desiredDir & west) {
+                curY--;
+            } else if (desiredDir & east) {
+                curY++;
+            }
+        } else {
+            if (desiredDir & east) {
+                curY++;
+            } else if (desiredDir & west) {
+                curY--;
+            } else if (desiredDir & south) {
+                curX++;
+            } else if (desiredDir & north) {
+                curX--;
+            }
+        }
+        if (grid[curY][curX].material == rock) {
+            grid[curY][curX].material = corridor;
+        }
+    } while (desiredDir != nowhere);
+}
+
+direction_t calculateDirection(int x, int y, int targetX, int targetY) {
+    direction_t dir = nowhere;
+    if (targetX > x) {
+        dir |= south;
+    } else if (targetX < x) {
+        dir |= north;
+    }
+    if (targetY > y) {
+        dir |= east;
+    } else if (targetY < y) {
+        dir |= west;
+    }
+    return dir;
 }
 
 int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount) {
@@ -87,17 +143,16 @@ int validateTwoRooms(room_t room1, room_t room2) {
     boundingRoom1.x = room1.x - 1;
     boundingRoom1.y = room1.y - 1;
     boundingRoom1.height = room1.height + 2;
-    boundingRoom1.width = room1.height + 2;
+    boundingRoom1.width = room1.width + 2;
 
-    for (int y2 = room2.y; y2 < room2.y + room2.height; y2++) {
-        for (int x2 = room2.x; x2 < room2.x + room2.width; x2++) {
-            if (x2 >= boundingRoom1.x && x2 <= boundingRoom1.x + boundingRoom1.width &&
-                    y2 >= boundingRoom1.y && y2 <= boundingRoom1.y + boundingRoom1.height) {
-                return -1;
-            }
-        }
+    // Check that room2 is outside of room1 in each direction.
+    if (room2.y + room2.height < boundingRoom1.y || // above
+            room2.y > boundingRoom1.y + boundingRoom1.height || // below
+            room2.x + room2.width < boundingRoom1.x || // left
+            room2.x > boundingRoom1.x + boundingRoom1.width /* right */) {
+        return 0;
     }
-    return 0;
+    return -1;
 }
 
 void printGrid(gridCell_t** grid) {
@@ -131,7 +186,7 @@ void populateRooms(gridCell_t** grid, room_t* rooms, int roomCount) {
             for (int xOffset = 0; xOffset < rooms[i].width; xOffset++) {
                 x = rooms[i].x + xOffset;
                 y = rooms[i].y + yOffset;
-                grid[y][x].material = room1;
+                grid[y][x].material = room;
             }
         }
     }
