@@ -1,0 +1,17 @@
+commit 924e4ec44f126740927be454b749184d670b24fc
+Author: Joel May <joel.may@live.com>
+Date:   Tue Jan 26 20:33:50 2016 -0600
+
+    Room generation and rendering implemented.  Path finding for room linking implemented.  Dungeon printing implemented.
+
+commit bd6fb2aa06a759d95f68dbf69bea9bfaae4e0c95
+Author: Joel May <joel.may@live.com>
+Date:   Mon Jan 25 23:51:48 2016 -0600
+
+    It generates rooms, but the overlap checking does not work.
+
+commit e733b2d90918ce618f60c080a66e457a6d29f50d
+Author: Joel May <joel.may@live.com>
+Date:   Mon Jan 25 21:04:23 2016 -0600
+
+    Project 1.01 started
