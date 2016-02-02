@@ -8,7 +8,7 @@
 #include <time.h>
 #include <string.h>
 #include <libgen.h>
-#include <endian.h>
+#include <inttypes.h>
 
 #include "main.h"
 
