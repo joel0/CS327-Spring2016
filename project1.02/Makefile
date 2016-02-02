@@ -14,7 +14,7 @@ environment:
 	mkdir -p bin obj
 
 clean:
-	rm -f $(EXEDIR)/* $(ODIR)/*.o
+	rm -f $(EXEDIR)/* $(ODIR)/*.o may_joel.assignment-1.02.tar.gz
 
 tar: clean
 	cp -rf . ../may_joel.assignment-1.02/
