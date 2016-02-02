@@ -5,6 +5,8 @@
 #ifndef PROJECT_MAIN_H
 #define PROJECT_MAIN_H
 
+#define VERSION 0
+
 #define WIDTH 80
 #define HEIGHT 21
 #define MIN_ROOMS 5
@@ -46,6 +48,7 @@ typedef struct gridCell_struct {
     enum material_enum material;
 } gridCell_t;
 
+int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName);
 int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* fileName);
 void showUsage(char* name);
 char* dungeonFileName();

@@ -13,8 +13,7 @@
 #include "main.h"
 
 int main(int argc, char* argv[]) {
-    printf("path %s\n", dungeonFileName());
-
+    int errLevel;
     gridCell_t** dungeonGrid;
     room_t* rooms;
     int roomCount;
@@ -35,10 +34,11 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
+    // load or generate dungeon
     if (load) {
-        int errLevel = loadDungeon(&dungeonGrid, &roomCount, &rooms, dungeonFileName());
+        errLevel = loadDungeon(&dungeonGrid, &roomCount, &rooms, dungeonFileName());
         if (errLevel) {
-            printf("Failed to load the dungeon.\n");
+            printf("Failed to load the dungeon.  Read error %d\n", errLevel);
             return -1;
         }
         populateRooms(dungeonGrid, rooms, roomCount);
@@ -50,12 +50,85 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // print dungeon
     printRooms(roomCount, rooms);
     printGrid(dungeonGrid);
+
+    // save dungeon
+    if (save) {
+        errLevel = saveDungeon(dungeonGrid, roomCount, rooms, dungeonFileName());
+        if (errLevel) {
+            printf("Failed to save the dungeon.  Save error %d\n", errLevel);
+            return -1;
+        }
+    }
 
     // Clean up
     free2DGrid(dungeonGrid, HEIGHT);
     free(rooms);
+    return 0;
+}
+
+int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
+    uint32_t fileSize;
+    uint32_t version;
+    FILE* file;
+    size_t bytesWritten;
+
+    fileSize = (uint32_t)(6 + 4 + 4 + 1482 + roomCount * 4); // magic bytes + file version + file size + hardness grid
+                                                             // + rooms
+
+    // big endian conversion
+    version = htobe32(VERSION);
+    fileSize = htobe32(fileSize);
+
+    file = fopen(fileName, "w");
+    if (file == NULL) {
+        // error opening the file for writing
+        return -1;
+    }
+
+    // magic bytes
+    bytesWritten = fwrite("RLG327", sizeof(char), 6, file);
+    if (bytesWritten != 6) {
+        // error writing the magic bytes
+        return -2;
+    }
+
+    // file version
+    bytesWritten = fwrite(&version, sizeof(version), 1, file);
+    if (bytesWritten != 1) {
+        // error writing the version
+        return -3;
+    }
+
+    // file size
+    bytesWritten = fwrite(&fileSize, sizeof(fileSize), 1, file);
+    if (bytesWritten != 1) {
+        // error writing the file size
+        return -4;
+    }
+
+    // hardness grid
+    // We do not save the immutable border
+    for (int y = 0; y < HEIGHT - 2; y++) {
+        for (int x = 0; x < WIDTH - 2; x++) {
+            bytesWritten = fwrite(&grid[y + 1][x + 1].hardness, sizeof(grid[y + 1][x + 1].hardness), 1, file);
+            if (bytesWritten != 1) {
+                // error writing hardness
+                return -5;
+            }
+        }
+    }
+
+    // rooms
+    for (int r = 0; r < roomCount; r++) {
+        bytesWritten = fwrite(&rooms[r], sizeof(*rooms), 1, file);
+        if (bytesWritten != 1) {
+            // error writing a room
+            return -6;
+        }
+    }
     return 0;
 }
 
