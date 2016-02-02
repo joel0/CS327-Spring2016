@@ -14,7 +14,7 @@
 #define ROOM_HEIGHT_MIN 2
 #define ROOM_HEIGHT_MAX 10
 
-#define ROCK_HARDNESS_MAX 5
+#define ROCK_HARDNESS_MAX 254
 
 enum material_enum {
     room = '.',
@@ -35,17 +35,22 @@ typedef enum direction_enum {
 } direction_t;
 
 typedef struct room_struct {
-    int x;
-    int y;
-    int height;
-    int width;
+    uint8_t x:8;
+    uint8_t y:8;
+    uint8_t width:8;
+    uint8_t height:8;
 } room_t;
 
 typedef struct gridCell_struct {
-    int hardness;
+    uint8_t hardness;
     enum material_enum material;
 } gridCell_t;
 
+int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* fileName);
+void showUsage(char* name);
+char* dungeonFileName();
+void printRooms(int roomCount, room_t* rooms);
+int generateDungeon(gridCell_t*** gridPtr, room_t** roomsPtr);
 int roomDist(room_t room1, room_t room2);
 void connectRooms(gridCell_t **grid, room_t* rooms, int roomCount);
 void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2);
