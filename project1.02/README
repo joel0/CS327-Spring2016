@@ -1,0 +1,9 @@
+Dungeon Generator with Load/Save
+
+The dungeon generator from the previous assignment has been extended to support saving and loading dungeons.  The save
+file is hard coded to be in ~/.rlg327/dungeon.  The folder must exist before trying to load or save a dungeon.  The
+flag --save will generated a dungeon, print it, then save it.  The flag --load will load a dungeon and print it.
+
+INSTRUCTIONS
+1. Run make
+2. Run "bin/main --help" to see the usage
