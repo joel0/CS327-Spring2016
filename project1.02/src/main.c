@@ -164,7 +164,7 @@ int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* 
         // Error reading version
         return -4;
     }
-    if (version != 0) {
+    if (version != VERSION) {
         // file version is newer than this program's version
         return -5;
     }
