@@ -312,25 +312,39 @@ void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2) {
 
     do {
         desiredDir = calculateDirection(curX, curY, targetX, targetY);
-        if ((curX + curY) % 2) {
-            if (desiredDir & north) {
-                curX--;
-            } else if (desiredDir & south) {
-                curX++;
-            } else if (desiredDir & west) {
+        if (desiredDir == northeast) {
+            if (grid[curY - 1][curX].hardness < grid[curY][curX + 1].hardness) {
                 curY--;
-            } else if (desiredDir & east) {
+            } else {
+                curX++;
+            }
+        } else if (desiredDir == southeast) {
+            if (grid[curY + 1][curX].hardness < grid[curY][curX + 1].hardness) {
                 curY++;
+            } else {
+                curX++;
+            }
+        } else if (desiredDir == southwest) {
+            if (grid[curY + 1][curX].hardness < grid[curY][curX - 1].hardness) {
+                curY++;
+            } else {
+                curX--;
+            }
+        } else if (desiredDir == northwest) {
+            if (grid[curY - 1][curX].hardness < grid[curY][curX - 1].hardness) {
+                curY--;
+            } else {
+                curX--;
             }
         } else {
-            if (desiredDir & east) {
-                curY++;
-            } else if (desiredDir & west) {
+            if (desiredDir & north) {
                 curY--;
             } else if (desiredDir & south) {
-                curX++;
-            } else if (desiredDir & north) {
+                curY++;
+            } else if (desiredDir & west) {
                 curX--;
+            } else if (desiredDir & east) {
+                curX++;
             }
         }
         if (grid[curY][curX].material == rock) {
@@ -343,14 +357,14 @@ void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2) {
 direction_t calculateDirection(int x, int y, int targetX, int targetY) {
     direction_t dir = nowhere;
     if (targetX > x) {
-        dir |= south;
+        dir |= east;
     } else if (targetX < x) {
-        dir |= north;
+        dir |= west;
     }
     if (targetY > y) {
-        dir |= east;
+        dir |= south;
     } else if (targetY < y) {
-        dir |= west;
+        dir |= north;
     }
     return dir;
 }
