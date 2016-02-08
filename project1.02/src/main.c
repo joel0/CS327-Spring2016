@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     // parse arguments
     int save = 0;
     int load = 0;
-    if (argc == 2) {
+    for (int i = 0; i < argc; i++) {
         if (strcmp(argv[1], "--save") == 0) {
             save = 1;
         } else if (strcmp(argv[1], "--load") == 0) {
@@ -29,9 +29,6 @@ int main(int argc, char* argv[]) {
             showUsage(argv[0]);
             return 0;
         }
-    } else if (argc > 1) {
-        showUsage(argv[0]);
-        return 0;
     }
 
     // load or generate dungeon
