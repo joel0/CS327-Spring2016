@@ -4,7 +4,7 @@ ODIR=obj
 EXEDIR=bin
 CFLAGS=-g -Wall -Werror -std=gnu11 -lm
 TARNAME=may_joel.assignment-1.03
-OFILES=$(ODIR)/main.o $(ODIR)/dungeon.o
+OFILES=$(ODIR)/main.o $(ODIR)/dungeon.o $(ODIR)/path.o $(ODIR)/path.o $(ODIR)/binheap.o
 
 all: environment $(OFILES)
 	$(CC) -o $(EXEDIR)/main $(OFILES) $(CFLAGS)
