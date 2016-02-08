@@ -5,6 +5,8 @@
 #ifndef PROJECT_DUNGEON_H
 #define PROJECT_DUNGEON_H
 
+#include <inttypes.h>
+
 enum material_enum {
     room = '.',
     corridor = '#',
