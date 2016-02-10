@@ -3,7 +3,6 @@
 //
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "main.h"
@@ -11,9 +10,7 @@
 
 int main(int argc, char* argv[]) {
     int errLevel;
-    gridCell_t** dungeonGrid;
-    room_t* rooms;
-    int roomCount;
+    dungeon_t dungeon;
     // parse arguments
     int save = 0;
     int load = 0;
@@ -30,27 +27,27 @@ int main(int argc, char* argv[]) {
 
     // load or generate dungeon
     if (load) {
-        errLevel = loadDungeon(&dungeonGrid, &roomCount, &rooms, dungeonFileName());
+        errLevel = loadDungeon(&dungeon, dungeonFileName());
         if (errLevel) {
             printf("Failed to load the dungeon.  Read error %d\n", errLevel);
             return -1;
         }
-        populateRooms(dungeonGrid, rooms, roomCount);
+        populateRooms(dungeon);
     } else {
-        roomCount = generateDungeon(&dungeonGrid, &rooms);
-        if (roomCount < 0) {
+        errLevel = generateDungeon(&dungeon);
+        if (errLevel) {
             printf("Failed to allocate memory for the dungeon grid.\n");
-            return roomCount;
+            return errLevel;
         }
     }
 
     // print dungeon
-    printRooms(roomCount, rooms);
-    printGrid(dungeonGrid);
+    printRooms(dungeon.roomCount, dungeon.rooms);
+    printGrid(dungeon.grid);
 
     // save dungeon
     if (save) {
-        errLevel = saveDungeon(dungeonGrid, roomCount, rooms, dungeonFileName());
+        errLevel = saveDungeon(dungeon, dungeonFileName());
         if (errLevel) {
             printf("Failed to save the dungeon.  Save error %d\n", errLevel);
             return -1;
@@ -58,8 +55,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Clean up
-    destroyDungeon(dungeonGrid);
-    free(rooms);
+    destroyDungeon(dungeon);
     return 0;
 }
 

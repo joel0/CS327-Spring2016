@@ -37,13 +37,21 @@ typedef struct gridCell_struct {
     enum material_enum material;
 } gridCell_t;
 
-int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName);
-int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* fileName);
-void destroyDungeon(gridCell_t** gridPtr);
+typedef struct dungeon_struct {
+    int PCX;
+    int PCY;
+    gridCell_t** grid;
+    room_t* rooms;
+    int roomCount;
+} dungeon_t;
+
+int saveDungeon(dungeon_t dungeon, char* fileName);
+int loadDungeon(dungeon_t* dungeonPtr, char* fileName);
+void destroyDungeon(dungeon_t dungeon);
 void showUsage(char* name);
 char* dungeonFileName();
 void printRooms(int roomCount, room_t* rooms);
-int generateDungeon(gridCell_t*** gridPtr, room_t** roomsPtr);
+int generateDungeon(dungeon_t* dungeonPtr);
 int roomDist(room_t room1, room_t room2);
 void connectRooms(gridCell_t **grid, room_t* rooms, int roomCount);
 void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2);
@@ -52,8 +60,8 @@ int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount);
 int validateRoom(room_t* rooms, int roomCount, room_t room);
 int validateTwoRooms(room_t room1, room_t room2);
 void printGrid(gridCell_t** grid);
-gridCell_t** populateGrid(room_t* rooms, int roomCount);
-void populateRooms(gridCell_t** grid, room_t* rooms, int roomCount);
+int populateGrid(dungeon_t* dungeonPtr);
+void populateRooms(dungeon_t dungeon);
 int malloc2DGrid(gridCell_t*** grid, int width, int height);
 void free2DGrid(gridCell_t** grid, int height);
 

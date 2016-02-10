@@ -5,7 +5,6 @@
 #include <math.h>
 #include <time.h>
 #include <libgen.h>
-#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -13,14 +12,14 @@
 #include "dungeon.h"
 #include "globals.h"
 
-int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
+int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
     uint32_t fileSize;
     uint32_t version;
     FILE* file;
     size_t bytesWritten;
 
-    fileSize = (uint32_t)(6 + 4 + 4 + 1482 + roomCount * 4); // magic bytes + file version + file size + hardness grid
-    // + rooms
+    fileSize = (uint32_t)(6 + 4 + 4 + 1482 + dungeon.roomCount * 4); // magic bytes + file version + file size +
+                                                                     // hardness grid + rooms
 
     // big endian conversion
     version = htobe32(VERSION);
@@ -55,9 +54,11 @@ int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName)
 
     // hardness grid
     // We do not save the immutable border
+    typeof((**dungeon.grid).hardness)* hardnessPtr;
     for (int y = 0; y < HEIGHT - 2; y++) {
         for (int x = 0; x < WIDTH - 2; x++) {
-            bytesWritten = fwrite(&grid[y + 1][x + 1].hardness, sizeof(grid[y + 1][x + 1].hardness), 1, file);
+            hardnessPtr = &dungeon.grid[y + 1][x + 1].hardness;
+            bytesWritten = fwrite(hardnessPtr, sizeof(*hardnessPtr), 1, file);
             if (bytesWritten != 1) {
                 // error writing hardness
                 return -5;
@@ -66,8 +67,10 @@ int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName)
     }
 
     // rooms
-    for (int r = 0; r < roomCount; r++) {
-        bytesWritten = fwrite(&rooms[r], sizeof(*rooms), 1, file);
+    room_t* roomPtr;
+    for (int r = 0; r < dungeon.roomCount; r++) {
+        roomPtr = &dungeon.rooms[r];
+        bytesWritten = fwrite(roomPtr, sizeof(*roomPtr), 1, file);
         if (bytesWritten != 1) {
             // error writing a room
             return -6;
@@ -76,14 +79,13 @@ int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName)
     return 0;
 }
 
-int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* fileName) {
+int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
     size_t bytesRead;
     char magicBytes[6];
     uint32_t version;
     uint32_t dataLen;
     // malloc2DGrid could fail.  Should be checked.
-    malloc2DGrid(gridPtr, WIDTH, HEIGHT);
-    gridCell_t** grid = *gridPtr;
+    malloc2DGrid(&dungeonPtr->grid, WIDTH, HEIGHT);
 
     FILE* file = fopen(fileName, "r");
     if (file == NULL) {
@@ -128,31 +130,31 @@ int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* 
 
     // place the solid border
     for (int x = 0; x < WIDTH; x++) {
-        grid[0][x].hardness = 255;
-        grid[0][x].material = rock;
-        grid[HEIGHT - 1][x].hardness = 255;
-        grid[HEIGHT - 1][x].material = rock;
+        dungeonPtr->grid[0][x].hardness = 255;
+        dungeonPtr->grid[0][x].material = rock;
+        dungeonPtr->grid[HEIGHT - 1][x].hardness = 255;
+        dungeonPtr->grid[HEIGHT - 1][x].material = rock;
     }
     for (int y = 0; y < HEIGHT; y++) {
-        grid[y][0].hardness = 255;
-        grid[y][0].material = rock;
-        grid[y][WIDTH - 1].hardness = 255;
-        grid[y][WIDTH - 1].material = rock;
+        dungeonPtr->grid[y][0].hardness = 255;
+        dungeonPtr->grid[y][0].material = rock;
+        dungeonPtr->grid[y][WIDTH - 1].hardness = 255;
+        dungeonPtr->grid[y][WIDTH - 1].material = rock;
     }
 
     // read the hardness grid
     for (int y = 0; y < HEIGHT - 2; y++) {
         for (int x = 0; x < WIDTH - 2; x++) {
-            bytesRead = fread(&grid[y + 1][x + 1].hardness, sizeof(grid[y + 1][x + 1].hardness), 1, file);
+            bytesRead = fread(&dungeonPtr->grid[y + 1][x + 1].hardness, sizeof((**dungeonPtr->grid).hardness), 1, file);
             if (bytesRead != 1) {
                 // error reading hardness data
                 return -8;
             }
-            if (grid[y + 1][x + 1].hardness == 0) {
+            if (dungeonPtr->grid[y + 1][x + 1].hardness == 0) {
                 // The cell is a corridor or a room.  For now it will be a corridor.
-                grid[y + 1][x + 1].material = corridor;
+                dungeonPtr->grid[y + 1][x + 1].material = corridor;
             } else {
-                grid[y + 1][x + 1].material = rock;
+                dungeonPtr->grid[y + 1][x + 1].material = rock;
             }
         }
     }
@@ -163,11 +165,10 @@ int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* 
         return -9;
     }
 
-    *roomCount = dataLen / 4;
-    *roomsPtr = malloc(sizeof(room_t) * *roomCount);
-    room_t* rooms = *roomsPtr;
-    for (int r = 0; r < *roomCount; r++) {
-        bytesRead = fread(&rooms[r], sizeof(room_t), 1, file);
+    dungeonPtr->roomCount = dataLen / 4;
+    dungeonPtr->rooms = malloc(sizeof(room_t) * dungeonPtr->roomCount);
+    for (int r = 0; r < dungeonPtr->roomCount; r++) {
+        bytesRead = fread(&dungeonPtr->rooms[r], sizeof(room_t), 1, file);
         if (bytesRead != 1) {
             // failure reading a room
             return -10;
@@ -176,31 +177,33 @@ int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* 
     return 0;
 }
 
-int generateDungeon(gridCell_t*** gridPtr, room_t** roomsPtr) {
-    int roomCount;
+int generateDungeon(dungeon_t* dungeonPtr) {
     unsigned int seed;
     seed = (unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 
-    roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
-    printf("Room count: %d\n", roomCount);
+    dungeonPtr->roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
+    printf("Room count: %d\n", dungeonPtr->roomCount);
 
-    if (!(*roomsPtr = malloc(sizeof(room_t) * roomCount))) {
+    if (!(dungeonPtr->rooms = malloc(sizeof(room_t) * dungeonPtr->roomCount))) {
         return -1;
     }
 
-    for (int i = 0; i < roomCount; i++) {
-        generateRoom(&(*roomsPtr)[i], *roomsPtr, i);
+    for (int i = 0; i < dungeonPtr->roomCount; i++) {
+        generateRoom(&dungeonPtr->rooms[i], dungeonPtr->rooms, i);
     }
 
-    *gridPtr = populateGrid(*roomsPtr, roomCount);
-    connectRooms(*gridPtr, *roomsPtr, roomCount);
-    return roomCount;
+    if (populateGrid(dungeonPtr)) {
+        return -2;
+    }
+    connectRooms(dungeonPtr->grid, dungeonPtr->rooms, dungeonPtr->roomCount);
+    return 0;
 }
 
-void destroyDungeon(gridCell_t** gridPtr) {
-    free2DGrid(gridPtr, HEIGHT);
+void destroyDungeon(dungeon_t dungeon) {
+    free2DGrid(dungeon.grid, HEIGHT);
+    free(dungeon.rooms);
 }
 
 void showUsage(char* name) {
@@ -373,31 +376,29 @@ void printGrid(gridCell_t** grid) {
     }
 }
 
-gridCell_t** populateGrid(room_t* rooms, int roomCount) {
-    gridCell_t **grid;
-
-    if (malloc2DGrid(&grid, WIDTH, HEIGHT)) {
-        return NULL;
+int populateGrid(dungeon_t* dungeonPtr) {
+    if (malloc2DGrid(&dungeonPtr->grid, WIDTH, HEIGHT)) {
+        return -1;
     }
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            grid[y][x].material = rock;
-            grid[y][x].hardness = (uint8_t)(rand() % (ROCK_HARDNESS_MAX - 1) + 1);
+            dungeonPtr->grid[y][x].material = rock;
+            dungeonPtr->grid[y][x].hardness = (uint8_t)(rand() % (ROCK_HARDNESS_MAX - 1) + 1);
         }
     }
-    populateRooms(grid, rooms, roomCount);
-    return grid;
+    populateRooms(*dungeonPtr);
+    return 0;
 }
 
-void populateRooms(gridCell_t** grid, room_t* rooms, int roomCount) {
+void populateRooms(dungeon_t dungeon) {
     int x, y;
-    for (int i = 0; i < roomCount; i++) {
-        for (int yOffset = 0; yOffset < rooms[i].height; yOffset++) {
-            for (int xOffset = 0; xOffset < rooms[i].width; xOffset++) {
-                x = rooms[i].x + xOffset;
-                y = rooms[i].y + yOffset;
-                grid[y][x].material = room;
-                grid[y][x].hardness = 0;
+    for (int i = 0; i < dungeon.roomCount; i++) {
+        for (int yOffset = 0; yOffset < dungeon.rooms[i].height; yOffset++) {
+            for (int xOffset = 0; xOffset < dungeon.rooms[i].width; xOffset++) {
+                x = dungeon.rooms[i].x + xOffset;
+                y = dungeon.rooms[i].y + yOffset;
+                dungeon.grid[y][x].material = room;
+                dungeon.grid[y][x].hardness = 0;
             }
         }
     }

@@ -1,3 +1,6 @@
+2016-02-09
+Created a datatype for a dungeon and changed the arguments and function calls appropriately.
+
 2016-02-07
 Imported the provided priority queue and created files for the path finding.  I need sleep.  Goodnight.
 
