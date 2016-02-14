@@ -1,3 +1,9 @@
+2016-02-14
+Created random PC placement.
+
+2016-02-14
+Finalized path finding and made the core modular.
+
 2016-02-09
 Created a datatype for a dungeon and changed the arguments and function calls appropriately.
 
