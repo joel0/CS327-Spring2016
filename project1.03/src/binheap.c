@@ -1,3 +1,7 @@
+/*
+ * This code was provided by the instructor.  Some modifications by Joel May.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 

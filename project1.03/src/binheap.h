@@ -1,3 +1,7 @@
+/*
+ * This code was provided by the instructor.  Some modifications by Joel May.
+ */
+
 #ifndef BINHEAP_H
 # define BINHEAP_H
 
@@ -7,7 +11,7 @@ extern "C" {
 
 # include <stdint.h>
 
-struct binheap_hode;
+struct binheap_node;
 typedef struct binheap_node binheap_node_t;
 
 typedef struct binheap {

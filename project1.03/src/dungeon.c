@@ -11,6 +11,7 @@
 
 #include "dungeon.h"
 #include "globals.h"
+#include "utils.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
     uint32_t fileSize;
@@ -84,8 +85,9 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
     char magicBytes[6];
     uint32_t version;
     uint32_t dataLen;
-    // malloc2DGrid could fail.  Should be checked.
-    malloc2DGrid(&dungeonPtr->grid, WIDTH, HEIGHT);
+    // malloc2DArray could fail.  Should be checked.
+    malloc2DArray((void ***) &dungeonPtr->grid, sizeof(**dungeonPtr->grid), WIDTH, HEIGHT);
+
 
     FILE* file = fopen(fileName, "r");
     if (file == NULL) {
@@ -179,7 +181,7 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
 
 int generateDungeon(dungeon_t* dungeonPtr) {
     unsigned int seed;
-    seed = (unsigned int)time(NULL); //1453848819;
+    seed = 1455171577; //(unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 
@@ -202,7 +204,7 @@ int generateDungeon(dungeon_t* dungeonPtr) {
 }
 
 void destroyDungeon(dungeon_t dungeon) {
-    free2DGrid(dungeon.grid, HEIGHT);
+    free2DArray((void **) dungeon.grid, HEIGHT);
     free(dungeon.rooms);
 }
 
@@ -367,17 +369,21 @@ int validateTwoRooms(room_t room1, room_t room2) {
     return -1;
 }
 
-void printGrid(gridCell_t** grid) {
+void printDungeon(dungeon_t* dungeonPtr) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            printf("%c", (char)grid[y][x].material);
+            if (x == dungeonPtr->PCX && y == dungeonPtr->PCY) {
+                printf("@");
+            } else {
+                printf("%c", (char) dungeonPtr->grid[y][x].material);
+            }
         }
         printf("\n");
     }
 }
 
 int populateGrid(dungeon_t* dungeonPtr) {
-    if (malloc2DGrid(&dungeonPtr->grid, WIDTH, HEIGHT)) {
+    if (malloc2DArray((void ***) &dungeonPtr->grid, sizeof(**dungeonPtr->grid), WIDTH, HEIGHT)) {
         return -1;
     }
     for (int y = 0; y < HEIGHT; y++) {
@@ -402,24 +408,4 @@ void populateRooms(dungeon_t dungeon) {
             }
         }
     }
-}
-
-int malloc2DGrid(gridCell_t*** grid, int width, int height) {
-    if (!(*grid = malloc(height * sizeof(gridCell_t*)))) {
-        return -1;
-    }
-
-    for (int y = 0; y < height; y++) {
-        if (!((*grid)[y] = malloc(width * sizeof(gridCell_t)))) {
-            return -1;
-        }
-    }
-    return 0;
-}
-
-void free2DGrid(gridCell_t** grid, int height) {
-    for (int y = 0; y < height; y++) {
-        free(grid[y]);
-    }
-    free(grid);
 }

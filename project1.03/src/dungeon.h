@@ -41,6 +41,8 @@ typedef struct dungeon_struct {
     int PCX;
     int PCY;
     gridCell_t** grid;
+    uint8_t** tunnelingDist;
+    uint8_t** nontunnelingDist;
     room_t* rooms;
     int roomCount;
 } dungeon_t;
@@ -59,10 +61,8 @@ direction_t calculateDirection(int x, int y, int targetX, int targetY);
 int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount);
 int validateRoom(room_t* rooms, int roomCount, room_t room);
 int validateTwoRooms(room_t room1, room_t room2);
-void printGrid(gridCell_t** grid);
+void printDungeon(dungeon_t* dungeonPtr);
 int populateGrid(dungeon_t* dungeonPtr);
 void populateRooms(dungeon_t dungeon);
-int malloc2DGrid(gridCell_t*** grid, int width, int height);
-void free2DGrid(gridCell_t** grid, int height);
 
 #endif //PROJECT_DUNGEON_H

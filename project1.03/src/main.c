@@ -7,6 +7,7 @@
 
 #include "main.h"
 #include "dungeon.h"
+#include "path.h"
 
 int main(int argc, char* argv[]) {
     int errLevel;
@@ -40,10 +41,21 @@ int main(int argc, char* argv[]) {
             return errLevel;
         }
     }
+    pathMallocDistGrid(&dungeon.tunnelingDist);
+    pathMallocDistGrid(&dungeon.nontunnelingDist);
+    dungeon.PCX = 18;
+    dungeon.PCY = 4;
+
+    // make calculations
+    pathTunneling(&dungeon);
+    pathNontunneling(&dungeon);
 
     // print dungeon
     printRooms(dungeon.roomCount, dungeon.rooms);
-    printGrid(dungeon.grid);
+    printDungeon(&dungeon);
+
+    printDistGrid(dungeon.tunnelingDist);
+    printDistGrid(dungeon.nontunnelingDist);
 
     // save dungeon
     if (save) {
@@ -55,6 +67,8 @@ int main(int argc, char* argv[]) {
     }
 
     // Clean up
+    pathFreeDistGrid(dungeon.nontunnelingDist);
+    pathFreeDistGrid(dungeon.tunnelingDist);
     destroyDungeon(dungeon);
     return 0;
 }
