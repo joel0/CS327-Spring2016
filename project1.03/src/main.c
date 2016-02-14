@@ -6,6 +6,7 @@
 #include <string.h>
 #include <libgen.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "main.h"
 #include "dungeon.h"
@@ -14,6 +15,13 @@
 int main(int argc, char* argv[]) {
     int errLevel;
     dungeon_t dungeon;
+
+    //init random
+    unsigned int seed;
+    seed = (unsigned int)time(NULL); //1453848819;
+    srand(seed);
+    printf("Seed: %d\n", seed);
+
     // parse arguments
     int save = 0;
     int load = 0;

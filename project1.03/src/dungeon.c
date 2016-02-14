@@ -179,11 +179,6 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
 }
 
 int generateDungeon(dungeon_t* dungeonPtr) {
-    unsigned int seed;
-    seed = (unsigned int)time(NULL); //1453848819;
-    srand(seed);
-    printf("Seed: %d\n", seed);
-
     dungeonPtr->roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
     printf("Room count: %d\n", dungeonPtr->roomCount);
 
