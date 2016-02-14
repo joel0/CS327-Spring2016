@@ -1,0 +1,11 @@
+Dungeon Generation with Distance Calculation
+
+Usage: main [--load] [--save]
+
+    --load  loads ~/.rlg327/dungeon
+    --save  generated a dungeon and saves it to the disk at ~/.rlg327/dungeon
+
+This version of the dungeon game generates a dungeon or loads one from the disk based on the arguments.  It prints the
+see and list of rooms (mainly for debugging; will be removed in a few versions).  Then three maps are printed.  The
+first is the standard map of hallways and corridors.  The second is the distance map for monsters that can tunnel
+through walls.  The third is the distance map for monsters that must stay within rooms and corridors.
