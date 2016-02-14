@@ -93,7 +93,7 @@ uint8_t ctype_uint8(int val) {
     return val < 255 ? (uint8_t)val : (uint8_t)255;
 }
 
-void printDistGrid(uint8_t** grid) {
+void printDistGrid(dungeon_t* dungeonPtr, uint8_t** grid) {
     char currentChar;
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
@@ -104,7 +104,7 @@ void printDistGrid(uint8_t** grid) {
             } else if (grid[y][x] - 36 + 'A' <= 'Z') {
                 currentChar = (char) ('A' + grid[y][x] - 36);
             } else {
-                currentChar = ' ';
+                currentChar = dungeonPtr->grid[y][x].material;
             }
             printf("%c", currentChar);
         }

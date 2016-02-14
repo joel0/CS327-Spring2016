@@ -16,6 +16,6 @@ int pathMallocDistGrid(dist_t*** gridPtr);
 void pathFreeDistGrid(dist_t** gridPtr);
 int pathTunneling(dungeon_t* dungeonPtr);
 int pathNontunneling(dungeon_t* dungeonPtr);
-void printDistGrid(uint8_t** grid);
+void printDistGrid(dungeon_t* dungeonPtr, uint8_t** grid);
 
 #endif //PROJECT_PATH_H

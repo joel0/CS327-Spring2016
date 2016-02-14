@@ -56,15 +56,15 @@ int main(int argc, char* argv[]) {
     dungeonPlacePC(&dungeon);
 
     // make calculations
-    pathTunneling(&dungeon);
     pathNontunneling(&dungeon);
+    pathTunneling(&dungeon);
 
     // print dungeon
     printRooms(dungeon.roomCount, dungeon.rooms);
     printDungeon(&dungeon);
 
-    printDistGrid(dungeon.tunnelingDist);
-    printDistGrid(dungeon.nontunnelingDist);
+    printDistGrid(&dungeon, dungeon.tunnelingDist);
+    printDistGrid(&dungeon, dungeon.nontunnelingDist);
 
     // save dungeon
     if (save) {
