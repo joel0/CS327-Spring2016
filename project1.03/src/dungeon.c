@@ -4,7 +4,6 @@
 
 #include <math.h>
 #include <time.h>
-#include <libgen.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -181,7 +180,7 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
 
 int generateDungeon(dungeon_t* dungeonPtr) {
     unsigned int seed;
-    seed = 1455171577; //(unsigned int)time(NULL); //1453848819;
+    seed = (unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 
@@ -208,21 +207,16 @@ void destroyDungeon(dungeon_t dungeon) {
     free(dungeon.rooms);
 }
 
-void showUsage(char* name) {
-    printf("Usage: %s [--save|--load]\n\n", basename(name));
-    printf("\t--save\tSaves a randomly generated dungeon to ~/.rlg327/dungeon\n");
-    printf("\t--load\tLoads ~/.rgl327/dungeon and displays it\n");
-}
+void dungeonPlacePC(dungeon_t* dungeonPtr) {
+    int chosenRoom;
+    int relX;
+    int relY;
 
-char* dungeonFileName() {
-    char* fullPath;
-    char* homeDir;
-    char* relativePath = "/.rlg327/dungeon";
-
-    homeDir = getenv("HOME");
-    fullPath = malloc(sizeof(char) * (strlen(homeDir) + strlen(relativePath) + 1));
-    sprintf(fullPath, "%s/.rlg327/dungeon", homeDir);
-    return fullPath;
+    chosenRoom = rand() % dungeonPtr->roomCount;
+    relX = rand() % dungeonPtr->rooms[chosenRoom].width;
+    relY = rand() % dungeonPtr->rooms[chosenRoom].height;
+    dungeonPtr->PCX = relX + dungeonPtr->rooms[chosenRoom].x;
+    dungeonPtr->PCY = relY + dungeonPtr->rooms[chosenRoom].y;
 }
 
 void printRooms(int roomCount, room_t* rooms) {

@@ -5,4 +5,7 @@
 #ifndef PROJECT_MAIN_H
 #define PROJECT_MAIN_H
 
+void showUsage(char* name);
+char* dungeonFileName();
+
 #endif //PROJECT_MAIN_H

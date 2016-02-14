@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <libgen.h>
+#include <stdlib.h>
 
 #include "main.h"
 #include "dungeon.h"
@@ -43,8 +45,7 @@ int main(int argc, char* argv[]) {
     }
     pathMallocDistGrid(&dungeon.tunnelingDist);
     pathMallocDistGrid(&dungeon.nontunnelingDist);
-    dungeon.PCX = 18;
-    dungeon.PCY = 4;
+    dungeonPlacePC(&dungeon);
 
     // make calculations
     pathTunneling(&dungeon);
@@ -73,3 +74,19 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+void showUsage(char* name) {
+    printf("Usage: %s [--save|--load]\n\n", basename(name));
+    printf("\t--save\tSaves a randomly generated dungeon to ~/.rlg327/dungeon\n");
+    printf("\t--load\tLoads ~/.rgl327/dungeon and displays it\n");
+}
+
+char* dungeonFileName() {
+    char* fullPath;
+    char* homeDir;
+    char* relativePath = "/.rlg327/dungeon";
+
+    homeDir = getenv("HOME");
+    fullPath = malloc(sizeof(char) * (strlen(homeDir) + strlen(relativePath) + 1));
+    sprintf(fullPath, "%s/.rlg327/dungeon", homeDir);
+    return fullPath;
+}

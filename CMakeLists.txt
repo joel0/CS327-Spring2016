@@ -1,5 +1,3 @@
-#I do not know what I am doing.  This file seems to work.
-
 cmake_minimum_required(VERSION 3.3)
 #project(project0)
 
@@ -12,11 +10,13 @@ set(PROJECT0.0 project0/src/hyperbinary.c)
 set(PROJECT0.1 project0/src/rationalNumber.c)
 set(PROJECT1.01 project1.01/src/main.c)
 set(PROJECT1.02 project1.02/src/main.c)
-set(PROJECT1.03 project1.03/src/main.c project1.03/src/dungeon.c project1.03/src/dungeon.h project1.03/src/globals.h project1.03/src/path.c project1.03/src/path.h project1.03/src/binheap.c project1.03/src/binheap.h)
+set(PROJECT1.03 project1.03/src/main.c project1.03/src/dungeon.c project1.03/src/dungeon.h project1.03/src/globals.h project1.03/src/path.c project1.03/src/path.h project1.03/src/binheap.c project1.03/src/binheap.h project1.03/src/utils.c project1.03/src/utils.h)
+set(TEST project1.03/src/test.c project1.03/src/binheap.c)
 #set(PROJECT1 project1.c)
 add_executable(project0.0 ${SOURCE_FILES} ${PROJECT0.0})
 add_executable(project0.1 ${SOURCE_FILES} ${PROJECT0.1})
 add_executable(project1.01 ${SOURCE_FILES} ${PROJECT1.01})
 add_executable(project1.02 ${SOURCE_FILES} ${PROJECT1.02})
 add_executable(project1.03 ${SOURCE_FILES} ${PROJECT1.03})
+add_executable(testProj ${TEST})
 #add_executable(project1 ${SOURCE_FILES} ${PROJECT1})

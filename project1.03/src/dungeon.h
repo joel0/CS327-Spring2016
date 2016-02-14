@@ -50,8 +50,7 @@ typedef struct dungeon_struct {
 int saveDungeon(dungeon_t dungeon, char* fileName);
 int loadDungeon(dungeon_t* dungeonPtr, char* fileName);
 void destroyDungeon(dungeon_t dungeon);
-void showUsage(char* name);
-char* dungeonFileName();
+void dungeonPlacePC(dungeon_t* dungeonPtr);
 void printRooms(int roomCount, room_t* rooms);
 int generateDungeon(dungeon_t* dungeonPtr);
 int roomDist(room_t room1, room_t room2);
