@@ -1,3 +1,6 @@
+2016-02-16
+Fixed memory leak while using the binheap.
+
 2016-02-14
 Created random PC placement.
 

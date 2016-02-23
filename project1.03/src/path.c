@@ -85,6 +85,7 @@ int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(d
         }
         free(curNodePtr);
     }
+    free2DArray((void **) binheapNodes, HEIGHT);
     binheap_delete(&heap);
     return 0;
 }
