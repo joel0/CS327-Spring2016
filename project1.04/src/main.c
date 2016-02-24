@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
     printDungeon(&dungeon);
 
     // do move
-    while (dungeon.PC.alive && dungeon.monsterCount) {
+    while (dungeon.PC.alive && dungeon.monsterCount > 1) {
         //usleep(400000);
         //movePC(&dungeon);
         int PCTurn = turnIsPC(&dungeon);

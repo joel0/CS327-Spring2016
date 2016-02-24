@@ -2,8 +2,7 @@ Dungeon Now with Enemies
 
 The dungeon game now has enemies who can interact with the PC.  The PC himself can move (randomly).  The enemies will
 move according to their properties when I get that feature implemented.  The enemies (and PC) move in the appropriate
-order.  Killing other characters should work, but is untested.  I have a hard coded seed for
-development.
+order.  Killing other characters works.  I have a hard coded seed for development purposes.
 
 Usage:
     bin/main [--save] [--load] [--nummon #]

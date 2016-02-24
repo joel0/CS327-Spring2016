@@ -215,6 +215,7 @@ int generateDungeon(dungeon_t* dungeonPtr) {
     // Characters
     dungeonPtr->PC.isPC = 1;
     dungeonPtr->PC.speed = 10;
+    dungeonPtr->PC.alive = 1;
     dungeonPlaceMonster(dungeonPtr, &dungeonPtr->PC);
     dungeonPtr->monsterCount++; // +1 for the PC
     dungeonPtr->monsterPtrs = malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
