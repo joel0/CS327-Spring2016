@@ -38,6 +38,12 @@ void turnDo(dungeon_t* dungeonPtr) {
     printf("Moved %c\n", monsterGetChar(*turnPtr->monsterPtr));
 }
 
+int turnIsPC(dungeon_t* dungeonPtr) {
+    turn_t* turnPtr;
+    turnPtr = binheap_peek_min(dungeonPtr->turnsHeapPtr);
+    return turnPtr->monsterPtr->isPC;
+}
+
 void turnDestroy(dungeon_t* dungeonPtr) {
     binheap_delete(dungeonPtr->turnsHeapPtr);
 }

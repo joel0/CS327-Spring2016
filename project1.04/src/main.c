@@ -79,11 +79,20 @@ int main(int argc, char* argv[]) {
     printDungeon(&dungeon);
 
     // do move
-    for (int i = 0; i < 3; i++) {
-        usleep(400000);
+    while (dungeon.PC.alive && dungeon.monsterCount) {
+        //usleep(400000);
         //movePC(&dungeon);
+        int PCTurn = turnIsPC(&dungeon);
         turnDo(&dungeon);
-        printDungeon(&dungeon);
+        if (PCTurn) {
+            printDungeon(&dungeon);
+        }
+    }
+
+    if (!dungeon.PC.alive) {
+        printf("You died!\n");
+    } else {
+        printf("Yay!  You defeated all the monsters.\n");
     }
 
     //printDistGrid(&dungeon, dungeon.tunnelingDist);
