@@ -19,6 +19,6 @@ char monsterGetChar(monster_t m) {
 void monsterGenerate(monster_t* m) {
     m->isPC = 0;
     m->speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
-    //m->type = (uint8_t) (rand() % 0x10); // 50% chance of each bit being 1
-    m->type = 0b0000;
+    m->type = (uint8_t) (rand() % 0x10); // 50% chance of each bit being 1
+    //m->type = 0b0000;
 }
