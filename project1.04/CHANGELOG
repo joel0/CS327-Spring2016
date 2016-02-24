@@ -1,4 +1,7 @@
 2016-02-23
+Queue is partially implemented.  For some reason the PC seems to be the only one to move...
+
+2016-02-23
 Coding marathon!  A bunch of features.  The monsters print.  The PC can move randomly.  Monsters can kill each other
 (theoretically).
 

@@ -1,0 +1,14 @@
+Dungeon Now with Enemies
+
+The dungeon game now has enemies who can interact with the PC.  The PC himself can move (randomly).  The enemies will
+move according to their properties when I get that feature implemented.  The turn order is currently broken because in
+my small test, only the PC moves.  Killing other characters should work, but is untested.  I have a hard coded seed for
+development.
+
+Usage:
+    bin/main [--save] [--load] [--nummon #]
+
+    --save      Generates a dungeon and saves it to ~/.rlg327/dungeon
+    --load      Loads a saved dungeon from ~/.rlg327/dungeon
+    --nummon    Specifies the number of monsters to generate in the dungeon.  Warning, if this number is too high the
+                game will be stuck in an infinite loop.

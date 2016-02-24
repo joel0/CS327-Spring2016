@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+
 #include "movement.h"
 #include "utils.h"
 #include "globals.h"
@@ -19,6 +20,10 @@ void movePC(dungeon_t* dungeonPtr) {
 }
 
 void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t m) {
+    if (!m.alive) {
+        return;
+    }
+
     int dstX, dstY;
     if (m.type & MONSTER_ERRATIC) {
         if (rand() % 2) {
@@ -29,6 +34,7 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t m) {
     }
     //TODO
     generateRandMove(dungeonPtr, m.x, m.y, &dstX, &dstY, m.type & MONSTER_TUNNELING);
+    moveMonster(dungeonPtr, m.x, m.y, dstX, dstY);
 }
 
 void moveMonster(dungeon_t* dungeonPtr, int srcX, int srcY, int dstX, int dstY) {

@@ -13,6 +13,7 @@
 #include "dungeon.h"
 #include "path.h"
 #include "movement.h"
+#include "turn.h"
 
 int main(int argc, char* argv[]) {
     int errLevel;
@@ -78,12 +79,12 @@ int main(int argc, char* argv[]) {
     printDungeon(&dungeon);
 
     // do move
-    //for (int i = 0; i < 100000; i++) {
-        //usleep(400000);
-        movePC(&dungeon);
+    for (int i = 0; i < 3; i++) {
+        usleep(400000);
+        //movePC(&dungeon);
+        turnDo(&dungeon);
         printDungeon(&dungeon);
-    printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
-    //}
+    }
 
     //printDistGrid(&dungeon, dungeon.tunnelingDist);
     //printDistGrid(&dungeon, dungeon.nontunnelingDist);

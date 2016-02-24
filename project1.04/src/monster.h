@@ -23,6 +23,7 @@ typedef struct monster_struct {
     int y;
     int lastPCX;
     int lastPCY;
+    int alive;
 } monster_t;
 
 char monsterGetChar(monster_t m);

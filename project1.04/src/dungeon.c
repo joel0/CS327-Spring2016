@@ -12,6 +12,8 @@
 #include "globals.h"
 #include "utils.h"
 #include "monster.h"
+#include "movement.h"
+#include "turn.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
     uint32_t fileSize;
@@ -226,10 +228,13 @@ int generateDungeon(dungeon_t* dungeonPtr) {
         dungeonPlaceMonster(dungeonPtr, monsterPtr);
     }
 
+    turnInit(dungeonPtr);
+
     return 0;
 }
 
 void destroyDungeon(dungeon_t dungeon) {
+    turnDestroy(&dungeon);
     free(dungeon.monsterPtrs);
     free2DArray((void **) dungeon.grid, HEIGHT);
     free(dungeon.rooms);
@@ -473,7 +478,8 @@ void populateRooms(dungeon_t dungeon) {
 }
 
 void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr) {
-    free(monsterPtrs[toRemove]);
+    monsterPtrs[toRemove]->alive = 0;
+//    free(monsterPtrs[toRemove]);
     while (toRemove < *monsterCountPtr - 1) {
         monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
         toRemove++;

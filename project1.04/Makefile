@@ -3,8 +3,8 @@ SDIR=src
 ODIR=obj
 EXEDIR=bin
 CFLAGS=-g -Wall -Werror -std=gnu11 -lm
-TARNAME=may_joel.assignment-1.03
-OFILES=$(ODIR)/main.o $(ODIR)/utils.o $(ODIR)/dungeon.o $(ODIR)/path.o $(ODIR)/binheap.o
+TARNAME=may_joel.assignment-1.04
+OFILES=$(ODIR)/main.o $(ODIR)/utils.o $(ODIR)/dungeon.o $(ODIR)/path.o $(ODIR)/binheap.o $(ODIR)/monster.o $(ODIR)/movement.o $(ODIR)/turn.o
 
 all: environment $(OFILES)
 	$(CC) -o $(EXEDIR)/main $(OFILES) $(CFLAGS)

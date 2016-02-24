@@ -8,12 +8,13 @@
 #include <inttypes.h>
 
 #include "monster.h"
+#include "binheap.h"
 
-enum material_enum {
+typedef enum material_enum {
     room = '.',
     corridor = '#',
     rock = ' '
-};
+} material_t;
 
 typedef enum direction_enum {
     nowhere =   0b0000,
@@ -36,7 +37,7 @@ typedef struct room_struct {
 
 typedef struct gridCell_struct {
     uint8_t hardness;
-    enum material_enum material;
+    material_t material;
     monster_t* monsterPtr;
 } gridCell_t;
 
@@ -49,6 +50,7 @@ typedef struct dungeon_struct {
     int roomCount;
     monster_t** monsterPtrs;
     int monsterCount;
+    binheap_t* turnsHeapPtr;
 } dungeon_t;
 
 int saveDungeon(dungeon_t dungeon, char* fileName);
