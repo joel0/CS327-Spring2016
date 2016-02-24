@@ -1,4 +1,7 @@
 2016-02-23
+Queue is fixed so monsters (and PC) have their appropriate turns.
+
+2016-02-23
 Queue is partially implemented.  For some reason the PC seems to be the only one to move...
 
 2016-02-23

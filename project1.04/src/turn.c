@@ -21,7 +21,7 @@ void turnInit(dungeon_t* dungeonPtr) {
     for (int i = 0; i < dungeonPtr->monsterCount; i++) {
         turn = malloc(sizeof(turn));
         turn->monsterPtr = dungeonPtr->monsterPtrs[i];
-        turn->nextTurn = 100 / turn->monsterPtr->speed;
+        turn->nextTurn = (100 / turn->monsterPtr->speed);
         turn->id = i;
         binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turn);
     }
@@ -45,7 +45,7 @@ void turnDestroy(dungeon_t* dungeonPtr) {
 int turnCompare(const void* d1, const void* d2) {
     turn_t* t1 = (turn_t*) d1;
     turn_t* t2 = (turn_t*) d2;
-    if (t1->nextTurn != t2->nextTurn) {
+    if (t1->nextTurn == t2->nextTurn) {
         return t1->id - t2->id;
     }
     return t1->nextTurn - t2->nextTurn;
