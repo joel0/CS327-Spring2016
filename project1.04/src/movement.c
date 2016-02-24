@@ -9,6 +9,7 @@
 #include "movement.h"
 #include "utils.h"
 #include "globals.h"
+#include "path.h"
 
 int isRock(gridCell_t** grid, int x, int y);
 int isImmutable(gridCell_t **grid, int x, int y);
@@ -34,6 +35,8 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
         // PC gets pure random movement
         generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
         moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
+        pathTunneling(dungeonPtr);
+        pathNontunneling(dungeonPtr);
     }
     if (monsterPtr->type & MONSTER_ERRATIC) {
         if (rand() % 2) {
@@ -112,9 +115,9 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
     if (grid[dstY][dstX].material == rock) {
         grid[dstY][dstX].material = corridor;
         grid[dstY][dstX].hardness = 0;
-        //TODO recalculate the path
+        pathTunneling(dungeonPtr);
+        pathNontunneling(dungeonPtr);
     }
-    //TODO if PC, recalculate paths
 }
 
 void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {
@@ -141,8 +144,61 @@ void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, i
 }
 
 void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {
-    //TODO
-    generateRandMove(dungeonPtr, monsterPtr, dstX, dstY);
+    int x = monsterPtr->x;
+    int y = monsterPtr->y;
+    uint8_t** grid;
+    uint8_t shortestDist;
+    direction_t shortestDirection;
+
+    if (monsterPtr->type & MONSTER_TUNNELING) {
+        grid = dungeonPtr->tunnelingDist;
+    } else {
+        grid = dungeonPtr->nontunnelingDist;
+    };
+    shortestDist = grid[y - 1][x - 1];
+    shortestDirection = northwest;
+
+    if (grid[y - 1][x] < shortestDist) {
+        shortestDist = grid[y - 1][x];
+        shortestDirection = north;
+    }
+    if (grid[y - 1][x + 1] < shortestDist) {
+        shortestDist = grid[y - 1][x + 1];
+        shortestDirection = northeast;
+    }
+    if (grid[y][x - 1] < shortestDist) {
+        shortestDist = grid[y][x - 1];
+        shortestDirection = west;
+    }
+    if (grid[y][x + 1] < shortestDist) {
+        shortestDist = grid[y][x + 1];
+        shortestDirection = east;
+    }
+    if (grid[y + 1][x - 1] < shortestDist) {
+        shortestDist = grid[y + 1][x - 1];
+        shortestDirection = southwest;
+    }
+    if (grid[y + 1][x] < shortestDist) {
+        shortestDist = grid[y + 1][x];
+        shortestDirection = south;
+    }
+    if (grid[y + 1][x + 1] < shortestDist) {
+        shortestDirection = southeast;
+    }
+    if (shortestDirection & north) {
+        y--;
+    }
+    if (shortestDirection & east) {
+        x++;
+    }
+    if (shortestDirection & south) {
+        y++;
+    }
+    if (shortestDirection & west) {
+        x--;
+    }
+    *dstX = x;
+    *dstY = y;
 }
 
 void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {

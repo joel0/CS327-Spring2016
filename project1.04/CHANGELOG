@@ -1,4 +1,7 @@
 2016-02-24
+Fixed bugs with using malloc wrong (thanks valgrind).  Implemented intelligent monster paths.
+
+2016-02-24
 PC always does random movement.
 
 2016-02-23
