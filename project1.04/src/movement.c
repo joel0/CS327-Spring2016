@@ -37,6 +37,7 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
         moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         pathTunneling(dungeonPtr);
         pathNontunneling(dungeonPtr);
+        return;
     }
     if (monsterPtr->type & MONSTER_ERRATIC) {
         if (rand() % 2) {
@@ -207,8 +208,10 @@ void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dst
     *dstY = y;
 }
 
-void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int targetX, int targetY, int* dstX, int* dstY) {
-    direction_t direction = calculateDirection(targetX, targetY, dungeonPtr->PC.x, dungeonPtr->PC.y);
+void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int PCX, int PCY, int* dstX, int* dstY) {
+    int targetX = monsterPtr->x;
+    int targetY = monsterPtr->y;
+    direction_t direction = calculateDirection(targetX, targetY, PCX, PCY);
     if (direction & north) {
         targetY--;
     }
