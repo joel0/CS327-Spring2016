@@ -130,6 +130,8 @@ int saveDungeon(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName)
             return -6;
         }
     }
+
+    fclose(file);
     return 0;
 }
 
@@ -230,6 +232,8 @@ int loadDungeon(gridCell_t*** gridPtr, int* roomCount, room_t** roomsPtr, char* 
             return -10;
         }
     }
+
+    fclose(file);
     return 0;
 }
 
