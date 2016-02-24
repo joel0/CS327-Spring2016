@@ -28,7 +28,11 @@ void turnDo(dungeon_t* dungeonPtr) {
     turn_t *turnPtr;
     do {
         turnPtr = binheap_remove_min(dungeonPtr->turnsHeapPtr);
-    } while (!turnPtr->monsterPtr->alive);
+        if (!turnPtr->monsterPtr->alive) {
+            free(turnPtr);
+            turnPtr = NULL;
+        }
+    } while (!turnPtr);
     moveMonsterLogic(dungeonPtr, turnPtr->monsterPtr);
     turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
