@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
     //init random
     unsigned int seed;
-    seed = 1456266256; //(unsigned int)time(NULL); //1453848819;
+    seed = 0;//1456266256; //(unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 
@@ -80,12 +80,11 @@ int main(int argc, char* argv[]) {
 
     // do move
     while (dungeon.PC.alive && dungeon.monsterCount > 1) {
-        //usleep(400000);
-        //movePC(&dungeon);
         int PCTurn = turnIsPC(&dungeon);
         turnDo(&dungeon);
         if (PCTurn) {
             printDungeon(&dungeon);
+            usleep(400000);
         }
     }
 
@@ -111,6 +110,7 @@ int main(int argc, char* argv[]) {
     pathFreeDistGrid(dungeon.nontunnelingDist);
     pathFreeDistGrid(dungeon.tunnelingDist);
     destroyDungeon(dungeon);
+    sleep(1000);
     return 0;
 }
 
@@ -118,6 +118,7 @@ void showUsage(char* name) {
     printf("Usage: %s [--save|--load]\n\n", basename(name));
     printf("\t--save\tSaves a randomly generated dungeon to ~/.rlg327/dungeon\n");
     printf("\t--load\tLoads ~/.rgl327/dungeon and displays it\n");
+    printf("\t--nummon\tSpecifies the number of monitors to place in the dungeon.\n");
 }
 
 char* dungeonFileName() {
