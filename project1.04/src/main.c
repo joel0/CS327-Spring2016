@@ -110,7 +110,6 @@ int main(int argc, char* argv[]) {
     pathFreeDistGrid(dungeon.nontunnelingDist);
     pathFreeDistGrid(dungeon.tunnelingDist);
     destroyDungeon(dungeon);
-    sleep(1000);
     return 0;
 }
 
