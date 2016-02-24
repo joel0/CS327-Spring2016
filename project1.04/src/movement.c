@@ -29,6 +29,11 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     }
 
     int dstX, dstY;
+    if (monsterPtr->isPC) {
+        // PC gets pure random movement
+        generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
+        moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
+    }
     if (monsterPtr->type & MONSTER_ERRATIC) {
         if (rand() % 2) {
             // random movement
