@@ -187,11 +187,13 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
     // Init the PC
     dungeonPtr->PC.isPC = 1;
     dungeonPtr->PC.speed = 10;
+    dungeonPtr->PC.alive = 1;
     dungeonPlaceMonster(dungeonPtr, &dungeonPtr->PC);
 
     dungeonPtr->monsterCount = 1;
     dungeonPtr->monsterPtrs = malloc(sizeof(monster_t) * dungeonPtr->monsterCount);
     dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
+    //TODO init monsters outside of this and generateDungeon
     return 0;
 }
 
@@ -228,6 +230,8 @@ int generateDungeon(dungeon_t* dungeonPtr) {
         monsterGenerate(monsterPtr);
         dungeonPtr->monsterPtrs[i] = monsterPtr;
         monsterPtr->alive = 1;
+        monsterPtr->lastPCX = 0;
+        monsterPtr->lastPCY = 0;
         dungeonPlaceMonster(dungeonPtr, monsterPtr);
     }
 

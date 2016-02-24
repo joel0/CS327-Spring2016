@@ -7,7 +7,7 @@
 
 #include "dungeon.h"
 
-void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t m);
-void movePC(dungeon_t* dungeonPtr);
+void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr);
+//void movePC(dungeon_t* dungeonPtr);
 
 #endif //PROJECT_MOVEMENT_H
