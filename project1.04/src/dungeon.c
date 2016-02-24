@@ -225,6 +225,7 @@ int generateDungeon(dungeon_t* dungeonPtr) {
         monsterPtr = malloc(sizeof(monster_t));
         monsterGenerate(monsterPtr);
         dungeonPtr->monsterPtrs[i] = monsterPtr;
+        monsterPtr->alive = 1;
         dungeonPlaceMonster(dungeonPtr, monsterPtr);
     }
 
