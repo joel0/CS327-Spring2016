@@ -31,7 +31,7 @@ void initMonsters(dungeon_t* dungeonPtr) {
 }
 
 void monstersDestroy(dungeon_t* dungeonPtr) {
-    for (int i = 0; i < totalMonsters; i++) {
+    for (int i = 1; i < totalMonsters; i++) {
         free(dungeonPtr->monsterPtrs[i]);
     }
     free(dungeonPtr->monsterPtrs);

@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "path.h"
-#include "dungeon.h"
 #include "globals.h"
-#include "binheap.h"
 #include "utils.h"
 
 typedef struct gridNode_struct {

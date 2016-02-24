@@ -13,7 +13,7 @@ void turnDelete(void* d);
 
 void turnInit(dungeon_t* dungeonPtr) {
     turn_t* turn;
-    dungeonPtr->turnsHeapPtr = malloc(sizeof(binheap_t));//TODO free that
+    dungeonPtr->turnsHeapPtr = malloc(sizeof(binheap_t));
     binheap_init(dungeonPtr->turnsHeapPtr, turnCompare, turnDelete);
     for (int i = 0; i < dungeonPtr->monsterCount; i++) {
         turn = malloc(sizeof(turn_t));
@@ -43,6 +43,7 @@ int turnIsPC(dungeon_t* dungeonPtr) {
 
 void turnDestroy(dungeon_t* dungeonPtr) {
     binheap_delete(dungeonPtr->turnsHeapPtr);
+    free(dungeonPtr->turnsHeapPtr);
 }
 
 int turnCompare(const void* d1, const void* d2) {

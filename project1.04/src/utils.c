@@ -4,8 +4,6 @@
 
 #include <stdlib.h>
 #include "utils.h"
-#include "dungeon.h"
-#include "stdlib.h"
 
 int malloc2DArray(void*** grid, size_t size, int width, int height) {
     if (!(*grid = malloc(height * sizeof(void*)))) {

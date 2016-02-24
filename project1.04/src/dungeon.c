@@ -214,7 +214,6 @@ int generateDungeon(dungeon_t* dungeonPtr) {
 void destroyDungeon(dungeon_t dungeon) {
     turnDestroy(&dungeon);
     monstersDestroy(&dungeon);
-    free(dungeon.monsterPtrs);
     free2DArray((void **) dungeon.grid, HEIGHT);
     free(dungeon.rooms);
 }
@@ -457,11 +456,12 @@ void populateRooms(dungeon_t dungeon) {
 }
 
 void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr) {
+    monster_t* deletedMonster = monsterPtrs[toRemove];
     monsterPtrs[toRemove]->alive = 0;
-//    free(monsterPtrs[toRemove]);
     while (toRemove < *monsterCountPtr - 1) {
         monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
         toRemove++;
     }
+    monsterPtrs[toRemove] = deletedMonster;
     (*monsterCountPtr)--;
 }
