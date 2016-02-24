@@ -52,7 +52,7 @@ int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(d
 
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            if (x == dungeonPtr->PCX && y == dungeonPtr->PCY) {
+            if (x == dungeonPtr->PC.x && y == dungeonPtr->PC.y) {
                 distGrid[y][x] = 0;
             } else {
                 distGrid[y][x] = PATH_DIST_INFINITE;

@@ -7,6 +7,8 @@
 
 #include <inttypes.h>
 
+#include "monster.h"
+
 enum material_enum {
     room = '.',
     corridor = '#',
@@ -35,23 +37,26 @@ typedef struct room_struct {
 typedef struct gridCell_struct {
     uint8_t hardness;
     enum material_enum material;
+    monster_t* monsterPtr;
 } gridCell_t;
 
 typedef struct dungeon_struct {
-    int PCX;
-    int PCY;
+    monster_t PC;
     gridCell_t** grid;
     uint8_t** tunnelingDist;
     uint8_t** nontunnelingDist;
     room_t* rooms;
     int roomCount;
+    monster_t** monsterPtrs;
+    int monsterCount;
 } dungeon_t;
 
 int saveDungeon(dungeon_t dungeon, char* fileName);
 int loadDungeon(dungeon_t* dungeonPtr, char* fileName);
 void destroyDungeon(dungeon_t dungeon);
-void dungeonPlacePC(dungeon_t* dungeonPtr);
+void dungeonPlaceMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr);
 void printRooms(int roomCount, room_t* rooms);
+void printMonsters(int monsterCount, monster_t** monsterPtrs);
 int generateDungeon(dungeon_t* dungeonPtr);
 int roomDist(room_t room1, room_t room2);
 void connectRooms(gridCell_t **grid, room_t* rooms, int roomCount);
@@ -63,5 +68,6 @@ int validateTwoRooms(room_t room1, room_t room2);
 void printDungeon(dungeon_t* dungeonPtr);
 int populateGrid(dungeon_t* dungeonPtr);
 void populateRooms(dungeon_t dungeon);
+void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr);
 
 #endif //PROJECT_DUNGEON_H

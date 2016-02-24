@@ -11,6 +11,7 @@
 #include "dungeon.h"
 #include "globals.h"
 #include "utils.h"
+#include "monster.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
     uint32_t fileSize;
@@ -133,14 +134,18 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
     for (int x = 0; x < WIDTH; x++) {
         dungeonPtr->grid[0][x].hardness = 255;
         dungeonPtr->grid[0][x].material = rock;
+        dungeonPtr->grid[0][x].monsterPtr = NULL;
         dungeonPtr->grid[HEIGHT - 1][x].hardness = 255;
         dungeonPtr->grid[HEIGHT - 1][x].material = rock;
+        dungeonPtr->grid[HEIGHT - 1][x].monsterPtr = NULL;
     }
     for (int y = 0; y < HEIGHT; y++) {
-        dungeonPtr->grid[y][0].hardness = 255;
+        dungeonPtr->grid[y][0].hardness = ROCK_HARDNESS_IMMUTABLE;
         dungeonPtr->grid[y][0].material = rock;
-        dungeonPtr->grid[y][WIDTH - 1].hardness = 255;
+        dungeonPtr->grid[y][0].monsterPtr = NULL;
+        dungeonPtr->grid[y][WIDTH - 1].hardness = ROCK_HARDNESS_IMMUTABLE;
         dungeonPtr->grid[y][WIDTH - 1].material = rock;
+        dungeonPtr->grid[y][WIDTH - 1].monsterPtr = NULL;
     }
 
     // read the hardness grid
@@ -157,6 +162,7 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
             } else {
                 dungeonPtr->grid[y + 1][x + 1].material = rock;
             }
+            dungeonPtr->grid[y + 1][x + 1].monsterPtr = NULL;
         }
     }
 
@@ -175,6 +181,15 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
             return -10;
         }
     }
+
+    // Init the PC
+    dungeonPtr->PC.isPC = 1;
+    dungeonPtr->PC.speed = 10;
+    dungeonPlaceMonster(dungeonPtr, &dungeonPtr->PC);
+
+    dungeonPtr->monsterCount = 1;
+    dungeonPtr->monsterPtrs = malloc(sizeof(monster_t) * dungeonPtr->monsterCount);
+    dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
     return 0;
 }
 
@@ -194,29 +209,66 @@ int generateDungeon(dungeon_t* dungeonPtr) {
         return -2;
     }
     connectRooms(dungeonPtr->grid, dungeonPtr->rooms, dungeonPtr->roomCount);
+
+    // Characters
+    dungeonPtr->PC.isPC = 1;
+    dungeonPtr->PC.speed = 10;
+    dungeonPlaceMonster(dungeonPtr, &dungeonPtr->PC);
+    dungeonPtr->monsterCount++; // +1 for the PC
+    dungeonPtr->monsterPtrs = malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
+    dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
+
+    for (int i = 1; i < dungeonPtr->monsterCount; i++) {
+        monster_t* monsterPtr;
+        monsterPtr = malloc(sizeof(monster_t));
+        monsterGenerate(monsterPtr);
+        dungeonPtr->monsterPtrs[i] = monsterPtr;
+        dungeonPlaceMonster(dungeonPtr, monsterPtr);
+    }
+
     return 0;
 }
 
 void destroyDungeon(dungeon_t dungeon) {
+    free(dungeon.monsterPtrs);
     free2DArray((void **) dungeon.grid, HEIGHT);
     free(dungeon.rooms);
 }
 
-void dungeonPlacePC(dungeon_t* dungeonPtr) {
+void dungeonPlaceMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     int chosenRoom;
     int relX;
     int relY;
+    int absX;
+    int absY;
 
-    chosenRoom = rand() % dungeonPtr->roomCount;
-    relX = rand() % dungeonPtr->rooms[chosenRoom].width;
-    relY = rand() % dungeonPtr->rooms[chosenRoom].height;
-    dungeonPtr->PCX = relX + dungeonPtr->rooms[chosenRoom].x;
-    dungeonPtr->PCY = relY + dungeonPtr->rooms[chosenRoom].y;
+    do {
+        chosenRoom = rand() % dungeonPtr->roomCount;
+        relX = rand() % dungeonPtr->rooms[chosenRoom].width;
+        relY = rand() % dungeonPtr->rooms[chosenRoom].height;
+        absX = relX + dungeonPtr->rooms[chosenRoom].x;
+        absY = relY + dungeonPtr->rooms[chosenRoom].y;
+    } while (dungeonPtr->grid[absY][absX].monsterPtr != NULL);
+
+    monsterPtr->x = absX;
+    monsterPtr->y = absY;
+    dungeonPtr->grid[absY][absX].monsterPtr = monsterPtr;
 }
 
 void printRooms(int roomCount, room_t* rooms) {
     for (int i = 0; i < roomCount; i++) {
         printf("rooms[%d]: (%d, %d) (%dx%d)\n", i, rooms[i].x, rooms[i].y, rooms[i].width, rooms[i].height);
+    }
+}
+
+void printMonsters(int monsterCount, monster_t** monsterPtrs) {
+    monster_t* curMonsterPtr;
+    printf("monsterCount: %d\n", monsterCount);
+    for (int i = 0; i < monsterCount; i++) {
+        curMonsterPtr = monsterPtrs[i];
+        printf("monsters[%d}: (%d, %d) %c\n", i, curMonsterPtr->x, curMonsterPtr->y, monsterGetChar(*curMonsterPtr));
+        printf("\tisPC: %d\n", curMonsterPtr->isPC);
+        printf("\tspeed: %d\n", curMonsterPtr->speed);
     }
 }
 
@@ -361,10 +413,12 @@ int validateTwoRooms(room_t room1, room_t room2) {
 void printDungeon(dungeon_t* dungeonPtr) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            if (x == dungeonPtr->PCX && y == dungeonPtr->PCY) {
-                printf("@");
-            } else {
+            if (dungeonPtr->grid[y][x].monsterPtr == NULL) {
+                // No monster
                 printf("%c", (char) dungeonPtr->grid[y][x].material);
+            } else {
+                // Monster (or PC)
+                printf("%c", monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
             }
         }
         printf("\n");
@@ -375,12 +429,31 @@ int populateGrid(dungeon_t* dungeonPtr) {
     if (malloc2DArray((void ***) &dungeonPtr->grid, sizeof(**dungeonPtr->grid), WIDTH, HEIGHT)) {
         return -1;
     }
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
+    for (int y = 1; y < HEIGHT - 1; y++) {
+        for (int x = 1; x < WIDTH - 1; x++) {
             dungeonPtr->grid[y][x].material = rock;
             dungeonPtr->grid[y][x].hardness = (uint8_t)(rand() % (ROCK_HARDNESS_MAX - 1) + 1);
+            dungeonPtr->grid[y][x].monsterPtr = NULL;
         }
     }
+    // Immutable border
+    for (int y = 0;  y < HEIGHT; y++) {
+        dungeonPtr->grid[y][0].material = rock;
+        dungeonPtr->grid[y][0].hardness = ROCK_HARDNESS_IMMUTABLE;
+        dungeonPtr->grid[y][0].monsterPtr = NULL;
+        dungeonPtr->grid[y][WIDTH - 1].material = rock;
+        dungeonPtr->grid[y][WIDTH - 1].hardness = ROCK_HARDNESS_IMMUTABLE;
+        dungeonPtr->grid[y][WIDTH - 1].monsterPtr = NULL;
+    }
+    for (int x = 0; x < WIDTH; x++) {
+        dungeonPtr->grid[0][x].material = rock;
+        dungeonPtr->grid[0][x].hardness = ROCK_HARDNESS_IMMUTABLE;
+        dungeonPtr->grid[0][x].monsterPtr = NULL;
+        dungeonPtr->grid[HEIGHT - 1][x].material = rock;
+        dungeonPtr->grid[HEIGHT - 1][x].hardness = ROCK_HARDNESS_IMMUTABLE;
+        dungeonPtr->grid[HEIGHT - 1][x].monsterPtr = NULL;
+    }
+
     populateRooms(*dungeonPtr);
     return 0;
 }
@@ -397,4 +470,13 @@ void populateRooms(dungeon_t dungeon) {
             }
         }
     }
+}
+
+void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr) {
+    free(monsterPtrs[toRemove]);
+    while (toRemove < *monsterCountPtr - 1) {
+        monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
+        toRemove++;
+    }
+    (*monsterCountPtr)--;
 }

@@ -7,18 +7,21 @@
 #include <libgen.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/unistd.h>
 
 #include "main.h"
 #include "dungeon.h"
 #include "path.h"
+#include "movement.h"
 
 int main(int argc, char* argv[]) {
     int errLevel;
     dungeon_t dungeon;
+    int numMonSpecified = 0;
 
     //init random
     unsigned int seed;
-    seed = (unsigned int)time(NULL); //1453848819;
+    seed = 1456266256; //(unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 
@@ -30,10 +33,21 @@ int main(int argc, char* argv[]) {
             save = 1;
         } else if (strcmp(argv[i], "--load") == 0) {
             load = 1;
+        } else if (strcmp(argv[i], "--nummon") == 0) {
+            if (i + 1 >= argc) {
+                showUsage(argv[0]);
+                return 0;
+            }
+            dungeon.monsterCount = atoi(argv[++i]);
+            numMonSpecified = 1;
         } else {
             showUsage(argv[0]);
             return 0;
         }
+    }
+
+    if (!numMonSpecified) {
+        dungeon.monsterCount = rand() % (42 / 2);
     }
 
     // load or generate dungeon
@@ -53,7 +67,6 @@ int main(int argc, char* argv[]) {
     }
     pathMallocDistGrid(&dungeon.tunnelingDist);
     pathMallocDistGrid(&dungeon.nontunnelingDist);
-    dungeonPlacePC(&dungeon);
 
     // make calculations
     pathNontunneling(&dungeon);
@@ -61,10 +74,19 @@ int main(int argc, char* argv[]) {
 
     // print dungeon
     printRooms(dungeon.roomCount, dungeon.rooms);
+    printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
     printDungeon(&dungeon);
 
-    printDistGrid(&dungeon, dungeon.tunnelingDist);
-    printDistGrid(&dungeon, dungeon.nontunnelingDist);
+    // do move
+    //for (int i = 0; i < 100000; i++) {
+        //usleep(400000);
+        movePC(&dungeon);
+        printDungeon(&dungeon);
+    printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
+    //}
+
+    //printDistGrid(&dungeon, dungeon.tunnelingDist);
+    //printDistGrid(&dungeon, dungeon.nontunnelingDist);
 
     // save dungeon
     if (save) {
