@@ -8,11 +8,11 @@
 #include <time.h>
 #include <string.h>
 #include <libgen.h>
-#include <inttypes.h>
 
 #include "main.h"
 
 int main(int argc, char* argv[]) {
+    char* fileName;
     int errLevel;
     gridCell_t** dungeonGrid;
     room_t* rooms;
@@ -33,7 +33,9 @@ int main(int argc, char* argv[]) {
 
     // load or generate dungeon
     if (load) {
-        errLevel = loadDungeon(&dungeonGrid, &roomCount, &rooms, dungeonFileName());
+        fileName = dungeonFileName();
+        errLevel = loadDungeon(&dungeonGrid, &roomCount, &rooms, fileName);
+        free(fileName);
         if (errLevel) {
             printf("Failed to load the dungeon.  Read error %d\n", errLevel);
             return -1;
@@ -53,7 +55,9 @@ int main(int argc, char* argv[]) {
 
     // save dungeon
     if (save) {
-        errLevel = saveDungeon(dungeonGrid, roomCount, rooms, dungeonFileName());
+        fileName = dungeonFileName();
+        errLevel = saveDungeon(dungeonGrid, roomCount, rooms, fileName);
+        free(fileName);
         if (errLevel) {
             printf("Failed to save the dungeon.  Save error %d\n", errLevel);
             return -1;
