@@ -19,7 +19,7 @@ void turnInit(dungeon_t* dungeonPtr) {
     dungeonPtr->turnsHeapPtr = malloc(sizeof(binheap_t));//TODO free that
     binheap_init(dungeonPtr->turnsHeapPtr, turnCompare, turnDelete);
     for (int i = 0; i < dungeonPtr->monsterCount; i++) {
-        turn = malloc(sizeof(turn));
+        turn = malloc(sizeof(turn_t));
         turn->monsterPtr = dungeonPtr->monsterPtrs[i];
         turn->nextTurn = (100 / turn->monsterPtr->speed);
         turn->id = i;
