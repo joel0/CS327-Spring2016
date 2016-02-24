@@ -61,8 +61,15 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // not telepathic
-            generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
-            moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
+            if (isLineOfSight(dungeonPtr->grid, monsterPtr->x, monsterPtr->y, dungeonPtr->PC.x, dungeonPtr->PC.y)){
+                // player is visible
+                generateDirectMove(dungeonPtr, monsterPtr, &dstX, &dstY);
+                moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
+            } else {
+                // player is not visible, move randomly
+                generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
+                moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
+            }
         }
     }
 
@@ -99,7 +106,9 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
     if (grid[dstY][dstX].material == rock) {
         grid[dstY][dstX].material = corridor;
         grid[dstY][dstX].hardness = 0;
+        //TODO recalculate the path
     }
+    //TODO if PC, recalculate paths
 }
 
 void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {
