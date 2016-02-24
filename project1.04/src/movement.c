@@ -268,6 +268,8 @@ int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2) {
     double slope;
     int leftX, leftY;
     int rightX, rightY;
+    int topX, topY;
+    int bottomY;
     if (x1 < x2) {
         leftX = x1;
         leftY = y1;
@@ -279,9 +281,24 @@ int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2) {
         rightX = x1;
         rightY = y1;
     }
+    if (y1 < y2) {
+        topX = x1;
+        topY = y1;
+        bottomY = y2;
+    } else {
+        topX = x2;
+        topY = y2;
+        bottomY = y1;
+    }
     slope = ((double) (leftY - rightY)) / (leftX - rightX);
     for (int x = leftX; x < rightX; x++) {
         int y = (int) (round((x - leftX) * slope) + leftY);
+        if (grid[y][x].hardness != 0) {
+            return 0;
+        }
+    }
+    for (int y = topY; y < bottomY; y++) {
+        int x = (int) (round((y - topY) / slope) + topX);
         if (grid[y][x].hardness != 0) {
             return 0;
         }
