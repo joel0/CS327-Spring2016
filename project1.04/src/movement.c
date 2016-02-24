@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "movement.h"
 #include "utils.h"
@@ -97,7 +98,7 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
 
     if (grid[dstY][dstX].monsterPtr != NULL) {
         // A monster is eating another.  We must delete the eaten one.
-        int toRemove = 0; // skipping the PC at index 0
+        int toRemove = -1;
         while (dungeonPtr->monsterPtrs[++toRemove] != grid[dstY][dstX].monsterPtr)
             ;
         dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
