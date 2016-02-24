@@ -106,17 +106,23 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
             ;
         dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
     }
-    grid[dstY][dstX].monsterPtr = grid[srcY][srcX].monsterPtr;
-    grid[srcY][srcX].monsterPtr = NULL;
-    grid[dstY][dstX].monsterPtr->x = dstX;
-    grid[dstY][dstX].monsterPtr->y = dstY;
-
-    // tunneling
-    if (grid[dstY][dstX].material == rock) {
-        grid[dstY][dstX].material = corridor;
-        grid[dstY][dstX].hardness = 0;
+    if (grid[dstY][dstX].hardness > 85 && !monsterPtr->isPC) {
+        // The rock must be bored through
+        grid[dstY][dstX].hardness -= 85;
         pathTunneling(dungeonPtr);
-        pathNontunneling(dungeonPtr);
+    } else {
+        grid[dstY][dstX].monsterPtr = grid[srcY][srcX].monsterPtr;
+        grid[srcY][srcX].monsterPtr = NULL;
+        grid[dstY][dstX].monsterPtr->x = dstX;
+        grid[dstY][dstX].monsterPtr->y = dstY;
+
+        // tunneling
+        if (grid[dstY][dstX].material == rock) {
+            grid[dstY][dstX].material = corridor;
+            grid[dstY][dstX].hardness = 0;
+            pathTunneling(dungeonPtr);
+            pathNontunneling(dungeonPtr);
+        }
     }
 }
 
