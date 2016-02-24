@@ -1,4 +1,10 @@
 2016-02-24
+free() in all the right places
+
+2016-02-24
+Finalized the features!  (Needs some free() calls though.)
+
+2016-02-24
 Fixed bugs with using malloc wrong (thanks valgrind).  Implemented intelligent monster paths.
 
 2016-02-24

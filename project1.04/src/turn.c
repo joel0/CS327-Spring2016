@@ -6,10 +6,7 @@
 #include <stdio.h>
 
 #include "turn.h"
-#include "binheap.h"
-#include "dungeon.h"
 #include "movement.h"
-#include "monster.h"
 
 int turnCompare(const void* d1, const void* d2);
 void turnDelete(void* d);
@@ -58,5 +55,5 @@ int turnCompare(const void* d1, const void* d2) {
 }
 
 void turnDelete(void* d) {
-    //free(d);
+    free(d);
 }

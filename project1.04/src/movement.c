@@ -15,7 +15,7 @@ int isRock(gridCell_t** grid, int x, int y);
 int isImmutable(gridCell_t **grid, int x, int y);
 void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
 void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
-void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
+void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int targetX, int targetY, int* dstX, int* dstY);
 void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dstY);
 int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2);
 
@@ -59,20 +59,20 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
             } else if (monsterPtr->lastPCX) {
                 // PC is remembered
-                generateDirectMove(dungeonPtr, monsterPtr, &dstX, &dstY);
+                generateDirectMove(dungeonPtr, monsterPtr, monsterPtr->lastPCX, monsterPtr->lastPCY, &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
             }
         }
     } else {
         // not intelligent
         if (monsterPtr->type & MONSTER_TELEPATHIC) {
-            generateDirectMove(dungeonPtr, monsterPtr, &dstX, &dstY);
+            generateDirectMove(dungeonPtr, monsterPtr, dungeonPtr->PC.x, dungeonPtr->PC.y, &dstX, &dstY);
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // not telepathic
             if (isLineOfSight(dungeonPtr->grid, monsterPtr->x, monsterPtr->y, dungeonPtr->PC.x, dungeonPtr->PC.y)){
                 // player is visible
-                generateDirectMove(dungeonPtr, monsterPtr, &dstX, &dstY);
+                generateDirectMove(dungeonPtr, monsterPtr, dungeonPtr->PC.x, dungeonPtr->PC.y, &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
             } else {
                 // player is not visible, move randomly
@@ -106,7 +106,7 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
             ;
         dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
     }
-    if (grid[dstY][dstX].hardness > 85 && !monsterPtr->isPC) {
+    if (grid[dstY][dstX].hardness > 85) {
         // The rock must be bored through
         grid[dstY][dstX].hardness -= 85;
         pathTunneling(dungeonPtr);
@@ -207,9 +207,7 @@ void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dst
     *dstY = y;
 }
 
-void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {
-    int targetX = monsterPtr->x;
-    int targetY = monsterPtr->y;
+void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int targetX, int targetY, int* dstX, int* dstY) {
     direction_t direction = calculateDirection(targetX, targetY, dungeonPtr->PC.x, dungeonPtr->PC.y);
     if (direction & north) {
         targetY--;

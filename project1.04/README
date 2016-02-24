@@ -1,8 +1,11 @@
 Dungeon Now with Enemies
 
 The dungeon game now has enemies who can interact with the PC.  The PC himself can move (randomly).  The enemies will
-move according to their properties when I get that feature implemented.  The enemies (and PC) move in the appropriate
-order.  Killing other characters works.  I have a hard coded seed for development purposes.
+move according to their properties.  A character (monster or PC) kills another character when trying to move to the same
+cell.  The monsters and PC must bore holes through the walls, which makes the characters appear to go a turn without
+moving.  The output is printed after each PC turn.  For debugging, when a character takes his turn, a message saying
+who moved is printed out.  There are debugging headers enabled, which prints the seed, a list of rooms, and the
+monsters.
 
 Usage:
     bin/main [--save] [--load] [--nummon #]

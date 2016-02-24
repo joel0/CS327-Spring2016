@@ -12,7 +12,6 @@
 #include "main.h"
 #include "dungeon.h"
 #include "path.h"
-#include "movement.h"
 #include "turn.h"
 
 int main(int argc, char* argv[]) {
@@ -22,7 +21,7 @@ int main(int argc, char* argv[]) {
 
     //init random
     unsigned int seed;
-    seed = 0;//1456266256; //(unsigned int)time(NULL); //1453848819;
+    seed = (unsigned int)time(NULL); //1453848819;
     srand(seed);
     printf("Seed: %d\n", seed);
 

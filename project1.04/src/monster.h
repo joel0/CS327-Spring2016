@@ -6,6 +6,7 @@
 #define PROJECT_MONSTER_H
 
 #include <inttypes.h>
+typedef struct dungeon_struct dungeon_t;
 
 #define MONSTER_MIN_SPEED 5
 #define MONSTER_MAX_SPEED 20
@@ -26,6 +27,8 @@ typedef struct monster_struct {
     int alive;
 } monster_t;
 
+void initMonsters(dungeon_t* dungeonPtr);
+void monstersDestroy(dungeon_t* dungeonPtr);
 char monsterGetChar(monster_t m);
 void monsterGenerate(monster_t* m);
 

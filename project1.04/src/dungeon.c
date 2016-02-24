@@ -11,8 +11,6 @@
 #include "dungeon.h"
 #include "globals.h"
 #include "utils.h"
-#include "monster.h"
-#include "movement.h"
 #include "turn.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
@@ -184,16 +182,9 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
         }
     }
 
-    // Init the PC
-    dungeonPtr->PC.isPC = 1;
-    dungeonPtr->PC.speed = 10;
-    dungeonPtr->PC.alive = 1;
-    dungeonPlaceMonster(dungeonPtr, &dungeonPtr->PC);
+    initMonsters(dungeonPtr);
+    turnInit(dungeonPtr);
 
-    dungeonPtr->monsterCount = 1;
-    dungeonPtr->monsterPtrs = malloc(sizeof(monster_t) * dungeonPtr->monsterCount);
-    dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
-    //TODO init monsters outside of this and generateDungeon
     return 0;
 }
 
@@ -214,27 +205,7 @@ int generateDungeon(dungeon_t* dungeonPtr) {
     }
     connectRooms(dungeonPtr->grid, dungeonPtr->rooms, dungeonPtr->roomCount);
 
-    // Characters
-    dungeonPtr->PC.isPC = 1;
-    dungeonPtr->PC.speed = 10;
-    dungeonPtr->PC.alive = 1;
-    dungeonPtr->PC.type = MONSTER_TUNNELING;
-    dungeonPlaceMonster(dungeonPtr, &dungeonPtr->PC);
-    dungeonPtr->monsterCount++; // +1 for the PC
-    dungeonPtr->monsterPtrs = malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
-    dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
-
-    for (int i = 1; i < dungeonPtr->monsterCount; i++) {
-        monster_t* monsterPtr;
-        monsterPtr = malloc(sizeof(monster_t));
-        monsterGenerate(monsterPtr);
-        dungeonPtr->monsterPtrs[i] = monsterPtr;
-        monsterPtr->alive = 1;
-        monsterPtr->lastPCX = 0;
-        monsterPtr->lastPCY = 0;
-        dungeonPlaceMonster(dungeonPtr, monsterPtr);
-    }
-
+    initMonsters(dungeonPtr);
     turnInit(dungeonPtr);
 
     return 0;
@@ -242,12 +213,13 @@ int generateDungeon(dungeon_t* dungeonPtr) {
 
 void destroyDungeon(dungeon_t dungeon) {
     turnDestroy(&dungeon);
+    monstersDestroy(&dungeon);
     free(dungeon.monsterPtrs);
     free2DArray((void **) dungeon.grid, HEIGHT);
     free(dungeon.rooms);
 }
 
-void dungeonPlaceMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
+void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster_t *monsterPtr) {
     int chosenRoom;
     int relX;
     int relY;
