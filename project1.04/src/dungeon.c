@@ -458,10 +458,13 @@ void populateRooms(dungeon_t dungeon) {
 void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr) {
     monster_t* deletedMonster = monsterPtrs[toRemove];
     monsterPtrs[toRemove]->alive = 0;
-    while (toRemove < *monsterCountPtr - 1) {
-        monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
-        toRemove++;
+    // Do not move the PC in the array.  It causes problems when trying to call free() on the array that was malloc()ed.
+    if (!monsterPtrs[toRemove]->isPC) {
+        while (toRemove < *monsterCountPtr - 1) {
+            monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
+            toRemove++;
+        }
+        monsterPtrs[toRemove] = deletedMonster;
     }
-    monsterPtrs[toRemove] = deletedMonster;
     (*monsterCountPtr)--;
 }
