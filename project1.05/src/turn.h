@@ -16,6 +16,7 @@ typedef struct turn_struct {
 
 void turnInit(dungeon_t* dungeonPtr);
 void turnDo(dungeon_t* dungeonPtr);
+void turnDoPC(dungeon_t* dungeonPtr);
 int turnIsPC(dungeon_t* dungeonPtr);
 void turnDestroy(dungeon_t* dungeonPtr);
 

@@ -1,4 +1,7 @@
 2016-03-07
+PC movement is controlled by a human!
+
+2016-03-07
 Dungeon printing works with curses.  I need to verify that the disabled printfs are not needed.
 
 2016-03-06

@@ -37,9 +37,95 @@ void turnDo(dungeon_t* dungeonPtr) {
     moveMonsterLogic(dungeonPtr, turnPtr->monsterPtr);
     turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
-    //printf("Moved %c\n", monsterGetChar(*turnPtr->monsterPtr));
     mvprintw(0, 0, "Moved %c", monsterGetChar(*turnPtr->monsterPtr));
     refresh();
+}
+
+void turnDoPC(dungeon_t* dungeonPtr) {
+    int userChar;
+    int validChar = 0;
+    int dstX;
+    int dstY;
+    turn_t* turnPtr;
+    turnPtr = binheap_remove_min(dungeonPtr->turnsHeapPtr);
+    dstX = turnPtr->monsterPtr->x;
+    dstY = turnPtr->monsterPtr->y;
+
+    do {
+        userChar = wgetch(stdscr);
+        switch (userChar) {
+            case '7': //Num Lock on
+            case KEY_HOME: //Num Lock off
+            case 'y':
+                mvprintw(0, 0, "User entered up-left");
+                dstX--;
+                dstY--;
+                validChar = 1;
+                break;
+            case '8': //Num Lock on
+            case KEY_UP: //Num Lock off
+            case 'k':
+            case 'w':
+                mvprintw(0, 0, "User entered up");
+                dstY--;
+                validChar = 1;
+                break;
+            case '9': //Num Lock on
+            case KEY_PPAGE: //Num Lock off
+            case 'u':
+                mvprintw(0, 0, "User entered up-right");
+                dstX++;
+                dstY--;
+                validChar = 1;
+                break;
+            case '4': //Num Lock on
+            case KEY_LEFT: //Num Lock off
+            case 'h':
+            case 'a':
+                mvprintw(0, 0, "User entered left");
+                dstX--;
+                validChar = 1;
+                break;
+            case '6': //Num Lock on
+            case KEY_RIGHT: //Num Lock off
+            case 'l':
+            case 'd':
+                mvprintw(0, 0, "User entered right");
+                dstX++;
+                validChar = 1;
+                break;
+            case '1': //Num Lock on
+            case KEY_END: //Num Lock off
+            case 'b':
+                mvprintw(0, 0, "User entered down-left");
+                dstX--;
+                dstY++;
+                validChar = 1;
+                break;
+            case '2': //Num Lock on
+            case KEY_DOWN: //Num Lock off
+            case 'j':
+            case 's':
+                mvprintw(0, 0, "User entered down");
+                dstY++;
+                validChar = 1;
+                break;
+            case '3': //Num Lock on
+            case KEY_NPAGE: //Num Lock off
+            case 'n':
+                mvprintw(0, 0, "User entered down-right");
+                dstX++;
+                dstY++;
+                validChar = 1;
+                break;
+            default:
+                mvprintw(0, 0, "Other key");
+        }
+    } while (!validChar);
+
+    moveMonster(dungeonPtr, turnPtr->monsterPtr, dstX, dstY);
+    turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
+    binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
 }
 
 int turnIsPC(dungeon_t* dungeonPtr) {

@@ -16,7 +16,6 @@ int isImmutable(gridCell_t **grid, int x, int y);
 void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
 void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
 void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int targetX, int targetY, int* dstX, int* dstY);
-void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dstY);
 int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2);
 
 //void movePC(dungeon_t* dungeonPtr) {
@@ -32,11 +31,7 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
 
     int dstX, dstY;
     if (monsterPtr->isPC) {
-        // PC gets pure random movement
-        generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
-        moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
-        pathTunneling(dungeonPtr);
-        pathNontunneling(dungeonPtr);
+        // PC does not move here.  His logic is handled elsewhere.
         return;
     }
     if (monsterPtr->type & MONSTER_ERRATIC) {

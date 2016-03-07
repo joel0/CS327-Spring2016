@@ -7,7 +7,6 @@
 #include <libgen.h>
 #include <stdlib.h>
 #include <time.h>
-#include <sys/unistd.h>
 #include <curses.h>
 
 #include "main.h"
@@ -73,10 +72,8 @@ int main(int argc, char* argv[]) {
     pathNontunneling(&dungeon);
     pathTunneling(&dungeon);
 
-    initscr();
-//    mvaddch(0,0,'h');
-
     // print dungeon
+    initTerminal();
     //printRooms(dungeon.roomCount, dungeon.rooms);
     //printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
     printDungeon(&dungeon);
@@ -84,10 +81,12 @@ int main(int argc, char* argv[]) {
     // do move
     while (dungeon.PC.alive && dungeon.monsterCount > 1) {
         int PCTurn = turnIsPC(&dungeon);
-        turnDo(&dungeon);
         if (PCTurn) {
             printDungeon(&dungeon);
-            usleep(400000);
+            turnDoPC(&dungeon);
+            //usleep(400000);
+        } else {
+            turnDo(&dungeon);
         }
     }
 
@@ -99,6 +98,8 @@ int main(int argc, char* argv[]) {
     } else {
         printf("Yay!  You defeated all the monsters.\n");
     }
+
+    getch();
 
     //printDistGrid(&dungeon, dungeon.tunnelingDist);
     //printDistGrid(&dungeon, dungeon.nontunnelingDist);
@@ -135,4 +136,12 @@ char* dungeonFileName() {
     fullPath = malloc(sizeof(char) * (strlen(homeDir) + strlen(relativePath) + 1));
     sprintf(fullPath, "%s/.rlg327/dungeon", homeDir);
     return fullPath;
+}
+
+void initTerminal() {
+    initscr();
+    raw();
+    noecho();
+    curs_set(0);
+    keypad(stdscr, TRUE);
 }
