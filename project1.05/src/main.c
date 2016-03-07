@@ -73,14 +73,12 @@ int main(int argc, char* argv[]) {
     pathNontunneling(&dungeon);
     pathTunneling(&dungeon);
 
-//    initscr();
+    initscr();
 //    mvaddch(0,0,'h');
-//    getch();
-//    endwin();
 
     // print dungeon
-    printRooms(dungeon.roomCount, dungeon.rooms);
-    printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
+    //printRooms(dungeon.roomCount, dungeon.rooms);
+    //printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
     printDungeon(&dungeon);
 
     // do move
@@ -92,6 +90,9 @@ int main(int argc, char* argv[]) {
             usleep(400000);
         }
     }
+
+    getch();
+    endwin();
 
     if (!dungeon.PC.alive) {
         printf("You died!\n");

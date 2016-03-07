@@ -1,2 +1,5 @@
+2016-03-07
+Dungeon printing works with curses.  I need to verify that the disabled printfs are not needed.
+
 2016-03-06
 Initial project and created stairs.  They don't work yet though.

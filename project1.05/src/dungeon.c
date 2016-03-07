@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <curses.h>
 
 #include "dungeon.h"
 #include "globals.h"
@@ -426,14 +427,16 @@ void printDungeon(dungeon_t* dungeonPtr) {
         for (int x = 0; x < WIDTH; x++) {
             if (dungeonPtr->grid[y][x].monsterPtr == NULL) {
                 // No monster
-                printf("%c", (char) dungeonPtr->grid[y][x].material);
+                //printf("%c", (char) dungeonPtr->grid[y][x].material);
+                mvaddch(y + 1, x, (char) dungeonPtr->grid[y][x].material);
             } else {
                 // Monster (or PC)
-                printf("%c", monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
+                //printf("%c", monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
+                mvaddch(y + 1, x, monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
             }
         }
-        printf("\n");
     }
+    refresh();
 }
 
 int populateGrid(dungeon_t* dungeonPtr) {

@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <curses.h>
 
 #include "turn.h"
 #include "movement.h"
@@ -36,7 +37,9 @@ void turnDo(dungeon_t* dungeonPtr) {
     moveMonsterLogic(dungeonPtr, turnPtr->monsterPtr);
     turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
-    printf("Moved %c\n", monsterGetChar(*turnPtr->monsterPtr));
+    //printf("Moved %c\n", monsterGetChar(*turnPtr->monsterPtr));
+    mvprintw(0, 0, "Moved %c", monsterGetChar(*turnPtr->monsterPtr));
+    refresh();
 }
 
 int turnIsPC(dungeon_t* dungeonPtr) {
