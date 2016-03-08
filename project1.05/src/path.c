@@ -44,53 +44,68 @@ int pathNontunneling(dungeon_t* dungeonPtr) {
 }
 
 int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(dungeon_t*, int, int)) {
-    binheap_t heap;
-    //binheap_node_t*** binheapNodes;
-    binheap_node_t* binheapNodes[HEIGHT][WIDTH];
-    //malloc2DArray((void ***) &binheapNodes, sizeof(binheap_node_t*), WIDTH, HEIGHT);
+    binheap_t queue;
+    binheap_init(&queue, pathCmp, NULL);
 
-    binheap_init(&heap, pathCmp, NULL);
+    gridNode_t** objects = malloc(sizeof(gridNode_t) * HEIGHT * WIDTH);
+    binheap_node_t*** bh_ptr = malloc(sizeof(binheap_node_t*) * HEIGHT * WIDTH);
 
+    // No need to add character: he starts in a room
     for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
-            if (x == dungeonPtr->PC.x && y == dungeonPtr->PC.y) {
-                distGrid[y][x] = 0;
+        objects[y] = malloc(sizeof(gridNode_t) * WIDTH);
+        bh_ptr[y] = malloc(sizeof(binheap_node_t*) * WIDTH);
+        for (int x = 0; x < HEIGHT; x++) {
+            objects[y][x].x = x;
+            objects[y][x].y = y;
+            if (y != dungeonPtr->PC.y || x != dungeonPtr->PC.x) {
+                distGrid[y][x] = 255;
             } else {
-                distGrid[y][x] = PATH_DIST_INFINITE;
+                distGrid[y][x] = 0;
             }
-            // Insert anything that's not an edge.
-            if (y != 0 && y < HEIGHT - 1 && x != 0 && x < WIDTH - 1) {
-                gridNode_t* dg = mallocGridNode(&distGrid[y][x], x, y);
-                binheapNodes[y][x] = binheap_insert(&heap, dg);
-            }
+            objects[y][x].weightPtr = &distGrid[y][x];
+            bh_ptr[y][x] = binheap_insert(&queue, &objects[y][x]);
         }
     }
 
-    gridNode_t* curNodePtr;
-    int neighborCalculatedWeight;
-    uint8_t neighborCurWeight;
-    while (!binheap_is_empty(&heap)) {
-        curNodePtr = binheap_remove_min(&heap);
-        for (int y = curNodePtr->y - 1; y < curNodePtr->y + 2; y++) {
-            for (int x = curNodePtr->x - 1; x < curNodePtr->x + 2; x++) {
-                // Avoid current cell and any edge cells
-                if ((x != curNodePtr->x || y != curNodePtr->y) &&
-                    x > 0 && x < WIDTH - 1 && y > 0 && y < HEIGHT - 1) {
-                    neighborCurWeight = distGrid[y][x];
-                    neighborCalculatedWeight = (int)*curNodePtr->weightPtr + relDist(dungeonPtr, x, y); //pathCalculateWeight(dungeonPtr->grid[y][x].hardness);
-                    if (neighborCalculatedWeight < neighborCurWeight) {
-                        distGrid[y][x] = ctype_uint8(neighborCalculatedWeight);
-                        binheap_decrease_key(&heap, binheapNodes[y][x]);
+    gridNode_t* c;
+
+    while ((c = (gridNode_t*) binheap_remove_min(&queue))) {
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                int x = c->x + dx;
+                int y = c->y + dy;
+                int dist = 1 + *objects[c->y][c->x].weightPtr;
+
+                if ((dx != dy) && x > 0 && y > 0 && x < WIDTH && y < HEIGHT) {
+                    if (!isBorder(x, y) && (dist < *objects[y][x].weightPtr || *objects[y][x].weightPtr < 0)) {
+                        *objects[y][x].weightPtr = dist;
+                        binheap_decrease_key(&queue, bh_ptr[y][x]);
                     }
                 }
             }
         }
-        binheapNodes[curNodePtr->y][curNodePtr->x] = NULL;
-        //free(curNodePtr);
     }
-    //free2DArray((void **) binheapNodes, HEIGHT);
-    binheap_delete(&heap);
-    return 0;
+
+    // No need to add character: he starts in a room
+//    for (int y = 0; y < HEIGHT; y++) {
+//        for (int x = 0; x < WIDTH; x++) {
+//            if (current->rooms_layer[y][x] != ' ' || current->hallways_layer[y][x] != ' ') {
+//                current->main_character.player_distances[y][x] = objects[y][x].distance;
+//            }
+//        }
+//    }
+
+    for (int y = 0; y < HEIGHT; y++) {
+        free(objects[y]);
+        free(bh_ptr[y]);
+    }
+    free(objects);
+    free(bh_ptr);
+    binheap_delete(&queue);
+}
+
+int isBorder(int x, int y) {
+    return (x == 0) || (y == 0) || (x == WIDTH - 1) || (y = HEIGHT - 1);
 }
 
 uint8_t ctype_uint8(int val) {
