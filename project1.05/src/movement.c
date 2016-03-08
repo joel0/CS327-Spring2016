@@ -94,6 +94,10 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
     if (monsterPtr->x == dstX && monsterPtr->y == dstY) {
         return;
     }
+    // Do nothing if the monster (or PC) is trying to go into immutable rock
+    if (grid[dstY][dstX].hardness == ROCK_HARDNESS_IMMUTABLE) {
+        return;
+    }
 
     if (grid[dstY][dstX].monsterPtr != NULL) {
         // A monster is eating another.  We must delete the eaten one.

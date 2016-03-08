@@ -14,9 +14,17 @@ typedef struct turn_struct {
     monster_t* monsterPtr;
 } turn_t;
 
+typedef enum PC_action_enum {
+    actionStairsDn,
+    actionStairsUp,
+    actionListMonsters,
+    actionSave,
+    actionMovement
+} PC_action;
+
 void turnInit(dungeon_t* dungeonPtr);
 void turnDo(dungeon_t* dungeonPtr);
-void turnDoPC(dungeon_t* dungeonPtr);
+PC_action turnDoPC(dungeon_t* dungeonPtr);
 int turnIsPC(dungeon_t* dungeonPtr);
 void turnDestroy(dungeon_t* dungeonPtr);
 

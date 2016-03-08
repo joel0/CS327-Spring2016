@@ -13,6 +13,7 @@
 #include "dungeon.h"
 #include "path.h"
 #include "turn.h"
+#include "screen.h"
 
 int main(int argc, char* argv[]) {
     int errLevel;
@@ -68,42 +69,6 @@ int main(int argc, char* argv[]) {
     pathMallocDistGrid(&dungeon.tunnelingDist);
     pathMallocDistGrid(&dungeon.nontunnelingDist);
 
-    // make calculations
-    pathNontunneling(&dungeon);
-    pathTunneling(&dungeon);
-
-    // print dungeon
-    initTerminal();
-    //printRooms(dungeon.roomCount, dungeon.rooms);
-    //printMonsters(dungeon.monsterCount, dungeon.monsterPtrs);
-    printDungeon(&dungeon);
-
-    // do move
-    while (dungeon.PC.alive && dungeon.monsterCount > 1) {
-        int PCTurn = turnIsPC(&dungeon);
-        if (PCTurn) {
-            printDungeon(&dungeon);
-            turnDoPC(&dungeon);
-            //usleep(400000);
-        } else {
-            turnDo(&dungeon);
-        }
-    }
-
-    getch();
-    endwin();
-
-    if (!dungeon.PC.alive) {
-        printf("You died!\n");
-    } else {
-        printf("Yay!  You defeated all the monsters.\n");
-    }
-
-    getch();
-
-    //printDistGrid(&dungeon, dungeon.tunnelingDist);
-    //printDistGrid(&dungeon, dungeon.nontunnelingDist);
-
     // save dungeon
     if (save) {
         errLevel = saveDungeon(dungeon, dungeonFileName());
@@ -113,7 +78,60 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // make calculations
+    pathNontunneling(&dungeon);
+    pathTunneling(&dungeon);
+
+    // print dungeon
+    initTerminal();
+    printDungeon(&dungeon);
+
+    // do move
+    PC_action userAction = actionMovement;
+    while (dungeon.PC.alive && dungeon.monsterCount > 1 && userAction != actionSave) {
+        int PCTurn = turnIsPC(&dungeon);
+        if (PCTurn) {
+            printDungeon(&dungeon);
+            mvprintw(0, 0, "(%d, %d)", dungeon.PC.x, dungeon.PC.y);
+            userAction = turnDoPC(&dungeon);
+            switch (userAction) {
+                case actionStairsUp:
+                case actionStairsDn:
+                    // Destroy old dungeon
+                    pathFreeDistGrid(dungeon.nontunnelingDist);
+                    pathFreeDistGrid(dungeon.tunnelingDist);
+                    destroyDungeon(dungeon);
+                    // Build new dungeon
+                    errLevel = generateDungeon(&dungeon);
+                    if (errLevel) {
+                        endwin();
+                        printf("Failed to allocate memory for the dungeon grid.\n");
+                        return errLevel;
+                    }
+                    pathMallocDistGrid(&dungeon.tunnelingDist);
+                    pathMallocDistGrid(&dungeon.nontunnelingDist);
+                    pathNontunneling(&dungeon);
+                    pathTunneling(&dungeon);
+                    break;
+                case actionListMonsters:
+                    monsterList(&dungeon);
+                    break;
+                default: break;
+            }
+        } else {
+            turnDo(&dungeon);
+        }
+    }
+
+    screenClearRow(0);
+    if (!dungeon.PC.alive) {
+        mvprintw(0, 0, "You died!  Press any key to exit.");
+    } else {
+        mvprintw(0, 0, "Yay!  You defeated all the monsters.  Press any key to exit.");
+    }
+
     // Clean up
+    getch(); // "press any key"
     pathFreeDistGrid(dungeon.nontunnelingDist);
     pathFreeDistGrid(dungeon.tunnelingDist);
     destroyDungeon(dungeon);
@@ -136,12 +154,4 @@ char* dungeonFileName() {
     fullPath = malloc(sizeof(char) * (strlen(homeDir) + strlen(relativePath) + 1));
     sprintf(fullPath, "%s/.rlg327/dungeon", homeDir);
     return fullPath;
-}
-
-void initTerminal() {
-    initscr();
-    raw();
-    noecho();
-    curs_set(0);
-    keypad(stdscr, TRUE);
 }

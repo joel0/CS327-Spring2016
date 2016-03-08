@@ -7,6 +7,5 @@
 
 void showUsage(char* name);
 char* dungeonFileName();
-void initTerminal();
 
 #endif //PROJECT_MAIN_H

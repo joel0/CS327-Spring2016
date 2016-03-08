@@ -8,6 +8,8 @@
 
 #include "turn.h"
 #include "movement.h"
+#include "screen.h"
+#include "path.h"
 
 int turnCompare(const void* d1, const void* d2);
 void turnDelete(void* d);
@@ -37,11 +39,14 @@ void turnDo(dungeon_t* dungeonPtr) {
     moveMonsterLogic(dungeonPtr, turnPtr->monsterPtr);
     turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
-    mvprintw(0, 0, "Moved %c", monsterGetChar(*turnPtr->monsterPtr));
-    refresh();
+
+//    screenClearRow(0);
+//    mvprintw(0, 0, "Moved %c", monsterGetChar(*turnPtr->monsterPtr));
+//    refresh();
 }
 
-void turnDoPC(dungeon_t* dungeonPtr) {
+PC_action turnDoPC(dungeon_t* dungeonPtr) {
+    PC_action returnValue = actionMovement;
     int userChar;
     int validChar = 0;
     int dstX;
@@ -52,7 +57,8 @@ void turnDoPC(dungeon_t* dungeonPtr) {
     dstY = turnPtr->monsterPtr->y;
 
     do {
-        userChar = wgetch(stdscr);
+        userChar = getch();
+        screenClearRow(0);
         switch (userChar) {
             case '7': //Num Lock on
             case KEY_HOME: //Num Lock off
@@ -65,7 +71,6 @@ void turnDoPC(dungeon_t* dungeonPtr) {
             case '8': //Num Lock on
             case KEY_UP: //Num Lock off
             case 'k':
-            case 'w':
                 mvprintw(0, 0, "User entered up");
                 dstY--;
                 validChar = 1;
@@ -89,7 +94,6 @@ void turnDoPC(dungeon_t* dungeonPtr) {
             case '6': //Num Lock on
             case KEY_RIGHT: //Num Lock off
             case 'l':
-            case 'd':
                 mvprintw(0, 0, "User entered right");
                 dstX++;
                 validChar = 1;
@@ -105,7 +109,6 @@ void turnDoPC(dungeon_t* dungeonPtr) {
             case '2': //Num Lock on
             case KEY_DOWN: //Num Lock off
             case 'j':
-            case 's':
                 mvprintw(0, 0, "User entered down");
                 dstY++;
                 validChar = 1;
@@ -118,14 +121,49 @@ void turnDoPC(dungeon_t* dungeonPtr) {
                 dstY++;
                 validChar = 1;
                 break;
+            case ' ':
+            case '5': //Num Lock on
+            case 350: //Num Lock off (from testing, I can't find a #define)
+                //do nothing
+                validChar = 1;
+                break;
+            case '>':
+                if (dungeonPtr->grid[dstY][dstX].material == stairsDn) {
+                    returnValue = actionStairsDn;
+                    mvprintw(0, 0, "Going down the stairs.");
+                    validChar = 1;
+                } else {
+                    mvprintw(0, 0, "I can't dig a hole through the floor. Please find me some stairs to use.");
+                }
+                break;
+            case '<':
+                if (dungeonPtr->grid[dstY][dstX].material == stairsUp) {
+                    returnValue = actionStairsUp;
+                    mvprintw(0, 0, "Going up the stairs.");
+                    validChar = 1;
+                } else {
+                    mvprintw(0, 0, "I can't reach the ceiling from here. Please find me some stairs to use.");
+                }
+                break;
+            case 'm':
+                returnValue = actionListMonsters;
+                validChar = 1;
+                break;
+            case 's':
+                returnValue = actionSave;
+                validChar = 1;
+                break;
             default:
-                mvprintw(0, 0, "Other key");
+                mvprintw(0, 0, "You can't do that! (%d)", userChar);
         }
     } while (!validChar);
 
     moveMonster(dungeonPtr, turnPtr->monsterPtr, dstX, dstY);
+    pathTunneling(dungeonPtr);
+    pathNontunneling(dungeonPtr);
     turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
+    return returnValue;
 }
 
 int turnIsPC(dungeon_t* dungeonPtr) {

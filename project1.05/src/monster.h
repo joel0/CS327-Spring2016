@@ -31,5 +31,6 @@ void initMonsters(dungeon_t* dungeonPtr);
 void monstersDestroy(dungeon_t* dungeonPtr);
 char monsterGetChar(monster_t m);
 void monsterGenerate(monster_t* m);
+void monsterList(dungeon_t* dungeonPtr);
 
 #endif //PROJECT_MONSTER_H

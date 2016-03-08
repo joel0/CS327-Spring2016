@@ -57,3 +57,7 @@ void monsterGenerate(monster_t* m) {
     m->x = 0;
     m->y = 0;
 }
+
+void monsterList(dungeon_t* dungeonPtr) {
+
+}
