@@ -135,6 +135,7 @@ int main(int argc, char* argv[]) {
 
     // Clean up
     getch(); // "press any key"
+    endwin();
     pathFreeDistGrid(dungeon.nontunnelingDist);
     pathFreeDistGrid(dungeon.tunnelingDist);
     destroyDungeon(dungeon);
