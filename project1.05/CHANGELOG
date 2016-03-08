@@ -1,3 +1,7 @@
+2016-03-08
+Monster list looks quite nice, if I do say so myself.  I discovered that there's a bug in pathNontunneling(), but I
+simply cannot figure out what is going on. Ugh!
+
 2016-03-07
 All possible user input in handled.  Still need a method to print all monsters.
 

@@ -45,10 +45,11 @@ int pathNontunneling(dungeon_t* dungeonPtr) {
 
 int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(dungeon_t*, int, int)) {
     binheap_t heap;
-    binheap_node_t*** binheapNodes;
+    //binheap_node_t*** binheapNodes;
+    binheap_node_t* binheapNodes[HEIGHT][WIDTH];
+    //malloc2DArray((void ***) &binheapNodes, sizeof(binheap_node_t*), WIDTH, HEIGHT);
 
-    malloc2DArray((void ***) &binheapNodes, sizeof(binheap_node_t*), WIDTH, HEIGHT);
-    binheap_init(&heap, pathCmp, pathDataDelete);
+    binheap_init(&heap, pathCmp, NULL);
 
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
@@ -58,8 +59,9 @@ int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(d
                 distGrid[y][x] = PATH_DIST_INFINITE;
             }
             // Insert anything that's not an edge.
-            if (y != 0 && y != HEIGHT - 1 && x != 0 && x != WIDTH - 1) {
-                binheapNodes[y][x] = binheap_insert(&heap, mallocGridNode(&distGrid[y][x], x, y));
+            if (y != 0 && y < HEIGHT - 1 && x != 0 && x < WIDTH - 1) {
+                gridNode_t* dg = mallocGridNode(&distGrid[y][x], x, y);
+                binheapNodes[y][x] = binheap_insert(&heap, dg);
             }
         }
     }
@@ -83,9 +85,10 @@ int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(d
                 }
             }
         }
-        free(curNodePtr);
+        binheapNodes[curNodePtr->y][curNodePtr->x] = NULL;
+        //free(curNodePtr);
     }
-    free2DArray((void **) binheapNodes, HEIGHT);
+    //free2DArray((void **) binheapNodes, HEIGHT);
     binheap_delete(&heap);
     return 0;
 }

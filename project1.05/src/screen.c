@@ -12,6 +12,7 @@ void initTerminal() {
     noecho();
     curs_set(0);
     keypad(stdscr, TRUE);
+    start_color();
 }
 
 void screenClearRow(int row) {

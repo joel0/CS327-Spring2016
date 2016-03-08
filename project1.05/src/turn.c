@@ -158,11 +158,13 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
         }
     } while (!validChar);
 
-    moveMonster(dungeonPtr, turnPtr->monsterPtr, dstX, dstY);
-    pathTunneling(dungeonPtr);
-    pathNontunneling(dungeonPtr);
-    turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
-    binheap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
+    if (returnValue == actionMovement) {
+        moveMonster(dungeonPtr, turnPtr->monsterPtr, dstX, dstY);
+        pathTunneling(dungeonPtr);
+        pathNontunneling(dungeonPtr);
+        turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
+    }
+    binheap_insert(dungeonPtr->turnsHeapPtr, (void *) turnPtr);
     return returnValue;
 }
 

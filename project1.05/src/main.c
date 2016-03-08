@@ -92,8 +92,7 @@ int main(int argc, char* argv[]) {
         int PCTurn = turnIsPC(&dungeon);
         if (PCTurn) {
             printDungeon(&dungeon);
-            mvaddch(0, 0, ' ');
-            printDistGrid(&dungeon, dungeon.nontunnelingDist);
+            //printDistGrid(&dungeon, dungeon.nontunnelingDist);
 
             mvprintw(0, 0, "(%d, %d)", dungeon.PC.x, dungeon.PC.y);
             userAction = turnDoPC(&dungeon);
@@ -104,6 +103,7 @@ int main(int argc, char* argv[]) {
                     pathFreeDistGrid(dungeon.nontunnelingDist);
                     pathFreeDistGrid(dungeon.tunnelingDist);
                     destroyDungeon(dungeon);
+                    dungeon.monsterCount--; // PC was counted as a "monster".  He must be removed for reinitialisation.
                     // Build new dungeon
                     errLevel = generateDungeon(&dungeon);
                     if (errLevel) {
@@ -127,7 +127,9 @@ int main(int argc, char* argv[]) {
     }
 
     screenClearRow(0);
-    if (!dungeon.PC.alive) {
+    if (userAction == actionSave) {
+        mvprintw(0, 0, "Game saved (haha, not really!).  Press any key to exit.");
+    } else if (!dungeon.PC.alive) {
         mvprintw(0, 0, "You died!  Press any key to exit.");
     } else {
         mvprintw(0, 0, "Yay!  You defeated all the monsters.  Press any key to exit.");
