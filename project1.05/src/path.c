@@ -4,6 +4,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <curses.h>
+
 #include "path.h"
 #include "globals.h"
 #include "utils.h"
@@ -105,9 +107,10 @@ void printDistGrid(dungeon_t* dungeonPtr, uint8_t** grid) {
             } else {
                 currentChar = dungeonPtr->grid[y][x].material;
             }
-            printf("%c", currentChar);
+            mvaddch(y + 1, x, currentChar);
+            //printf("%c", currentChar);
         }
-        printf("\n");
+        //printf("\n");
     }
 }
 
@@ -134,6 +137,7 @@ dist_t pathCalculateRelWeightTunneling(dungeon_t* dungeonPtr, int x, int y) {
 }
 
 dist_t pathCalculateRelWeightNontunneling(dungeon_t* dungeonPtr, int x, int y) {
+    //return pathCalculateWeight(dungeonPtr->grid[y][x].hardness);
     if (dungeonPtr->grid[y][x].material != rock) {
         return pathCalculateWeight(dungeonPtr->grid[y][x].hardness);
     }

@@ -79,8 +79,8 @@ int main(int argc, char* argv[]) {
     }
 
     // make calculations
-    pathNontunneling(&dungeon);
     pathTunneling(&dungeon);
+    pathNontunneling(&dungeon);
 
     // print dungeon
     initTerminal();
@@ -92,6 +92,9 @@ int main(int argc, char* argv[]) {
         int PCTurn = turnIsPC(&dungeon);
         if (PCTurn) {
             printDungeon(&dungeon);
+            mvaddch(0, 0, ' ');
+            printDistGrid(&dungeon, dungeon.nontunnelingDist);
+
             mvprintw(0, 0, "(%d, %d)", dungeon.PC.x, dungeon.PC.y);
             userAction = turnDoPC(&dungeon);
             switch (userAction) {
@@ -110,8 +113,8 @@ int main(int argc, char* argv[]) {
                     }
                     pathMallocDistGrid(&dungeon.tunnelingDist);
                     pathMallocDistGrid(&dungeon.nontunnelingDist);
-                    pathNontunneling(&dungeon);
                     pathTunneling(&dungeon);
+                    pathNontunneling(&dungeon);
                     break;
                 case actionListMonsters:
                     monsterList(&dungeon);
