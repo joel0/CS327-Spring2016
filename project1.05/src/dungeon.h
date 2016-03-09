@@ -8,7 +8,7 @@
 #include <inttypes.h>
 
 #include "monster.h"
-#include "binheap.h"
+#include "heap.h"
 
 typedef enum material_enum {
     room = '.',
@@ -52,7 +52,7 @@ typedef struct dungeon_struct {
     int roomCount;
     monster_t** monsterPtrs;
     int monsterCount;
-    binheap_t* turnsHeapPtr;
+    heap_t* turnsHeapPtr;
 } dungeon_t;
 
 int saveDungeon(dungeon_t dungeon, char* fileName);
