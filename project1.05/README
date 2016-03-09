@@ -1,7 +1,8 @@
 The dungeon game now allows YOU to play it.  Use the numpad (with or without Num Lock) to move the PC.  Or you can use
 the keys defined in the PDF provided by Jeremy (I use a Dvorak keyboard layout, so those are useless for me).  Use S to
 "save" the game (i.e. quit without saving).  Use > and < to go up and down stairs.  Space or 5 will cause the PC to do
-nothing for the turn.
+nothing for the turn.  Press m to list the monsters.  This list is scrollable if it is too long to fit on one page.
+Use the arrow keys to scroll up and down.  Use escape to exit the monster list.
 
 Usage:
     bin/main [--save] [--load] [--nummon #]
