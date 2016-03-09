@@ -16,6 +16,7 @@ typedef struct gridNode_struct {
     uint8_t* weightPtr;
 } gridNode_t;
 
+int isBorder(int x, int y);
 int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(dungeon_t*, int x, int y));
 gridNode_t* mallocGridNode(dist_t* weightPtr, int x, int y);
 int32_t pathCmp(const void *keyPtr, const void *withPtr);
@@ -72,7 +73,7 @@ int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(d
         }
     }
 
-    while (heap.size) { //(!heap_is_empty(&heap)) {
+    while (heap.size) {
         gridNodePtr = heap_remove_min(&heap);
         for (int offY = -1; offY <= 1; offY++) {
             for (int offX = -1; offX <= 1; offX++) {
