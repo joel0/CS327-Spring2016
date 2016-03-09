@@ -92,9 +92,7 @@ int main(int argc, char* argv[]) {
         int PCTurn = turnIsPC(&dungeon);
         if (PCTurn) {
             printDungeon(&dungeon);
-            //printDistGrid(&dungeon, dungeon.nontunnelingDist);
 
-            mvprintw(0, 0, "(%d, %d)", dungeon.PC.x, dungeon.PC.y);
             userAction = turnDoPC(&dungeon);
             switch (userAction) {
                 case actionStairsUp:

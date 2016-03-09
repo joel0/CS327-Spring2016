@@ -131,6 +131,7 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
                 if (dungeonPtr->grid[dstY][dstX].material == stairsDn) {
                     returnValue = actionStairsDn;
                     mvprintw(0, 0, "Going down the stairs.");
+                    refresh();
                     validChar = 1;
                 } else {
                     mvprintw(0, 0, "I can't dig a hole through the floor. Please find me some stairs to use.");
@@ -140,6 +141,7 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
                 if (dungeonPtr->grid[dstY][dstX].material == stairsUp) {
                     returnValue = actionStairsUp;
                     mvprintw(0, 0, "Going up the stairs.");
+                    refresh();
                     validChar = 1;
                 } else {
                     mvprintw(0, 0, "I can't reach the ceiling from here. Please find me some stairs to use.");

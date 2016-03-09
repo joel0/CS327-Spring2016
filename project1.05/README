@@ -1,0 +1,12 @@
+The dungeon game now allows YOU to play it.  Use the numpad (with or without Num Lock) to move the PC.  Or you can use
+the keys defined in the PDF provided by Jeremy (I use a Dvorak keyboard layout, so those are useless for me).  Use S to
+"save" the game (i.e. quit without saving).  Use > and < to go up and down stairs.  Space or 5 will cause the PC to do
+nothing for the turn.
+
+Usage:
+    bin/main [--save] [--load] [--nummon #]
+
+    --save      Generates a dungeon and saves it to ~/.rlg327/dungeon
+    --load      Loads a saved dungeon from ~/.rlg327/dungeon
+    --nummon    Specifies the number of monsters to generate in the dungeon.  Warning, if this number is too high the
+                game will be stuck in an infinite loop.

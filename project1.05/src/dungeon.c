@@ -192,7 +192,7 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
 
 int generateDungeon(dungeon_t* dungeonPtr) {
     dungeonPtr->roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
-    printf("Room count: %d\n", dungeonPtr->roomCount);
+    //printf("Room count: %d\n", dungeonPtr->roomCount);
 
     if (!(dungeonPtr->rooms = malloc(sizeof(room_t) * dungeonPtr->roomCount))) {
         return -1;

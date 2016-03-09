@@ -66,7 +66,6 @@ void monsterList(dungeon_t* dungeonPtr) {
     int offset = 0;
     int maxOffset = dungeonPtr->monsterCount - 1 + 4 - 11;
     WINDOW* monsterWin = newpad(dungeonPtr->monsterCount - 1 + 4, 60);
-//    WINDOW* monsterWin = newwin(10, 60, HEIGHT / 2 - (10 / 2), WIDTH / 2 - (60 / 2));
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
     wbkgd(monsterWin, COLOR_PAIR(1));
     wborder(monsterWin, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -78,7 +77,6 @@ void monsterList(dungeon_t* dungeonPtr) {
         mvwaddstr(monsterWin, i + 3, 1, monsterDescrip);
         free(monsterDescrip);
     }
-    //wrefresh(monsterWin);
     wnoutrefresh(stdscr);
     do {
         pnoutrefresh(monsterWin, offset, 0, 5, 10, 15, 70);

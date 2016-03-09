@@ -18,12 +18,6 @@ void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dst
 void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int targetX, int targetY, int* dstX, int* dstY);
 int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2);
 
-//void movePC(dungeon_t* dungeonPtr) {
-//    int targetX, targetY;
-//    generateRandMove(dungeonPtr, dungeonPtr->PC.x, dungeonPtr->PC.y, &targetX, &targetY, 1);
-//    moveMonster(dungeonPtr, dungeonPtr->PC.x, dungeonPtr->PC.y, targetX, targetY);
-//}
-
 void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     if (!monsterPtr->alive) {
         return;

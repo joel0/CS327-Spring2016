@@ -1,4 +1,7 @@
 2016-03-08
+Code cleanup and less debugging.
+
+2016-03-08
 Switched from binheap to heap.  I could not get the binheap working.  Is it broken?
 
 2016-03-08
