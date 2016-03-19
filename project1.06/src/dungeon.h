@@ -7,6 +7,10 @@
 
 #include <inttypes.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "monster.h"
 #include "heap.h"
 
@@ -19,14 +23,14 @@ typedef enum material_enum {
 } material_t;
 
 typedef enum direction_enum {
-    nowhere =   0b0000,
-    north =     0b0001,
+    nowhere = 0b0000,
+    north = 0b0001,
     northeast = 0b0011,
-    east =      0b0010,
+    east = 0b0010,
     southeast = 0b0110,
-    south =     0b0100,
+    south = 0b0100,
     southwest = 0b1100,
-    west =      0b1000,
+    west = 0b1000,
     northwest = 0b1001
 } direction_t;
 
@@ -58,14 +62,14 @@ typedef struct dungeon_struct {
 int saveDungeon(dungeon_t dungeon, char* fileName);
 int loadDungeon(dungeon_t* dungeonPtr, char* fileName);
 void destroyDungeon(dungeon_t dungeon);
-void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster_t *monsterPtr);
+void dungeonRandomlyPlaceMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr);
 void dungeonPlaceStairs(dungeon_t* dungeonPtr);
 void printRooms(int roomCount, room_t* rooms);
 void printMonsters(int monsterCount, monster_t** monsterPtrs);
 int generateDungeon(dungeon_t* dungeonPtr);
 int roomDist(room_t room1, room_t room2);
-void connectRooms(gridCell_t **grid, room_t* rooms, int roomCount);
-void connectTwoRooms(gridCell_t **grid, room_t room1, room_t room2);
+void connectRooms(gridCell_t** grid, room_t* rooms, int roomCount);
+void connectTwoRooms(gridCell_t** grid, room_t room1, room_t room2);
 direction_t calculateDirection(int x, int y, int targetX, int targetY);
 int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount);
 int validateRoom(room_t* rooms, int roomCount, room_t room);
@@ -74,5 +78,9 @@ void printDungeon(dungeon_t* dungeonPtr);
 int populateGrid(dungeon_t* dungeonPtr);
 void populateRooms(dungeon_t dungeon);
 void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //PROJECT_DUNGEON_H

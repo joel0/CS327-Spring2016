@@ -19,11 +19,11 @@ void initMonsters(dungeon_t* dungeonPtr) {
     dungeonPtr->PC.type = MONSTER_TUNNELING;
     dungeonRandomlyPlaceMonster(dungeonPtr, &dungeonPtr->PC);
     dungeonPtr->monsterCount++; // +1 for the PC
-    dungeonPtr->monsterPtrs = malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
+    dungeonPtr->monsterPtrs = (monster_t**) malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
     dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
 
     for (int i = 1; i < dungeonPtr->monsterCount; i++) {
-        randMonsterPtr = malloc(sizeof(monster_t));
+        randMonsterPtr = (monster_t*) malloc(sizeof(monster_t));
         monsterGenerate(randMonsterPtr);
         dungeonPtr->monsterPtrs[i] = randMonsterPtr;
         dungeonRandomlyPlaceMonster(dungeonPtr, randMonsterPtr);
@@ -43,7 +43,7 @@ char monsterGetChar(monster_t m) {
         return '@';
     }
     if (m.type < 10) {
-        return (char) ('0' + m.type);
+        return '0' + m.type;
     }
     return (char) ('a' + m.type - 10);
 }
@@ -108,7 +108,7 @@ void monsterList(dungeon_t* dungeonPtr) {
 char* monsterDescription(dungeon_t* dungeonPtr, monster_t* monster) {
     int offX = dungeonPtr->PC.x - monster->x;
     int offY = dungeonPtr->PC.y - monster->y;
-    char* returnStr = malloc(30 * sizeof(char));
+    char* returnStr = (char*) malloc(30 * sizeof(char));
     char verticalPart[20] = "";
     char horizontalPart[20] = "";
 

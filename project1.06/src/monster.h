@@ -6,6 +6,11 @@
 #define PROJECT_MONSTER_H
 
 #include <inttypes.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct dungeon_struct dungeon_t;
 
 #define MONSTER_MIN_SPEED 5
@@ -27,11 +32,15 @@ typedef struct monster_struct {
     int alive;
 } monster_t;
 
-void initMonsters(dungeon_t* dungeonPtr);
-void monstersDestroy(dungeon_t* dungeonPtr);
+void initMonsters(dungeon_t *dungeonPtr);
+void monstersDestroy(dungeon_t *dungeonPtr);
 char monsterGetChar(monster_t m);
-void monsterGenerate(monster_t* m);
-void monsterList(dungeon_t* dungeonPtr);
-char* monsterDescription(dungeon_t* dungeonPtr, monster_t* monster);
+void monsterGenerate(monster_t *m);
+void monsterList(dungeon_t *dungeonPtr);
+char *monsterDescription(dungeon_t *dungeonPtr, monster_t *monster);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //PROJECT_MONSTER_H
