@@ -8,25 +8,69 @@
 #include "monster.h"
 #include "dungeon.h"
 
+char* monster::toString(dungeon_t* dungeonPtr) {
+    int offX = ((monster&) dungeonPtr->PC).x - x;
+    int offY = ((monster&) dungeonPtr->PC).y - y;
+    char* returnStr = (char*) malloc(30 * sizeof(char));
+    char verticalPart[20] = "";
+    char horizontalPart[20] = "";
+
+    if (offY < 0) {
+        //south
+        sprintf(verticalPart, "%d south", -offY);
+    } else if (offY > 0) {
+        //north
+        sprintf(verticalPart, "%d north", offY);
+    }
+    if (offX < 0) {
+        //east
+        sprintf(horizontalPart, "%d east", -offX);
+    } else if (offX > 0) {
+        //west
+        sprintf(horizontalPart, "%d west", offX);
+    }
+    if (horizontalPart[0] && verticalPart[0]) {
+        sprintf(returnStr, "%c, %s and %s", getChar(), verticalPart, horizontalPart);
+    } else {
+        sprintf(returnStr, "%c, %s%s", getChar(), verticalPart, horizontalPart);
+    }
+    return returnStr;
+}
+
+monster_evil::monster_evil() {
+    speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
+    type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
+    lastPCX = 0;
+    lastPCY = 0;
+    alive = true;
+    x = 0;
+    y = 0;
+}
+
+char monster_evil::getChar() {
+    if (type < 10) {
+        return '0' + type;
+    }
+    return (char) ('a' + type - 10);
+}
+
 // To keep track of how many monsters to free in the destroy
 static int totalMonsters;
 
 void initMonsters(dungeon_t* dungeonPtr) {
-    monster_t* randMonsterPtr;
-    dungeonPtr->PC.isPC = 1;
-    dungeonPtr->PC.speed = 10;
-    dungeonPtr->PC.alive = 1;
-    dungeonPtr->PC.type = MONSTER_TUNNELING;
+    monster* randMonsterPtr;
+    dungeonPtr->PC = (monster_t) new monster_PC(0, 0);
     dungeonRandomlyPlaceMonster(dungeonPtr, &dungeonPtr->PC);
     dungeonPtr->monsterCount++; // +1 for the PC
     dungeonPtr->monsterPtrs = (monster_t**) malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
     dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
 
     for (int i = 1; i < dungeonPtr->monsterCount; i++) {
-        randMonsterPtr = (monster_t*) malloc(sizeof(monster_t));
-        monsterGenerate(randMonsterPtr);
-        dungeonPtr->monsterPtrs[i] = randMonsterPtr;
-        dungeonRandomlyPlaceMonster(dungeonPtr, randMonsterPtr);
+        //randMonsterPtr = (monster_t*) malloc(sizeof(monster_t));
+        randMonsterPtr = new monster_evil();
+        //monsterGenerate(randMonsterPtr);
+        dungeonPtr->monsterPtrs[i] = (monster_t*) randMonsterPtr;
+        dungeonRandomlyPlaceMonster(dungeonPtr, (monster_t*) randMonsterPtr);
     }
     totalMonsters = dungeonPtr->monsterCount;
 }
@@ -38,26 +82,16 @@ void monstersDestroy(dungeon_t* dungeonPtr) {
     free(dungeonPtr->monsterPtrs);
 }
 
-char monsterGetChar(monster_t m) {
-    if (m.isPC) {
-        return '@';
-    }
-    if (m.type < 10) {
-        return '0' + m.type;
-    }
-    return (char) ('a' + m.type - 10);
-}
-
-void monsterGenerate(monster_t* m) {
-    m->isPC = 0;
-    m->speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
-    m->type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
-    m->lastPCX = 0;
-    m->lastPCY = 0;
-    m->alive = 1;
-    m->x = 0;
-    m->y = 0;
-}
+//void monsterGenerate(monster_t* m) {
+//    m->isPC = 0;
+//    m->speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
+//    m->type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
+//    m->lastPCX = 0;
+//    m->lastPCY = 0;
+//    m->alive = 1;
+//    m->x = 0;
+//    m->y = 0;
+//}
 
 void monsterList(dungeon_t* dungeonPtr) {
     int exit = 0;
@@ -105,31 +139,36 @@ void monsterList(dungeon_t* dungeonPtr) {
     refresh();
 }
 
-char* monsterDescription(dungeon_t* dungeonPtr, monster_t* monster) {
-    int offX = dungeonPtr->PC.x - monster->x;
-    int offY = dungeonPtr->PC.y - monster->y;
-    char* returnStr = (char*) malloc(30 * sizeof(char));
-    char verticalPart[20] = "";
-    char horizontalPart[20] = "";
+// +----------------------------------------------------+
+// | C EXPORTS                                          |
+// +----------------------------------------------------+
 
-    if (offY < 0) {
-        //south
-        sprintf(verticalPart, "%d south", -offY);
-    } else if (offY > 0) {
-        //north
-        sprintf(verticalPart, "%d north", offY);
-    }
-    if (offX < 0) {
-        //east
-        sprintf(horizontalPart, "%d east", -offX);
-    } else if (offX > 0) {
-        //west
-        sprintf(horizontalPart, "%d west", offX);
-    }
-    if (horizontalPart[0] && verticalPart[0]) {
-        sprintf(returnStr, "%c, %s and %s", monsterGetChar(*monster), verticalPart, horizontalPart);
-    } else {
-        sprintf(returnStr, "%c, %s%s", monsterGetChar(*monster), verticalPart, horizontalPart);
-    }
-    return returnStr;
+char monsterGetChar(monster_t* monsterPtr) {
+    return ((monster&) *monsterPtr).getChar();
 }
+
+char* monsterDescription(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
+    return ((monster&) *monsterPtr).toString(dungeonPtr);
+}
+
+int monsterGetX(monster_t* monsterPtr) { return ((monster&) *monsterPtr).x; }
+int monsterGetY(monster_t* monsterPtr) { return ((monster&) *monsterPtr).y; }
+
+int monsterGetLastPCX(monster_t* monsterPtr) { return ((monster&) *monsterPtr).lastPCX; }
+int monsterGetLastPCY(monster_t* monsterPtr) { return ((monster&) *monsterPtr).lastPCY; }
+
+void monsterSetX(monster_t* monsterPtr, int x) { ((monster&) *monsterPtr).x = x; }
+void monsterSetY(monster_t* monsterPtr, int y) { ((monster&) *monsterPtr).y = y; }
+
+void monsterSetLastPCX(monster_t* monsterPtr, int x) { ((monster&) *monsterPtr).lastPCX = x; }
+void monsterSetLastPCY(monster_t* monsterPtr, int y) { ((monster&) *monsterPtr).lastPCY = y; }
+
+int monsterIsAlive(monster_t* monsterPtr) { return ((monster&) *monsterPtr).alive; }
+
+int monsterIsPC(monster_t* monsterPtr) { return ((monster&) *monsterPtr).isPC(); }
+
+int monsterSpeed(monster_t* monsterPtr) { return ((monster&) *monsterPtr).speed; }
+
+void monsterKill(monster_t* monsterPtr) { ((monster&) *monsterPtr).alive = false; }
+
+uint8_t monsterGetType(monster_t* monsterPtr) { return ((monster_evil&) *monsterPtr).type; }

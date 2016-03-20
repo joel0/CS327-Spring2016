@@ -236,8 +236,8 @@ void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster_t *monsterPtr) {
         absY = relY + dungeonPtr->rooms[chosenRoom].y;
     } while (dungeonPtr->grid[absY][absX].monsterPtr != NULL);
 
-    monsterPtr->x = absX;
-    monsterPtr->y = absY;
+    monsterSetX(monsterPtr, absX);
+    monsterSetY(monsterPtr, absY);
     dungeonPtr->grid[absY][absX].monsterPtr = monsterPtr;
 }
 
@@ -278,9 +278,9 @@ void printMonsters(int monsterCount, monster_t** monsterPtrs) {
     printf("monsterCount: %d\n", monsterCount);
     for (int i = 0; i < monsterCount; i++) {
         curMonsterPtr = monsterPtrs[i];
-        printf("monsters[%d}: (%d, %d) %c\n", i, curMonsterPtr->x, curMonsterPtr->y, monsterGetChar(*curMonsterPtr));
-        printf("\tisPC: %d\n", curMonsterPtr->isPC);
-        printf("\tspeed: %d\n", curMonsterPtr->speed);
+        printf("monsters[%d}: (%d, %d) %c\n", i, monsterGetX(curMonsterPtr), monsterGetY(curMonsterPtr), monsterGetChar(*curMonsterPtr));
+        printf("\tisPC: %d\n", monsterIsPC(curMonsterPtr));
+        printf("\tspeed: %d\n", monsterSpeed(curMonsterPtr));
     }
 }
 
@@ -488,9 +488,9 @@ void populateRooms(dungeon_t dungeon) {
 
 void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr) {
     monster_t* deletedMonster = monsterPtrs[toRemove];
-    monsterPtrs[toRemove]->alive = 0;
+    monsterKill(monsterPtrs[toRemove]);
     // Do not move the PC in the array.  It causes problems when trying to call free() on the array that was malloc()ed.
-    if (!monsterPtrs[toRemove]->isPC) {
+    if (!monsterIsPC(monsterPtrs[toRemove])) {
         while (toRemove < *monsterCountPtr - 1) {
             monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
             toRemove++;

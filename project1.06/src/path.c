@@ -57,7 +57,7 @@ int pathPopulate(dungeon_t* dungeonPtr, uint8_t** distGrid, uint8_t (*relDist)(d
     heap_init(&heap, pathCmp, NULL);
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            if (x == dungeonPtr->PC.x && y == dungeonPtr->PC.y) {
+            if (x == monsterGetX(dungeonPtr->PC) && y == monsterGetY(dungeonPtr->PC)) {
                 distGrid[y][x] = 0;
             } else {
                 distGrid[y][x] = PATH_DIST_INFINITE;

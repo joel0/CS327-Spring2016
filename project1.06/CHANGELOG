@@ -1,4 +1,7 @@
 2016-03-19
+Started class transformation.  Code compiles, but does not work due to incorrect casting.
+
+2016-03-19
 Converted monster.c to C++ and added extern "C" to the appropriate headers.
 
 2016-03-18

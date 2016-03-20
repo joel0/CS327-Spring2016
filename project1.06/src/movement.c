@@ -19,16 +19,16 @@ void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int target
 int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2);
 
 void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
-    if (!monsterPtr->alive) {
+    if (!monsterIsAlive(monsterPtr)) {
         return;
     }
 
     int dstX, dstY;
-    if (monsterPtr->isPC) {
+    if (monsterIsPC(monsterPtr)) {
         // PC does not move here.  His logic is handled elsewhere.
         return;
     }
-    if (monsterPtr->type & MONSTER_ERRATIC) {
+    if (monsterGetType(monsterPtr) & MONSTER_ERRATIC) {
         if (rand() % 2) {
             // random movement
             generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
@@ -36,33 +36,33 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
             return;
         }
     }
-    if (monsterPtr->type & MONSTER_INTELLIGENT) {
+    if (monsterGetType(monsterPtr) & MONSTER_INTELLIGENT) {
         // intelligent
-        if (monsterPtr->type & MONSTER_TELEPATHIC) {
+        if (monsterGetType(monsterPtr) & MONSTER_TELEPATHIC) {
             generateShortestMove(dungeonPtr, monsterPtr, &dstX, &dstY);
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // Only move if the PC is visible or there is a last known location of the PC, otherwise stay put.
-            if (isLineOfSight(dungeonPtr->grid, monsterPtr->x, monsterPtr->y, dungeonPtr->PC.x, dungeonPtr->PC.y)) {
+            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC))) {
                 // PC is visible
                 generateShortestMove(dungeonPtr, monsterPtr, &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
-            } else if (monsterPtr->lastPCX) {
+            } else if (monsterGetLastPCX(monsterPtr)) {
                 // PC is remembered
-                generateDirectMove(dungeonPtr, monsterPtr, monsterPtr->lastPCX, monsterPtr->lastPCY, &dstX, &dstY);
+                generateDirectMove(dungeonPtr, monsterPtr, monsterGetLastPCX(monsterPtr), monsterGetLastPCY(monsterPtr), &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
             }
         }
     } else {
         // not intelligent
-        if (monsterPtr->type & MONSTER_TELEPATHIC) {
-            generateDirectMove(dungeonPtr, monsterPtr, dungeonPtr->PC.x, dungeonPtr->PC.y, &dstX, &dstY);
+        if (monsterGetType(monsterPtr) & MONSTER_TELEPATHIC) {
+            generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC), &dstX, &dstY);
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // not telepathic
-            if (isLineOfSight(dungeonPtr->grid, monsterPtr->x, monsterPtr->y, dungeonPtr->PC.x, dungeonPtr->PC.y)){
+            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC))){
                 // player is visible
-                generateDirectMove(dungeonPtr, monsterPtr, dungeonPtr->PC.x, dungeonPtr->PC.y, &dstX, &dstY);
+                generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC), &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
             } else {
                 // player is not visible, move randomly
@@ -73,19 +73,19 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     }
 
     // Keep track of line-of-sight memory
-    if (isLineOfSight(dungeonPtr->grid, monsterPtr->x, monsterPtr->y, dungeonPtr->PC.x, dungeonPtr->PC.y)) {
-        monsterPtr->lastPCX = dungeonPtr->PC.x;
-        monsterPtr->lastPCY = dungeonPtr->PC.y;
+    if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC))) {
+        monsterSetLastPCX(monsterPtr, monsterGetX(dungeonPtr->PC));
+        monsterSetLastPCY(monsterPtr, monsterGetY(dungeonPtr->PC));
     }
 }
 
 void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dstY) {
-    int srcX = monsterPtr->x;
-    int srcY = monsterPtr->y;
+    int srcX = monsterGetX(monsterPtr);
+    int srcY = monsterGetY(monsterPtr);
     gridCell_t** grid = dungeonPtr->grid;
 
     // Do not do anything if the "move" is nothing
-    if (monsterPtr->x == dstX && monsterPtr->y == dstY) {
+    if (monsterGetX(monsterPtr) == dstX && monsterGetY(monsterPtr) == dstY) {
         return;
     }
     // Do nothing if the monster (or PC) is trying to go into immutable rock
@@ -107,8 +107,8 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
     } else {
         grid[dstY][dstX].monsterPtr = grid[srcY][srcX].monsterPtr;
         grid[srcY][srcX].monsterPtr = NULL;
-        grid[dstY][dstX].monsterPtr->x = dstX;
-        grid[dstY][dstX].monsterPtr->y = dstY;
+        monsterSetX(grid[dstY][dstX].monsterPtr, dstX);
+        monsterSetY(grid[dstY][dstX].monsterPtr, dstY);
 
         // tunneling
         if (grid[dstY][dstX].material == rock) {
@@ -122,12 +122,12 @@ void moveMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr, int dstX, int dst
 
 void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {
     direction_t movementDir;
-    int tunneling = monsterPtr->type & MONSTER_TUNNELING;
+    int tunneling = monsterGetType(monsterPtr) & MONSTER_TUNNELING;
     int targetX, targetY;
     do {
         movementDir = utilRandDir();
-        targetX = monsterPtr->x;
-        targetY = monsterPtr->y;
+        targetX = monsterGetX(monsterPtr);
+        targetY = monsterGetY(monsterPtr);
         if (movementDir & north) {
             targetY--;
         } else if (movementDir & south) {
@@ -144,13 +144,13 @@ void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, i
 }
 
 void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY) {
-    int x = monsterPtr->x;
-    int y = monsterPtr->y;
+    int x = monsterGetX(monsterPtr);
+    int y = monsterGetY(monsterPtr);
     uint8_t** grid;
     uint8_t shortestDist;
     direction_t shortestDirection;
 
-    if (monsterPtr->type & MONSTER_TUNNELING) {
+    if (monsterGetType(monsterPtr) & MONSTER_TUNNELING) {
         grid = dungeonPtr->tunnelingDist;
     } else {
         grid = dungeonPtr->nontunnelingDist;
@@ -202,8 +202,8 @@ void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dst
 }
 
 void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int PCX, int PCY, int* dstX, int* dstY) {
-    int targetX = monsterPtr->x;
-    int targetY = monsterPtr->y;
+    int targetX = monsterGetX(monsterPtr);
+    int targetY = monsterGetY(monsterPtr);
     direction_t direction = calculateDirection(targetX, targetY, PCX, PCY);
     if (direction & north) {
         targetY--;
@@ -217,12 +217,12 @@ void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int PCX, i
     if (direction & west) {
         targetX--;
     }
-    if (!(monsterPtr->type & MONSTER_TUNNELING)) {
+    if (!(monsterGetType(monsterPtr) & MONSTER_TUNNELING)) {
         // Nontuneling
         if (isRock(dungeonPtr->grid, targetX, targetY)) {
             // Direct path is blocked, try orthogonal
-            targetX = monsterPtr->x;
-            targetY = monsterPtr->y;
+            targetX = monsterGetX(monsterPtr);
+            targetY = monsterGetY(monsterPtr);
             if (direction & north) {
                 if (!isRock(dungeonPtr->grid, targetX, targetY - 1)) {
                     targetY--;
