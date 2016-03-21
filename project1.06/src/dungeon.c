@@ -278,7 +278,7 @@ void printMonsters(int monsterCount, monster_t** monsterPtrs) {
     printf("monsterCount: %d\n", monsterCount);
     for (int i = 0; i < monsterCount; i++) {
         curMonsterPtr = monsterPtrs[i];
-        printf("monsters[%d}: (%d, %d) %c\n", i, monsterGetX(curMonsterPtr), monsterGetY(curMonsterPtr), monsterGetChar(*curMonsterPtr));
+        printf("monsters[%d}: (%d, %d) %c\n", i, monsterGetX(curMonsterPtr), monsterGetY(curMonsterPtr), monsterGetChar(curMonsterPtr));
         printf("\tisPC: %d\n", monsterIsPC(curMonsterPtr));
         printf("\tspeed: %d\n", monsterSpeed(curMonsterPtr));
     }
@@ -432,7 +432,7 @@ void printDungeon(dungeon_t* dungeonPtr) {
             } else {
                 // Monster (or PC)
                 //printf("%c", monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
-                mvaddch(y + 1, x, monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
+                mvaddch(y + 1, x, monsterGetChar(dungeonPtr->grid[y][x].monsterPtr));
             }
         }
     }

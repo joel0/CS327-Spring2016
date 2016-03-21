@@ -48,7 +48,7 @@ typedef struct gridCell_struct {
 } gridCell_t;
 
 typedef struct dungeon_struct {
-    monster_t PC;
+    monster_t* PCPtr;
     gridCell_t** grid;
     uint8_t** tunnelingDist;
     uint8_t** nontunnelingDist;

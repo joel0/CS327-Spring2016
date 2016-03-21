@@ -43,7 +43,7 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // Only move if the PC is visible or there is a last known location of the PC, otherwise stay put.
-            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC))) {
+            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))) {
                 // PC is visible
                 generateShortestMove(dungeonPtr, monsterPtr, &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
@@ -56,13 +56,13 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     } else {
         // not intelligent
         if (monsterGetType(monsterPtr) & MONSTER_TELEPATHIC) {
-            generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC), &dstX, &dstY);
+            generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr), &dstX, &dstY);
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // not telepathic
-            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC))){
+            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))){
                 // player is visible
-                generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC), &dstX, &dstY);
+                generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr), &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
             } else {
                 // player is not visible, move randomly
@@ -73,9 +73,9 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     }
 
     // Keep track of line-of-sight memory
-    if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PC), monsterGetY(dungeonPtr->PC))) {
-        monsterSetLastPCX(monsterPtr, monsterGetX(dungeonPtr->PC));
-        monsterSetLastPCY(monsterPtr, monsterGetY(dungeonPtr->PC));
+    if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))) {
+        monsterSetLastPCX(monsterPtr, monsterGetX(dungeonPtr->PCPtr));
+        monsterSetLastPCY(monsterPtr, monsterGetY(dungeonPtr->PCPtr));
     }
 }
 

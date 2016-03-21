@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 
     // do move
     PC_action userAction = actionMovement;
-    while (monsterIsAlive(&dungeon.PC) && dungeon.monsterCount > 1 && userAction != actionSave) {
+    while (monsterIsAlive(dungeon.PCPtr) && dungeon.monsterCount > 1 && userAction != actionSave) {
         int PCTurn = turnIsPC(&dungeon);
         if (PCTurn) {
             printDungeon(&dungeon);
@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
     screenClearRow(0);
     if (userAction == actionSave) {
         mvprintw(0, 0, "Game saved (haha, not really!).  Press any key to exit.");
-    } else if (!monsterIsAlive(&dungeon.PC)) {
+    } else if (!monsterIsAlive(dungeon.PCPtr)) {
         mvprintw(0, 0, "You died!  Press any key to exit.");
     } else {
         mvprintw(0, 0, "Yay!  You defeated all the monsters.  Press any key to exit.");

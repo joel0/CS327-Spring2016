@@ -9,8 +9,8 @@
 #include "dungeon.h"
 
 char* monster::toString(dungeon_t* dungeonPtr) {
-    int offX = ((monster&) dungeonPtr->PC).x - x;
-    int offY = ((monster&) dungeonPtr->PC).y - y;
+    int offX = ((monster*) dungeonPtr->PCPtr)->x - x;
+    int offY = ((monster*) dungeonPtr->PCPtr)->y - y;
     char* returnStr = (char*) malloc(30 * sizeof(char));
     char verticalPart[20] = "";
     char horizontalPart[20] = "";
@@ -59,11 +59,11 @@ static int totalMonsters;
 
 void initMonsters(dungeon_t* dungeonPtr) {
     monster* randMonsterPtr;
-    dungeonPtr->PC = (monster_t) new monster_PC(0, 0);
-    dungeonRandomlyPlaceMonster(dungeonPtr, &dungeonPtr->PC);
+    dungeonPtr->PCPtr = (monster_t*) new monster_PC(0, 0);
+    dungeonRandomlyPlaceMonster(dungeonPtr, dungeonPtr->PCPtr);
     dungeonPtr->monsterCount++; // +1 for the PC
     dungeonPtr->monsterPtrs = (monster_t**) malloc(sizeof(monster_t*) * dungeonPtr->monsterCount);
-    dungeonPtr->monsterPtrs[0] = &dungeonPtr->PC;
+    dungeonPtr->monsterPtrs[0] = dungeonPtr->PCPtr;
 
     for (int i = 1; i < dungeonPtr->monsterCount; i++) {
         //randMonsterPtr = (monster_t*) malloc(sizeof(monster_t));
@@ -144,31 +144,31 @@ void monsterList(dungeon_t* dungeonPtr) {
 // +----------------------------------------------------+
 
 char monsterGetChar(monster_t* monsterPtr) {
-    return ((monster&) *monsterPtr).getChar();
+    return ((monster*) monsterPtr)->getChar();
 }
 
 char* monsterDescription(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
-    return ((monster&) *monsterPtr).toString(dungeonPtr);
+    return ((monster*) monsterPtr)->toString(dungeonPtr);
 }
 
-int monsterGetX(monster_t* monsterPtr) { return ((monster&) *monsterPtr).x; }
-int monsterGetY(monster_t* monsterPtr) { return ((monster&) *monsterPtr).y; }
+int monsterGetX(monster_t* monsterPtr) { return ((monster*) monsterPtr)->x; }
+int monsterGetY(monster_t* monsterPtr) { return ((monster*) monsterPtr)->y; }
 
-int monsterGetLastPCX(monster_t* monsterPtr) { return ((monster&) *monsterPtr).lastPCX; }
-int monsterGetLastPCY(monster_t* monsterPtr) { return ((monster&) *monsterPtr).lastPCY; }
+int monsterGetLastPCX(monster_t* monsterPtr) { return ((monster*) monsterPtr)->lastPCX; }
+int monsterGetLastPCY(monster_t* monsterPtr) { return ((monster*) monsterPtr)->lastPCY; }
 
-void monsterSetX(monster_t* monsterPtr, int x) { ((monster&) *monsterPtr).x = x; }
-void monsterSetY(monster_t* monsterPtr, int y) { ((monster&) *monsterPtr).y = y; }
+void monsterSetX(monster_t* monsterPtr, int x) { ((monster*) monsterPtr)->x = x; }
+void monsterSetY(monster_t* monsterPtr, int y) { ((monster*) monsterPtr)->y = y; }
 
-void monsterSetLastPCX(monster_t* monsterPtr, int x) { ((monster&) *monsterPtr).lastPCX = x; }
-void monsterSetLastPCY(monster_t* monsterPtr, int y) { ((monster&) *monsterPtr).lastPCY = y; }
+void monsterSetLastPCX(monster_t* monsterPtr, int x) { ((monster*) monsterPtr)->lastPCX = x; }
+void monsterSetLastPCY(monster_t* monsterPtr, int y) { ((monster*) monsterPtr)->lastPCY = y; }
 
-int monsterIsAlive(monster_t* monsterPtr) { return ((monster&) *monsterPtr).alive; }
+int monsterIsAlive(monster_t* monsterPtr) { return ((monster*) monsterPtr)->alive; }
 
-int monsterIsPC(monster_t* monsterPtr) { return ((monster&) *monsterPtr).isPC(); }
+int monsterIsPC(monster_t* monsterPtr) { return ((monster*) monsterPtr)->isPC(); }
 
-int monsterSpeed(monster_t* monsterPtr) { return ((monster&) *monsterPtr).speed; }
+int monsterSpeed(monster_t* monsterPtr) { return ((monster*) monsterPtr)->speed; }
 
-void monsterKill(monster_t* monsterPtr) { ((monster&) *monsterPtr).alive = false; }
+void monsterKill(monster_t* monsterPtr) { ((monster*) monsterPtr)->alive = false; }
 
-uint8_t monsterGetType(monster_t* monsterPtr) { return ((monster_evil&) *monsterPtr).type; }
+uint8_t monsterGetType(monster_t* monsterPtr) { return ((monster_evil*) monsterPtr)->type; }

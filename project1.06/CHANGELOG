@@ -1,3 +1,6 @@
+2016-03-21
+C-wrapper functions work better now.  Still bugs galore though.
+
 2016-03-19
 Started class transformation.  Code compiles, but does not work due to incorrect casting.
 

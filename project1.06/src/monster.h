@@ -81,7 +81,7 @@ typedef struct dungeon_struct dungeon_t;
 //    int lastPCY;
 //    int alive;
 //} monster_t;
-typedef void* monster_t;
+typedef struct {} monster_t;
 
 void initMonsters(dungeon_t *dungeonPtr);
 void monstersDestroy(dungeon_t *dungeonPtr);
