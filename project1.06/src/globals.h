@@ -15,6 +15,8 @@
 #define ROCK_HARDNESS_MAX 254
 #define ROCK_HARDNESS_IMMUTABLE 255
 
+#define PC_VISION_DIST 3
+
 #define WIDTH 80
 #define HEIGHT 21
 #define MIN_ROOMS 5

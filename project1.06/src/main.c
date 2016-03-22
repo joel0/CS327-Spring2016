@@ -84,14 +84,15 @@ int main(int argc, char* argv[]) {
 
     // print dungeon
     initTerminal();
-    printDungeon(&dungeon);
+    printDungeon(dungeon.grid);
 
     // do move
     PC_action userAction = actionMovement;
     while (monsterIsAlive(dungeon.PCPtr) && dungeon.monsterCount > 1 && userAction != actionSave) {
         int PCTurn = turnIsPC(&dungeon);
         if (PCTurn) {
-            printDungeon(&dungeon);
+            monsterUpdatePCGridKnown(dungeon.PCPtr, dungeon.grid);
+            printDungeon(monsterGetPCGridKnown(dungeon.PCPtr));
 
             userAction = turnDoPC(&dungeon);
             switch (userAction) {

@@ -74,7 +74,7 @@ direction_t calculateDirection(int x, int y, int targetX, int targetY);
 int generateRoom(room_t* generatedRoom, room_t* rooms, int roomCount);
 int validateRoom(room_t* rooms, int roomCount, room_t room);
 int validateTwoRooms(room_t room1, room_t room2);
-void printDungeon(dungeon_t* dungeonPtr);
+void printDungeon(gridCell_t** world);
 int populateGrid(dungeon_t* dungeonPtr);
 void populateRooms(dungeon_t dungeon);
 void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr);

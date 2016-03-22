@@ -7,6 +7,8 @@
 
 #include "monster.h"
 #include "dungeon.h"
+#include "utils.h"
+#include "globals.h"
 
 char* monster::toString(dungeon_t* dungeonPtr) {
     int offX = ((monster*) dungeonPtr->PCPtr)->x - x;
@@ -52,6 +54,41 @@ char monster_evil::getChar() {
         return '0' + type;
     }
     return (char) ('a' + type - 10);
+}
+
+monster_PC::monster_PC(int x, int y) : monster(MONSTER_TUNNELING, 10, x, y) {
+    malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
+    for (int curY = 0; curY < HEIGHT; curY++) {
+        for (int curX = 0; curX < WIDTH; curX++) {
+            gridKnown[curY][curX].hardness = 0;
+            gridKnown[curY][curX].material = rock;
+            gridKnown[curY][curX].monsterPtr = NULL;
+        }
+    }
+}
+
+monster_PC::~monster_PC() {
+    free2DArray((void**) gridKnown, HEIGHT);
+}
+
+void monster_PC::updateGridKnown(gridCell_t** world) {
+    int minX, minY, maxX, maxY;
+    // Remove any monsters that may be out of visibility
+    for (int curY = 0; curY < HEIGHT; curY++) {
+        for (int curX = 0; curX < WIDTH; curX++) {
+            gridKnown[curY][curX].monsterPtr = NULL;
+        }
+    }
+
+    minX = MAX(0, x - PC_VISION_DIST);
+    minY = MAX(0, y - PC_VISION_DIST);
+    maxX = MIN(WIDTH - 1, x + PC_VISION_DIST);
+    maxY = MIN(HEIGHT - 1, y + PC_VISION_DIST);
+    for (int curY = minY; curY <= maxY; curY++) {
+        for (int curX = minX; curX <= maxX; curX++) {
+            gridKnown[curY][curX] = world[curY][curX];
+        }
+    }
 }
 
 // To keep track of how many monsters to free in the destroy
@@ -159,3 +196,11 @@ int monsterSpeed(monster_t* monsterPtr) { return ((monster*) monsterPtr)->speed;
 void monsterKill(monster_t* monsterPtr) { ((monster*) monsterPtr)->alive = false; }
 
 uint8_t monsterGetType(monster_t* monsterPtr) { return ((monster_evil*) monsterPtr)->type; }
+
+void monsterUpdatePCGridKnown(monster_t* monsterPtr, gridCell_t** world) {
+    ((monster_PC*) monsterPtr)->updateGridKnown(world);
+}
+
+gridCell_t** monsterGetPCGridKnown(monster_t* monsterPtr) {
+    return ((monster_PC*) monsterPtr)->gridKnown;
+}

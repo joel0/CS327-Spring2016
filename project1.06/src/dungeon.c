@@ -422,17 +422,15 @@ int validateTwoRooms(room_t room1, room_t room2) {
     return -1;
 }
 
-void printDungeon(dungeon_t* dungeonPtr) {
+void printDungeon(gridCell_t** world) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            if (dungeonPtr->grid[y][x].monsterPtr == NULL) {
+            if (world[y][x].monsterPtr == NULL) {
                 // No monster
-                //printf("%c", (char) dungeonPtr->grid[y][x].material);
-                mvaddch(y + 1, x, (char) dungeonPtr->grid[y][x].material);
+                mvaddch(y + 1, x, (char) world[y][x].material);
             } else {
                 // Monster (or PC)
-                //printf("%c", monsterGetChar(*dungeonPtr->grid[y][x].monsterPtr));
-                mvaddch(y + 1, x, monsterGetChar(dungeonPtr->grid[y][x].monsterPtr));
+                mvaddch(y + 1, x, monsterGetChar(world[y][x].monsterPtr));
             }
         }
     }

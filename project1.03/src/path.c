@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "path.h"
-#include "dungeon.h"
 #include "globals.h"
 #include "binheap.h"
 #include "utils.h"
@@ -34,12 +33,10 @@ void pathFreeDistGrid(dist_t** grid) {
 }
 
 int pathTunneling(dungeon_t* dungeonPtr) {
-    //malloc2DArray((void ***) &dungeonPtr->tunnelingDist, sizeof(dist_t), WIDTH, HEIGHT);
     return pathPopulate(dungeonPtr, dungeonPtr->tunnelingDist, pathCalculateRelWeightTunneling);
 }
 
 int pathNontunneling(dungeon_t* dungeonPtr) {
-    //malloc2DArray((void ***) &dungeonPtr->nontunnelingDist, sizeof(dist_t), WIDTH, HEIGHT);
     return pathPopulate(dungeonPtr, dungeonPtr->nontunnelingDist, pathCalculateRelWeightNontunneling);
 }
 

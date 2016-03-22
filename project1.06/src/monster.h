@@ -15,6 +15,7 @@
 #define MONSTER_TUNNELING 0x2
 #define MONSTER_ERRATIC 0x1
 
+typedef struct gridCell_struct gridCell_t;
 typedef struct dungeon_struct dungeon_t;
 
 #ifdef __cplusplus
@@ -57,11 +58,14 @@ public:
 
 class monster_PC : public monster {
 public:
+    gridCell_t** gridKnown;
     inline char getChar() { return '@'; }
-    monster_PC(int x, int y) : monster(MONSTER_TUNNELING, 10, x, y) {}
 
+    monster_PC(int x, int y);
+    ~monster_PC();
 public:
     inline bool isPC() { return true; }
+    void updateGridKnown(gridCell_t** world);
 };
 
 extern "C" {
@@ -89,6 +93,8 @@ int monsterIsPC(monster_t* monsterRef);
 int monsterSpeed(monster_t* monsterPtr);
 void monsterKill(monster_t* monsterPtr);
 uint8_t monsterGetType(monster_t* monsterPtr);
+void monsterUpdatePCGridKnown(monster_t* monsterPtr, gridCell_t** world);
+gridCell_t** monsterGetPCGridKnown(monster_t* monsterPtr);
 
 #ifdef __cplusplus
 }
