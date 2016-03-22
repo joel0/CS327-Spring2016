@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 }
 
 void showUsage(char* name) {
-    printf("Usage: %s [--save|--load]\n\n", basename(name));
+    printf("Usage: %s [--save|--load] [--nummon num]\n\n", basename(name));
     printf("\t--save\tSaves a randomly generated dungeon to ~/.rlg327/dungeon\n");
     printf("\t--load\tLoads ~/.rgl327/dungeon and displays it\n");
     printf("\t--nummon\tSpecifies the number of monitors to place in the dungeon.\n");

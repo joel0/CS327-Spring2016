@@ -16,7 +16,6 @@ int isImmutable(gridCell_t **grid, int x, int y);
 void generateRandMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
 void generateShortestMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int* dstX, int* dstY);
 void generateDirectMove(dungeon_t* dungeonPtr, monster_t* monsterPtr, int targetX, int targetY, int* dstX, int* dstY);
-int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2);
 
 void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     if (!monsterIsAlive(monsterPtr)) {
@@ -43,7 +42,8 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // Only move if the PC is visible or there is a last known location of the PC, otherwise stay put.
-            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))) {
+            if (movementIsLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr),
+                                      monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))) {
                 // PC is visible
                 generateShortestMove(dungeonPtr, monsterPtr, &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
@@ -60,7 +60,8 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
             // not telepathic
-            if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))){
+            if (movementIsLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr),
+                                      monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))){
                 // player is visible
                 generateDirectMove(dungeonPtr, monsterPtr, monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr), &dstX, &dstY);
                 moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
@@ -73,7 +74,8 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
     }
 
     // Keep track of line-of-sight memory
-    if (isLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr), monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))) {
+    if (movementIsLineOfSight(dungeonPtr->grid, monsterGetX(monsterPtr), monsterGetY(monsterPtr),
+                              monsterGetX(dungeonPtr->PCPtr), monsterGetY(dungeonPtr->PCPtr))) {
         monsterSetLastPCX(monsterPtr, monsterGetX(dungeonPtr->PCPtr));
         monsterSetLastPCY(monsterPtr, monsterGetY(dungeonPtr->PCPtr));
     }
@@ -257,7 +259,7 @@ int isImmutable(gridCell_t **grid, int x, int y) {
     return grid[y][x].hardness == ROCK_HARDNESS_IMMUTABLE;
 }
 
-int isLineOfSight(gridCell_t** grid, int x1, int y1, int x2, int y2) {
+int movementIsLineOfSight(gridCell_t **grid, int x1, int y1, int x2, int y2) {
     double slope;
     int leftX, leftY;
     int rightX, rightY;

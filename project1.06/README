@@ -1,0 +1,11 @@
+Dungeon Game Now with Fog of War
+
+The game is now partially in C++.  The behavior did not change at all in the C++ transition.  The new front-end feature
+is Fog of War.  The PC can only see a rectangle of up to three spaces away in each direction.  He can remember the
+part of the dungeon that he has seen, but he does not remember any monsters.  Rock blocks the PC's vision.
+
+Usage: main [--save|--load] [--nummon num]
+
+        --save  Saves a randomly generated dungeon to ~/.rlg327/dungeon
+        --load  Loads ~/.rgl327/dungeon and displays it
+        --nummon        Specifies the number of monitors to place in the dungeon

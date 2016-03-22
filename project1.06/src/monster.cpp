@@ -9,6 +9,7 @@
 #include "dungeon.h"
 #include "utils.h"
 #include "globals.h"
+#include "movement.h"
 
 char* monster::toString(dungeon_t* dungeonPtr) {
     int offX = ((monster*) dungeonPtr->PCPtr)->x - x;
@@ -86,7 +87,9 @@ void monster_PC::updateGridKnown(gridCell_t** world) {
     maxY = MIN(HEIGHT - 1, y + PC_VISION_DIST);
     for (int curY = minY; curY <= maxY; curY++) {
         for (int curX = minX; curX <= maxX; curX++) {
-            gridKnown[curY][curX] = world[curY][curX];
+            if(movementIsLineOfSight(world, x, y, curX, curY)) {
+                gridKnown[curY][curX] = world[curY][curX];
+            }
         }
     }
 }
