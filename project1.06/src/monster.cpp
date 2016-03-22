@@ -66,9 +66,7 @@ void initMonsters(dungeon_t* dungeonPtr) {
     dungeonPtr->monsterPtrs[0] = dungeonPtr->PCPtr;
 
     for (int i = 1; i < dungeonPtr->monsterCount; i++) {
-        //randMonsterPtr = (monster_t*) malloc(sizeof(monster_t));
         randMonsterPtr = new monster_evil();
-        //monsterGenerate(randMonsterPtr);
         dungeonPtr->monsterPtrs[i] = (monster_t*) randMonsterPtr;
         dungeonRandomlyPlaceMonster(dungeonPtr, (monster_t*) randMonsterPtr);
     }
@@ -77,7 +75,6 @@ void initMonsters(dungeon_t* dungeonPtr) {
 
 void monstersDestroy(dungeon_t* dungeonPtr) {
     for (int i = 1; i < totalMonsters; i++) {
-        //free(dungeonPtr->monsterPtrs[i]);
         delete dungeonPtr->monsterPtrs[i];
     }
     free(dungeonPtr->monsterPtrs);
