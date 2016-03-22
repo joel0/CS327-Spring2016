@@ -1,4 +1,7 @@
 2016-03-21
+Yay!  C++ class works.  It was a stupid bug of calling the wrong C-wrapper.
+
+2016-03-21
 C-wrapper functions work better now.  Still bugs galore though.
 
 2016-03-19

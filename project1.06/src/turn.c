@@ -56,6 +56,8 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
     dstX = monsterGetX(turnPtr->monsterPtr);
     dstY = monsterGetY(turnPtr->monsterPtr);
 
+    mvprintw(0, 30, "(%d, %d)", dstX, dstY);
+
     do {
         userChar = getch();
         screenClearRow(0);
@@ -173,7 +175,7 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
 int turnIsPC(dungeon_t* dungeonPtr) {
     turn_t* turnPtr;
     turnPtr = heap_peek_min(dungeonPtr->turnsHeapPtr);
-    return monsterSpeed(turnPtr->monsterPtr);
+    return monsterIsPC(turnPtr->monsterPtr);
 }
 
 void turnDestroy(dungeon_t* dungeonPtr) {
