@@ -77,21 +77,11 @@ void initMonsters(dungeon_t* dungeonPtr) {
 
 void monstersDestroy(dungeon_t* dungeonPtr) {
     for (int i = 1; i < totalMonsters; i++) {
-        free(dungeonPtr->monsterPtrs[i]);
+        //free(dungeonPtr->monsterPtrs[i]);
+        delete dungeonPtr->monsterPtrs[i];
     }
     free(dungeonPtr->monsterPtrs);
 }
-
-//void monsterGenerate(monster_t* m) {
-//    m->isPC = 0;
-//    m->speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
-//    m->type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
-//    m->lastPCX = 0;
-//    m->lastPCY = 0;
-//    m->alive = 1;
-//    m->x = 0;
-//    m->y = 0;
-//}
 
 void monsterList(dungeon_t* dungeonPtr) {
     int exit = 0;

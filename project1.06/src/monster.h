@@ -19,8 +19,6 @@ typedef struct dungeon_struct dungeon_t;
 
 #ifdef __cplusplus
 class monster {
-    // To keep track of how many monsters to free in the destroy
-    static int totalMonsters;
 public:
     uint8_t type;
     int speed;
@@ -71,22 +69,11 @@ extern "C" {
 
 typedef struct dungeon_struct dungeon_t;
 
-//typedef struct monster_struct {
-//    uint8_t type;
-//    int speed;
-//    int isPC;
-//    int x;
-//    int y;
-//    int lastPCX;
-//    int lastPCY;
-//    int alive;
-//} monster_t;
 typedef struct {} monster_t;
 
 void initMonsters(dungeon_t *dungeonPtr);
 void monstersDestroy(dungeon_t *dungeonPtr);
 char monsterGetChar(monster_t* m);
-void monsterGenerate(monster_t *m);
 void monsterList(dungeon_t *dungeonPtr);
 char *monsterDescription(dungeon_t *dungeonPtr, monster_t *monsterPtr);
 int monsterGetX(monster_t* monsterRef);
