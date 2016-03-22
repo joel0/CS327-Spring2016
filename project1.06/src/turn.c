@@ -56,8 +56,6 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
     dstX = monsterGetX(turnPtr->monsterPtr);
     dstY = monsterGetY(turnPtr->monsterPtr);
 
-    mvprintw(0, 30, "(%d, %d)", dstX, dstY);
-
     do {
         userChar = getch();
         screenClearRow(0);
