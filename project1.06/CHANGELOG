@@ -1,3 +1,6 @@
+2016-03-22
+Done.  Forgot to delete dungeon.PCPtr after changing it to a pointer instead of a struct on the heap.
+
 2016-03-21
 PC can't see through walls.
 

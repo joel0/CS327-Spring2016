@@ -118,6 +118,7 @@ void monstersDestroy(dungeon_t* dungeonPtr) {
         delete dungeonPtr->monsterPtrs[i];
     }
     free(dungeonPtr->monsterPtrs);
+    delete dungeonPtr->PCPtr;
 }
 
 void monsterList(dungeon_t* dungeonPtr) {

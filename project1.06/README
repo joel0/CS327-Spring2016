@@ -1,8 +1,14 @@
 Dungeon Game Now with Fog of War
 
-The game is now partially in C++.  The behavior did not change at all in the C++ transition.  The new front-end feature
-is Fog of War.  The PC can only see a rectangle of up to three spaces away in each direction.  He can remember the
-part of the dungeon that he has seen, but he does not remember any monsters.  Rock blocks the PC's vision.
+The game is now partially in C++.  The behavior did not change at all in the
+C++ transition.  The new front-end feature is Fog of War.  The PC can only see
+a rectangle of up to three spaces away in each direction.  He can remember the
+part of the dungeon that he has seen, but he does not remember any monsters.
+Rock blocks the PC's vision.
+
+INSTRUCTIONS
+1. Run make
+2. Execute bin/main
 
 Usage: main [--save|--load] [--nummon num]
 
