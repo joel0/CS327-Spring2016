@@ -70,6 +70,12 @@ public:
     virtual char getChar() = 0;
     inline virtual bool isPC() { return false; }
     virtual ~monster() {
+        if (speedPtr != NULL) {
+            delete speedPtr;
+            speedPtr = NULL;
+        } else {
+            std::cout << "SPEEDPTR WAS NULL" << std::endl;
+        }
     }
 };
 

@@ -154,9 +154,9 @@ int main(int argc, char* argv[]) {
 bool parseFile(dungeon_t* dungeonPtr) {
     std::ifstream f(monsterDescFileName().c_str());
     std::string str;
-    std::vector<monster_evil> monsters;
+    std::vector<monster_evil*> monsters;
     monster_evil* tempMonsterPtr;
-    std::vector<monster_evil>::iterator monster_iterator;
+    std::vector<monster_evil*>::iterator monster_iterator;
 
     std::getline(f, str);
     util_remove_cr(str);
@@ -168,21 +168,23 @@ bool parseFile(dungeon_t* dungeonPtr) {
     while (!f.eof()) {
         tempMonsterPtr = monster_evil::try_parse(f);
         if (tempMonsterPtr != NULL) {
-            monsters.push_back(*tempMonsterPtr);
+            monsters.push_back(tempMonsterPtr);
         }
     }
 
     monster_iterator = monsters.begin();
     while (monster_iterator != monsters.end()) {
-        std::cout << "Name: " << monster_iterator->name << std::endl;
-        std::cout << "Description: " << std::endl << monster_iterator->description << std::endl;
-        std::cout << "Color: " << monster_iterator->color << std::endl;
-        std::cout << "Speed: " << monster_iterator->speedPtr->toString() << std::endl;
-        std::cout << "Abilities: " << monster_iterator->abilities << std::endl;
-        std::cout << "Hitpoints: " << monster_iterator->HP << std::endl;
-        std::cout << "Attack Damage: " << monster_iterator->DAM << std::endl;
+        std::cout << "Name: " << (*monster_iterator)->name << std::endl;
+        std::cout << "Description: " << std::endl << (*monster_iterator)->description << std::endl;
+        std::cout << "Color: " << (*monster_iterator)->color << std::endl;
+        std::cout << "Speed: " << (*monster_iterator)->speedPtr->toString() << std::endl;
+        std::cout << "Abilities: " << (*monster_iterator)->abilities << std::endl;
+        std::cout << "Hitpoints: " << (*monster_iterator)->HP << std::endl;
+        std::cout << "Attack Damage: " << (*monster_iterator)->DAM << std::endl;
         std::cout << std::endl;
-        monster_iterator++; // = monsters.erase(monster_iterator);
+        //monster_iterator = monsters.erase(monster_iterator);
+        delete *monster_iterator;
+        monster_iterator++;
     }
 
     f.close();
