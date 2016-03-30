@@ -58,18 +58,37 @@ public:
         this->name = name;
         this->description = desc;
         this->color = color;
-        this->speedPtr = new dice_set(speed.data());
+        this->speedPtr = new dice_set(speed.c_str());
         this->abilities = abil;
         this->HP = HP;
         this->DAM = DAM;
         this->symb = SYMB;
+        std::cout << "created this crap " << speedPtr->toString() << std::endl;
+    }
+    monster(const monster& m) {
+        this->name = m.name;
+        this->description = m.description;
+        this->color = m.color;
+        this->speedPtr = new dice_set(m.speedPtr->toString().c_str());
+        this->abilities = m.abilities;
+        this->HP = m.HP;
+        this->DAM = m.DAM;
+        this->symb = m.symb;
     }
 public:
     char* toString(dungeon_t* dungeonPtr);
     // Override getChar
     virtual char getChar() = 0;
     inline virtual bool isPC() { return false; }
-    virtual ~monster() {}
+    ~monster() {
+        std::cout << "destroying this crap " << speedPtr->toString() << std::endl;
+        if (speedPtr != NULL) {
+            delete speedPtr;
+            speedPtr = NULL;
+        } else {
+            std::cout << "SPEEDPTR WAS NULL" << std::endl;
+        }
+    }
 };
 
 class monster_evil : public monster {
@@ -78,7 +97,6 @@ public:
     monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
     monster_evil(std::string name, std::string desc, std::string color, std::string speed, std::string abil, int HP, int DAM, char SYMB)
             : monster::monster(name, desc, color, speed, abil, HP, DAM, SYMB) {}
-    ~monster_evil() {}
     char getChar();
     static monster_evil* try_parse(std::ifstream& input);
 };

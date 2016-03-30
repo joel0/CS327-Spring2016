@@ -182,7 +182,7 @@ bool parseFile(dungeon_t* dungeonPtr) {
         std::cout << "Hitpoints: " << monster_iterator->HP << std::endl;
         std::cout << "Attack Damage: " << monster_iterator->DAM << std::endl;
         std::cout << std::endl;
-        monster_iterator = monsters.erase(monster_iterator);
+        monster_iterator++; // = monsters.erase(monster_iterator);
     }
 
     f.close();

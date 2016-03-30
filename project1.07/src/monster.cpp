@@ -60,7 +60,6 @@ char monster_evil::getChar() {
 
 monster_evil* monster_evil::try_parse(std::ifstream& input) {
     std::string s;
-    monster_evil* m;
     std::string keyword;
     bool has_name = false; std::string name;
     bool has_desc = false; std::string desc;
@@ -192,8 +191,7 @@ monster_evil* monster_evil::try_parse(std::ifstream& input) {
     calculatedHP = hp_dice.roll();
     calculatedDAM = dam_dice.roll();
 
-    m = new monster_evil(name, desc, color, speed, abil, calculatedHP, calculatedDAM, symb);
-    return m;
+    return new monster_evil(name, desc, color, speed, abil, calculatedHP, calculatedDAM, symb);
 }
 
 monster_PC::monster_PC(int x, int y) : monster(MONSTER_TUNNELING, 10, x, y) {
