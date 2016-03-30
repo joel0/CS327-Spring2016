@@ -1,0 +1,12 @@
+Dungeon Game - Now With Less Dungeon!
+
+The dungeon game is going under major changes.  Until the changes are complete, the program will simply load the types
+of monsters from the file in ~/.rlg327/monster_desc.txt, then display it on the screen.  The monster class has been
+partially updated to handle the new types of information.  There is now a dice_set class to simulate a set of dice.
+
+Usage:
+bin/main
+
+Installation:
+1. make
+2. bin/main
