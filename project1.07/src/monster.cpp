@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <curses.h>
 #include <cstring>
+#include <sstream>
 
 #include "monster.h"
 #include "dungeon.h"
@@ -105,17 +106,19 @@ monster_evil* monster_evil::try_parse(std::ifstream& input) {
                 std::cout << "Warning: duplicate desc field" << std::endl;
                 return NULL;
             }
+            std::ostringstream temp_desc;
             has_desc = true;
             // finish the DESC line
             std::getline(input, temp);
             // Read the first line of the DESC contents
             std::getline(input, temp);
             do {
-                desc += temp + "\n";
+                temp_desc << temp << std::endl;
                 std::getline(input, temp);
                 util_remove_cr(temp);
             } while (temp != ".");
             // remove the trailing '\n'
+            desc = temp_desc.str();
             desc.erase(desc.size() - 1);
         } else if (keyword == "COLOR") {
             if (has_color) {
