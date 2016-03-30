@@ -69,7 +69,7 @@ monster_evil* monster_evil::try_parse(std::ifstream& input) {
     bool has_abil = false; std::string abil;
     bool has_hp = false; std::string hp;
     bool has_dam = false; std::string dam;
-    bool has_symb = false; char symb;
+    bool has_symb = false; char symb = '-';
 
     std::getline(input, s);
     util_remove_cr(s);
