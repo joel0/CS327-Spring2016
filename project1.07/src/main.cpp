@@ -172,7 +172,8 @@ bool parseFile(dungeon_t* dungeonPtr) {
         }
     }
 
-    for (monster_iterator = monsters.begin(); monster_iterator != monsters.end(); monster_iterator++) {
+    monster_iterator = monsters.begin();
+    while (monster_iterator != monsters.end()) {
         std::cout << "Name: " << monster_iterator->name << std::endl;
         std::cout << "Description: " << std::endl << monster_iterator->description << std::endl;
         std::cout << "Color: " << monster_iterator->color << std::endl;
@@ -181,7 +182,7 @@ bool parseFile(dungeon_t* dungeonPtr) {
         std::cout << "Hitpoints: " << monster_iterator->HP << std::endl;
         std::cout << "Attack Damage: " << monster_iterator->DAM << std::endl;
         std::cout << std::endl;
-        delete &*monster_iterator;
+        monster_iterator = monsters.erase(monster_iterator);
     }
 
     f.close();

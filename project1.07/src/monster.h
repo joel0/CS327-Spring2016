@@ -78,6 +78,7 @@ public:
     monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
     monster_evil(std::string name, std::string desc, std::string color, std::string speed, std::string abil, int HP, int DAM, char SYMB)
             : monster::monster(name, desc, color, speed, abil, HP, DAM, SYMB) {}
+    ~monster_evil() {}
     char getChar();
     static monster_evil* try_parse(std::ifstream& input);
 };
