@@ -1,0 +1,11 @@
+2016-03-30
+Fixed memory leaks reported by Valgrind.  It's 3 AM now, so I hope my code actually works.
+
+2016-03-29
+Fixed bugs with displaying the data.
+
+2016-03-29
+Finished the project and forgot to update the changelog at each step.  Need to check for bugs.
+
+2016-03-29
+Started the project
