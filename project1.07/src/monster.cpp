@@ -192,7 +192,7 @@ monster_evil* monster_evil::try_parse(std::ifstream& input) {
     calculatedHP = hp_dice.roll();
     calculatedDAM = dam_dice.roll();
 
-    m = new monster_evil(name, desc, color, speed, abil, calculatedHP, calculatedDAM);
+    m = new monster_evil(name, desc, color, speed, abil, calculatedHP, calculatedDAM, symb);
     return m;
 }
 
