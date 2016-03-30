@@ -69,6 +69,7 @@ public:
     // Override getChar
     virtual char getChar() = 0;
     inline virtual bool isPC() { return false; }
+    virtual ~monster() {}
 };
 
 class monster_evil : public monster {
