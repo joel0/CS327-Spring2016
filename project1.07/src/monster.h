@@ -63,31 +63,13 @@ public:
         this->HP = HP;
         this->DAM = DAM;
         this->symb = SYMB;
-        std::cout << "created this crap " << speedPtr->toString() << std::endl;
-    }
-    monster(const monster& m) {
-        this->name = m.name;
-        this->description = m.description;
-        this->color = m.color;
-        this->speedPtr = new dice_set(m.speedPtr->toString().c_str());
-        this->abilities = m.abilities;
-        this->HP = m.HP;
-        this->DAM = m.DAM;
-        this->symb = m.symb;
     }
 public:
     char* toString(dungeon_t* dungeonPtr);
     // Override getChar
     virtual char getChar() = 0;
     inline virtual bool isPC() { return false; }
-    ~monster() {
-        std::cout << "destroying this crap " << speedPtr->toString() << std::endl;
-        if (speedPtr != NULL) {
-            delete speedPtr;
-            speedPtr = NULL;
-        } else {
-            std::cout << "SPEEDPTR WAS NULL" << std::endl;
-        }
+    virtual ~monster() {
     }
 };
 
