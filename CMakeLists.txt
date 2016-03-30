@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 project(project0)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 #add_definitions(-std=gnu11)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
