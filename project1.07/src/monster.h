@@ -6,6 +6,10 @@
 #define PROJECT_MONSTER_H
 
 #include <inttypes.h>
+#include <iostream>
+#include <fstream>
+
+#include "dice_set.h"
 
 #define MONSTER_MIN_SPEED 5
 #define MONSTER_MAX_SPEED 20
@@ -21,12 +25,21 @@ typedef struct dungeon_struct dungeon_t;
 class monster {
 public:
     uint8_t type;
-    int speed;
+    //int speed;
     int x;
     int y;
     int lastPCX;
     int lastPCY;
     bool alive;
+
+    std::string name;
+    std::string description;
+    std::string color;
+    dice_set* speedPtr;
+    std::string abilities;
+    int HP;
+    int DAM;
+    char symb;
 
 protected:
     monster() { }
@@ -34,17 +47,27 @@ protected:
 public:
     monster(uint8_t type, int speed, int x, int y) {
         this->type = type;
-        this->speed = speed;
+        //this->speed = speed;
         this->x = x;
         this->y = y;
         this->lastPCX = x;
         this->lastPCY = y;
         this->alive = true;
     }
+    monster(std::string name, std::string desc, std::string color, std::string speed, std::string abil, int HP, int DAM, char SYMB) {
+        this->name = name;
+        this->description = desc;
+        this->color = color;
+        this->speedPtr = new dice_set(speed.data());
+        this->abilities = abil;
+        this->HP = HP;
+        this->DAM = DAM;
+        this->symb = SYMB;
+    }
 public:
     char* toString(dungeon_t* dungeonPtr);
     // Override getChar
-    inline virtual char getChar() { return '!'; }
+    virtual char getChar() = 0;
     inline virtual bool isPC() { return false; }
 };
 
@@ -52,7 +75,10 @@ class monster_evil : public monster {
 public:
     monster_evil();
     monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
+    monster_evil(std::string name, std::string desc, std::string color, std::string speed, std::string abil, int HP, int DAM, char SYMB)
+            : monster::monster(name, desc, color, speed, abil, HP, DAM, SYMB) {}
     char getChar();
+    static monster_evil* try_parse(std::ifstream& input);
 };
 
 class monster_PC : public monster {

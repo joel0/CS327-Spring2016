@@ -8,12 +8,17 @@
 #include <stdlib.h>
 #include <time.h>
 #include <curses.h>
+#include <vector>
 
 #include "main.h"
 #include "dungeon.h"
 #include "path.h"
 #include "turn.h"
 #include "screen.h"
+#include "utils.h"
+
+bool parseFile(dungeon_t* dungeonPtr);
+char* monsterDescFileName();
 
 int main(int argc, char* argv[]) {
     int errLevel;
@@ -46,6 +51,8 @@ int main(int argc, char* argv[]) {
             return 0;
         }
     }
+
+    return parseFile(&dungeon);
 
     if (!numMonSpecified) {
         dungeon.monsterCount = rand() % (42 / 2);
@@ -143,6 +150,42 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+bool parseFile(dungeon_t* dungeonPtr) {
+    std::ifstream f(monsterDescFileName());
+    std::string str;
+    std::vector<monster_evil> monsters;
+    monster_evil* tempMonsterPtr;
+    std::vector<monster_evil>::iterator monster_iterator;
+
+    std::getline(f, str);
+    util_remove_cr(str);
+    // The \357\273\277 is the UTF-8 header.  Some Windows programs will append it at the start of a file.
+    if (str != "RLG327 MONSTER DESCRIPTION 1" && str != "\357\273\277RLG327 MONSTER DESCRIPTION 1") {
+        return false;
+    }
+
+    while (!f.eof()) {
+        tempMonsterPtr = monster_evil::try_parse(f);
+        if (tempMonsterPtr != NULL) {
+            monsters.push_back(*tempMonsterPtr);
+        }
+    }
+
+    for (monster_iterator = monsters.begin(); monster_iterator != monsters.end(); monster_iterator++) {
+        std::cout << "Name: " << monster_iterator->name << std::endl;
+        std::cout << "Description: " << std::endl << monster_iterator->description << std::endl;
+        std::cout << "Color: " << monster_iterator->color << std::endl;
+        std::cout << "Speed: " << monster_iterator->speedPtr->toString() << std::endl;
+        std::cout << "Abilities: " << monster_iterator->abilities << std::endl;
+        std::cout << "Hitpoints: " << monster_iterator->HP << std::endl;
+        std::cout << "Attack Damage: " << monster_iterator->DAM << std::endl;
+        std::cout << std::endl;
+    }
+
+    f.close();
+    return true;
+}
+
 void showUsage(char* name) {
     printf("Usage: %s [--save|--load] [--nummon num]\n\n", basename(name));
     printf("\t--save\tSaves a randomly generated dungeon to ~/.rlg327/dungeon\n");
@@ -158,5 +201,16 @@ char* dungeonFileName() {
     homeDir = getenv("HOME");
     fullPath = (char *) malloc(sizeof(char) * (strlen(homeDir) + strlen(relativePath) + 1));
     sprintf(fullPath, "%s/.rlg327/dungeon", homeDir);
+    return fullPath;
+}
+
+char* monsterDescFileName() {
+    char* fullPath;
+    char* homeDir;
+    const char *relativePath = "/.rlg327/monster_desc.txt";
+
+    homeDir = getenv("HOME");
+    fullPath = (char *) malloc(sizeof(char) * (strlen(homeDir) + strlen(relativePath) + 1));
+    sprintf(fullPath, "%s/.rlg327/monster_desc.txt", homeDir);
     return fullPath;
 }

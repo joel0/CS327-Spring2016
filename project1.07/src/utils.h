@@ -14,5 +14,6 @@
 int malloc2DArray(void ***grid, size_t size, int width, int height);
 void free2DArray(void **grid, int height);
 direction_t utilRandDir();
+void util_remove_cr(std::string& str);
 
 #endif //PROJECT_UTILS_H

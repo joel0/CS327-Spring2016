@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <cstring>
 #include "utils.h"
 
 int malloc2DArray(void*** grid, size_t size, int width, int height) {
@@ -47,4 +48,11 @@ direction_t utilRandDir() {
             // To avoid a compiler warning, something must be returned.
             return north;
     }
+}
+
+void util_remove_cr(std::string& str) {
+    // This code is to remove the \r from the end of strings to handle Windows \r\n
+    // This code from http://stackoverflow.com/a/2529011
+    if (!str.empty() && str[str.size() - 1] == '\r')
+        str.erase(str.size() - 1);
 }
