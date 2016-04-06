@@ -6,9 +6,12 @@
 #define PROJECT_DUNGEON_H
 
 #include <inttypes.h>
+#include <vector>
 
 #include "monster.h"
 #include "heap.h"
+
+typedef struct monster_descrip monster_descrip;
 
 typedef enum material_enum {
     room = '.',
@@ -40,29 +43,29 @@ typedef struct room_struct {
 typedef struct gridCell_struct {
     uint8_t hardness;
     material_t material;
-    monster_t* monsterPtr;
+    monster* monsterPtr;
 } gridCell_t;
 
 typedef struct dungeon_struct {
-    monster_t* PCPtr;
+    monster_PC* PCPtr;
     gridCell_t** grid;
     uint8_t** tunnelingDist;
     uint8_t** nontunnelingDist;
     room_t* rooms;
     int roomCount;
-    monster_t** monsterPtrs;
+    monster** monsterPtrs;
     int monsterCount;
     heap_t* turnsHeapPtr;
 } dungeon_t;
 
 int saveDungeon(dungeon_t dungeon, char* fileName);
-int loadDungeon(dungeon_t* dungeonPtr, char* fileName);
+int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descrip*>& monster_descrips);
 void destroyDungeon(dungeon_t dungeon);
-void dungeonRandomlyPlaceMonster(dungeon_t* dungeonPtr, monster_t* monsterPtr);
+void dungeonRandomlyPlaceMonster(dungeon_t* dungeonPtr, monster* monsterPtr);
 void dungeonPlaceStairs(dungeon_t* dungeonPtr);
 void printRooms(int roomCount, room_t* rooms);
-void printMonsters(int monsterCount, monster_t** monsterPtrs);
-int generateDungeon(dungeon_t* dungeonPtr);
+void printMonsters(int monsterCount, monster** monsterPtrs);
+int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips);
 int roomDist(room_t room1, room_t room2);
 void connectRooms(gridCell_t** grid, room_t* rooms, int roomCount);
 void connectTwoRooms(gridCell_t** grid, room_t room1, room_t room2);
@@ -73,6 +76,6 @@ int validateTwoRooms(room_t room1, room_t room2);
 void printDungeon(gridCell_t** world);
 int populateGrid(dungeon_t* dungeonPtr);
 void populateRooms(dungeon_t dungeon);
-void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr);
+void dungeonRemoveMonster(monster** monsterPtrs, int toRemove, int* monsterCountPtr);
 
 #endif //PROJECT_DUNGEON_H

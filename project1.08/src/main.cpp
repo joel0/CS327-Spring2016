@@ -19,12 +19,13 @@
 #include "utils.h"
 #include "monster_descrip.h"
 
-bool parseFile(dungeon_t* dungeonPtr);
+bool parse_monster_descrip_file(std::vector<monster_descrip*> &monster_descrips);
 std::string monsterDescFileName();
 
 int main(int argc, char* argv[]) {
     int errLevel;
     dungeon_t dungeon;
+    std::vector<monster_descrip*> monster_descrips;
     int numMonSpecified = 0;
 
     //init random
@@ -54,7 +55,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    parseFile(&dungeon);
+    if (!parse_monster_descrip_file(monster_descrips)) {
+        std::cout << "Error parsing the monster descriptions." << std::endl;
+        return -1;
+    }
 
     if (!numMonSpecified) {
         dungeon.monsterCount = rand() % (42 / 3);
@@ -62,14 +66,14 @@ int main(int argc, char* argv[]) {
 
     // load or generate dungeon
     if (load) {
-        errLevel = loadDungeon(&dungeon, dungeonFileName());
+        errLevel = loadDungeon(&dungeon, dungeonFileName(), monster_descrips);
         if (errLevel) {
             printf("Failed to load the dungeon.  Read error %d\n", errLevel);
             return -1;
         }
         populateRooms(dungeon);
     } else {
-        errLevel = generateDungeon(&dungeon);
+        errLevel = generateDungeon(&dungeon, monster_descrips);
         if (errLevel) {
             printf("Failed to allocate memory for the dungeon grid.\n");
             return errLevel;
@@ -97,11 +101,11 @@ int main(int argc, char* argv[]) {
 
     // do move
     PC_action userAction = actionMovement;
-    while (monsterIsAlive(dungeon.PCPtr) && dungeon.monsterCount > 1 && userAction != actionSave) {
+    while (dungeon.PCPtr->alive && dungeon.monsterCount > 1 && userAction != actionSave) {
         int PCTurn = turnIsPC(&dungeon);
         if (PCTurn) {
-            monsterUpdatePCGridKnown(dungeon.PCPtr, dungeon.grid);
-            printDungeon(monsterGetPCGridKnown(dungeon.PCPtr));
+            dungeon.PCPtr->updateGridKnown(dungeon.grid);
+            printDungeon(dungeon.PCPtr->gridKnown);
 
             userAction = turnDoPC(&dungeon);
             switch (userAction) {
@@ -113,7 +117,7 @@ int main(int argc, char* argv[]) {
                     destroyDungeon(dungeon);
                     dungeon.monsterCount--; // PC was counted as a "monster".  He must be removed for reinitialisation.
                     // Build new dungeon
-                    errLevel = generateDungeon(&dungeon);
+                    errLevel = generateDungeon(&dungeon, monster_descrips);
                     if (errLevel) {
                         endwin();
                         printf("Failed to allocate memory for the dungeon grid.\n");
@@ -137,7 +141,7 @@ int main(int argc, char* argv[]) {
     screenClearRow(0);
     if (userAction == actionSave) {
         mvprintw(0, 0, "Game saved (haha, not really!).  Press any key to exit.");
-    } else if (!monsterIsAlive(dungeon.PCPtr)) {
+    } else if (!dungeon.PCPtr->alive) {
         mvprintw(0, 0, "You died!  Press any key to exit.");
     } else {
         mvprintw(0, 0, "Yay!  You defeated all the monsters.  Press any key to exit.");
@@ -152,10 +156,10 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-bool parseFile(dungeon_t* dungeonPtr) {
+bool parse_monster_descrip_file(std::vector<monster_descrip *> &monster_descrips) {
     std::ifstream f(monsterDescFileName().c_str());
     std::string str;
-    std::vector<monster_descrip*> monsters;
+    //std::vector<monster_descrip*> monsters;
     monster_descrip* tempMonsterPtr;
     std::vector<monster_descrip*>::iterator monster_iterator;
 
@@ -169,7 +173,7 @@ bool parseFile(dungeon_t* dungeonPtr) {
     while (!f.eof()) {
         try {
             tempMonsterPtr = new monster_descrip(f);
-            monsters.push_back(tempMonsterPtr);
+            monster_descrips.push_back(tempMonsterPtr);
         } catch (std::string ex) {
             std::cout << ex << std::endl;
         } catch (const char* ex) {
@@ -180,10 +184,10 @@ bool parseFile(dungeon_t* dungeonPtr) {
         }
     }
 
-    monster_iterator = monsters.begin();
-    while (monster_iterator != monsters.end()) {
+    monster_iterator = monster_descrips.begin();
+    while (monster_iterator != monster_descrips.end()) {
         std::cout << (*monster_iterator)->to_string() << std::endl;
-        delete *monster_iterator;
+        //delete *monster_iterator;
         monster_iterator++;
     }
 

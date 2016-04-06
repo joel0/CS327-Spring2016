@@ -7,7 +7,8 @@
 
 #include <fstream>
 #include "dice_set.h"
-#include "monster.h"
+
+class monster_evil;
 
 class monster_descrip {
 public:

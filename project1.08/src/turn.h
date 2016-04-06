@@ -11,7 +11,7 @@
 typedef struct turn_struct {
     int id;
     int nextTurn;
-    monster_t* monsterPtr;
+    monster* monsterPtr;
 } turn_t;
 
 typedef enum PC_action_enum {

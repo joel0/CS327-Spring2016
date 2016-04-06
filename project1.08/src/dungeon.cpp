@@ -8,11 +8,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <curses.h>
+#include <vector>
 
 #include "dungeon.h"
 #include "globals.h"
 #include "utils.h"
 #include "turn.h"
+#include "../../project1.06/src/monster.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
     uint32_t fileSize;
@@ -81,7 +83,7 @@ int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int r
     return 0;
 }
 
-int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
+int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descrip*>& monster_descrips) {
     size_t bytesRead;
     char magicBytes[6];
     uint32_t version;
@@ -184,13 +186,13 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName) {
     }
 
     dungeonPlaceStairs(dungeonPtr);
-    initMonsters(dungeonPtr);
+    initMonsters(dungeonPtr, monster_descrips);
     turnInit(dungeonPtr);
 
     return 0;
 }
 
-int generateDungeon(dungeon_t* dungeonPtr) {
+int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips) {
     dungeonPtr->roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
     //printf("Room count: %d\n", dungeonPtr->roomCount);
 
@@ -208,7 +210,7 @@ int generateDungeon(dungeon_t* dungeonPtr) {
     connectRooms(dungeonPtr->grid, dungeonPtr->rooms, dungeonPtr->roomCount);
 
     dungeonPlaceStairs(dungeonPtr);
-    initMonsters(dungeonPtr);
+    initMonsters(dungeonPtr, monster_descrips);
     turnInit(dungeonPtr);
 
     return 0;
@@ -221,7 +223,7 @@ void destroyDungeon(dungeon_t dungeon) {
     free(dungeon.rooms);
 }
 
-void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster_t *monsterPtr) {
+void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster *monsterPtr) {
     int chosenRoom;
     int relX;
     int relY;
@@ -236,8 +238,8 @@ void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster_t *monsterPtr) {
         absY = relY + dungeonPtr->rooms[chosenRoom].y;
     } while (dungeonPtr->grid[absY][absX].monsterPtr != NULL);
 
-    monsterSetX(monsterPtr, absX);
-    monsterSetY(monsterPtr, absY);
+    monsterPtr->x = absX;
+    monsterPtr->y = absY;
     dungeonPtr->grid[absY][absX].monsterPtr = monsterPtr;
 }
 
@@ -273,14 +275,14 @@ void printRooms(int roomCount, room_t* rooms) {
     }
 }
 
-void printMonsters(int monsterCount, monster_t** monsterPtrs) {
-    monster_t* curMonsterPtr;
+void printMonsters(int monsterCount, monster** monsterPtrs) {
+    monster* curMonsterPtr;
     printf("monsterCount: %d\n", monsterCount);
     for (int i = 0; i < monsterCount; i++) {
         curMonsterPtr = monsterPtrs[i];
-        printf("monsters[%d}: (%d, %d) %c\n", i, monsterGetX(curMonsterPtr), monsterGetY(curMonsterPtr), monsterGetChar(curMonsterPtr));
-        printf("\tisPC: %d\n", monsterIsPC(curMonsterPtr));
-        printf("\tspeed: %d\n", monsterSpeed(curMonsterPtr));
+        printf("monsters[%d}: (%d, %d) %c\n", i, curMonsterPtr->x, curMonsterPtr->y, curMonsterPtr->getChar());
+        printf("\tisPC: %d\n", curMonsterPtr->isPC());
+        printf("\tspeed: %d\n", curMonsterPtr->speed);
     }
 }
 
@@ -430,7 +432,7 @@ void printDungeon(gridCell_t** world) {
                 mvaddch(y + 1, x, (char) world[y][x].material);
             } else {
                 // Monster (or PC)
-                mvaddch(y + 1, x, monsterGetChar(world[y][x].monsterPtr));
+                mvaddch(y + 1, x, world[y][x].monsterPtr->getChar());
             }
         }
     }
@@ -484,11 +486,11 @@ void populateRooms(dungeon_t dungeon) {
     }
 }
 
-void dungeonRemoveMonster(monster_t** monsterPtrs, int toRemove, int* monsterCountPtr) {
-    monster_t* deletedMonster = monsterPtrs[toRemove];
-    monsterKill(monsterPtrs[toRemove]);
+void dungeonRemoveMonster(monster** monsterPtrs, int toRemove, int* monsterCountPtr) {
+    monster* deletedMonster = monsterPtrs[toRemove];
+    monsterPtrs[toRemove]->alive = false;
     // Do not move the PC in the array.  It causes problems when trying to call free() on the array that was malloc()ed.
-    if (!monsterIsPC(monsterPtrs[toRemove])) {
+    if (!monsterPtrs[toRemove]->isPC()) {
         while (toRemove < *monsterCountPtr - 1) {
             monsterPtrs[toRemove] = monsterPtrs[toRemove + 1];
             toRemove++;

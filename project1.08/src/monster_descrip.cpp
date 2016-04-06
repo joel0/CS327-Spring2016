@@ -167,7 +167,7 @@ std::string monster_descrip::to_string() {
 }
 
 monster_evil* monster_descrip::generate() {
-    return new monster_evil(name, description, color, speed_ptr, abilities, HP_ptr->roll(), DAM_ptr->roll(), symb);
+    return new monster_evil(name, description, color, speed_ptr->roll(), abilities, HP_ptr->roll(), DAM_ptr, symb);
 }
 
 int monster_descrip::parse_color(std::string color_str) {

@@ -21,7 +21,7 @@ void turnInit(dungeon_t* dungeonPtr) {
     for (int i = 0; i < dungeonPtr->monsterCount; i++) {
         turn = (turn_t *) malloc(sizeof(turn_t));
         turn->monsterPtr = dungeonPtr->monsterPtrs[i];
-        turn->nextTurn = (100 / monsterSpeed(turn->monsterPtr));
+        turn->nextTurn = (100 / turn->monsterPtr->speed);
         turn->id = i;
         heap_insert(dungeonPtr->turnsHeapPtr, (void*) turn);
     }
@@ -31,13 +31,13 @@ void turnDo(dungeon_t* dungeonPtr) {
     turn_t *turnPtr;
     do {
         turnPtr = (turn_t *) heap_remove_min(dungeonPtr->turnsHeapPtr);
-        if (!monsterIsAlive(turnPtr->monsterPtr)) {
+        if (!turnPtr->monsterPtr->alive) {
             free(turnPtr);
             turnPtr = NULL;
         }
     } while (!turnPtr);
     moveMonsterLogic(dungeonPtr, turnPtr->monsterPtr);
-    turnPtr->nextTurn += 100 / monsterSpeed(turnPtr->monsterPtr);
+    turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     heap_insert(dungeonPtr->turnsHeapPtr, (void*) turnPtr);
 
 //    screenClearRow(0);
@@ -53,8 +53,8 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
     int dstY;
     turn_t* turnPtr;
     turnPtr = (turn_t *) heap_remove_min(dungeonPtr->turnsHeapPtr);
-    dstX = monsterGetX(turnPtr->monsterPtr);
-    dstY = monsterGetY(turnPtr->monsterPtr);
+    dstX = turnPtr->monsterPtr->x;
+    dstY = turnPtr->monsterPtr->y;
 
     do {
         userChar = getch();
@@ -164,7 +164,7 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
         moveMonster(dungeonPtr, turnPtr->monsterPtr, dstX, dstY);
         pathTunneling(dungeonPtr);
         pathNontunneling(dungeonPtr);
-        turnPtr->nextTurn += 100 / monsterSpeed(turnPtr->monsterPtr);
+        turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;
     }
     heap_insert(dungeonPtr->turnsHeapPtr, (void *) turnPtr);
     return returnValue;
@@ -173,7 +173,7 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
 int turnIsPC(dungeon_t* dungeonPtr) {
     turn_t* turnPtr;
     turnPtr = (turn_t *) heap_peek_min(dungeonPtr->turnsHeapPtr);
-    return monsterIsPC(turnPtr->monsterPtr);
+    return turnPtr->monsterPtr->isPC();
 }
 
 void turnDestroy(dungeon_t* dungeonPtr) {
