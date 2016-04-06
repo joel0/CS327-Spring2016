@@ -12,6 +12,7 @@
 
 #include "dice_set.h"
 #include "monster_descrip.h"
+#include "item_descrip.h"
 
 #define MONSTER_MIN_SPEED 5
 #define MONSTER_MAX_SPEED 20
@@ -100,7 +101,9 @@ public:
 typedef struct dungeon_struct dungeon_t;
 
 void initMonsters(dungeon_t *dungeonPtr, std::vector<monster_descrip*>& monster_descrips);
+void initItems(dungeon_t& dungeon, std::vector<item_descrip*>& item_descrips);
 void monstersDestroy(dungeon_t *dungeonPtr);
+void itemsDestroy(dungeon_t& dungeon);
 //char monsterGetChar(monster_t* m);
 void monsterList(dungeon_t *dungeonPtr);
 //char *monsterDescription(dungeon_t *dungeonPtr, monster_t *monsterPtr);

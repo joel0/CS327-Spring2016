@@ -13,6 +13,7 @@
 #include "utils.h"
 #include "globals.h"
 #include "movement.h"
+#include "item_descrip.h"
 
 char* monster::toString(dungeon_t* dungeonPtr) {
     int offX = ((monster*) dungeonPtr->PCPtr)->x - x;
@@ -64,6 +65,7 @@ monster_PC::monster_PC(int x, int y) : monster(std::string("PC"), std::string("Y
             gridKnown[curY][curX].hardness = 0;
             gridKnown[curY][curX].material = rock;
             gridKnown[curY][curX].monsterPtr = NULL;
+            gridKnown[curY][curX].itemPtr = NULL;
         }
     }
 }
@@ -113,12 +115,31 @@ void initMonsters(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_
     totalMonsters = dungeonPtr->monsterCount;
 }
 
+void initItems(dungeon_t& dungeon, std::vector<item_descrip*>& item_descrips) {
+    item* randItemPtr;
+    dungeon.itemCount = 10 + rand() % 10;
+    dungeon.itemPtrs = (item**) malloc(sizeof(item*) * dungeon.itemCount);
+
+    for (int i = 0; i < dungeon.itemCount; i++) {
+        randItemPtr = item_descrips[rand() % item_descrips.size()]->generate();
+        dungeon.itemPtrs[i] = randItemPtr;
+        dungeonRandomlyPlaceItem(dungeon, *randItemPtr);
+    }
+}
+
 void monstersDestroy(dungeon_t* dungeonPtr) {
     for (int i = 1; i < totalMonsters; i++) {
         delete dungeonPtr->monsterPtrs[i];
     }
     free(dungeonPtr->monsterPtrs);
     delete dungeonPtr->PCPtr;
+}
+
+void itemsDestroy(dungeon_t& dungeon) {
+    for (int i = 0; i < dungeon.itemCount; i++) {
+        delete dungeon.itemPtrs[i];
+    }
+    free(dungeon.itemPtrs);
 }
 
 void monsterList(dungeon_t* dungeonPtr) {

@@ -43,6 +43,10 @@ dice_set::dice_set(const char *dice_str) {
 
 int dice_set::roll() {
     int total = base;
+    // If we have a 0-sided die, we should not try to modulo by it
+    if (sides == 0) {
+        return total;
+    }
     for (int i = 0; i < dice; i++) {
         total += (rand() % sides) + 1;
     }

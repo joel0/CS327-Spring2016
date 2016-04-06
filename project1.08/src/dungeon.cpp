@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "turn.h"
 #include "../../project1.06/src/monster.h"
+#include "item_descrip.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
     uint32_t fileSize;
@@ -83,7 +84,7 @@ int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int r
     return 0;
 }
 
-int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descrip*>& monster_descrips) {
+int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descrip*>& monster_descrips, std::vector<item_descrip*>& item_descrips) {
     size_t bytesRead;
     char magicBytes[6];
     uint32_t version;
@@ -187,12 +188,13 @@ int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descr
 
     dungeonPlaceStairs(dungeonPtr);
     initMonsters(dungeonPtr, monster_descrips);
+    initItems(*dungeonPtr, item_descrips);
     turnInit(dungeonPtr);
 
     return 0;
 }
 
-int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips) {
+int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips, std::vector<item_descrip*>& item_descrips) {
     dungeonPtr->roomCount = MIN_ROOMS + (rand() % (MAX_ROOMS - MIN_ROOMS + 1));
     //printf("Room count: %d\n", dungeonPtr->roomCount);
 
@@ -211,6 +213,7 @@ int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monste
 
     dungeonPlaceStairs(dungeonPtr);
     initMonsters(dungeonPtr, monster_descrips);
+    initItems(*dungeonPtr, item_descrips);
     turnInit(dungeonPtr);
 
     return 0;
@@ -219,6 +222,7 @@ int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monste
 void destroyDungeon(dungeon_t dungeon) {
     turnDestroy(&dungeon);
     monstersDestroy(&dungeon);
+    itemsDestroy(dungeon);
     free2DArray((void **) dungeon.grid, HEIGHT);
     free(dungeon.rooms);
 }
@@ -241,6 +245,24 @@ void dungeonRandomlyPlaceMonster(dungeon_t *dungeonPtr, monster *monsterPtr) {
     monsterPtr->x = absX;
     monsterPtr->y = absY;
     dungeonPtr->grid[absY][absX].monsterPtr = monsterPtr;
+}
+
+void dungeonRandomlyPlaceItem(dungeon_t& dungeon, item& i) {
+    int chosenRoom;
+    int relX;
+    int relY;
+    int absX;
+    int absY;
+
+    do {
+        chosenRoom = rand() % dungeon.roomCount;
+        relX = rand() % dungeon.rooms[chosenRoom].width;
+        relY = rand() % dungeon.rooms[chosenRoom].height;
+        absX = relX + dungeon.rooms[chosenRoom].x;
+        absY = relY + dungeon.rooms[chosenRoom].y;
+    } while (dungeon.grid[absY][absX].itemPtr != NULL);
+
+    dungeon.grid[absY][absX].itemPtr = &i;
 }
 
 void dungeonPlaceStairs(dungeon_t* dungeonPtr) {

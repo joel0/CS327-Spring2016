@@ -57,17 +57,20 @@ typedef struct dungeon_struct {
     int roomCount;
     monster** monsterPtrs;
     int monsterCount;
+    item** itemPtrs;
+    int itemCount;
     heap_t* turnsHeapPtr;
 } dungeon_t;
 
 int saveDungeon(dungeon_t dungeon, char* fileName);
-int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descrip*>& monster_descrips);
+int loadDungeon(dungeon_t* dungeonPtr, char* fileName, std::vector<monster_descrip*>& monster_descrips, std::vector<item_descrip*>& item_descrips);
 void destroyDungeon(dungeon_t dungeon);
 void dungeonRandomlyPlaceMonster(dungeon_t* dungeonPtr, monster* monsterPtr);
+void dungeonRandomlyPlaceItem(dungeon_t& dungeon, item& i);
 void dungeonPlaceStairs(dungeon_t* dungeonPtr);
 void printRooms(int roomCount, room_t* rooms);
 void printMonsters(int monsterCount, monster** monsterPtrs);
-int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips);
+int generateDungeon(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips, std::vector<item_descrip*>& item_descrips);
 int roomDist(room_t room1, room_t room2);
 void connectRooms(gridCell_t** grid, room_t* rooms, int roomCount);
 void connectTwoRooms(gridCell_t** grid, room_t room1, room_t room2);

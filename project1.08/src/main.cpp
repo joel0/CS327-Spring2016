@@ -73,14 +73,14 @@ int main(int argc, char* argv[]) {
 
     // load or generate dungeon
     if (load) {
-        errLevel = loadDungeon(&dungeon, dungeonFileName(), monster_descrips);
+        errLevel = loadDungeon(&dungeon, dungeonFileName(), monster_descrips, item_descrips);
         if (errLevel) {
             printf("Failed to load the dungeon.  Read error %d\n", errLevel);
             return -1;
         }
         populateRooms(dungeon);
     } else {
-        errLevel = generateDungeon(&dungeon, monster_descrips);
+        errLevel = generateDungeon(&dungeon, monster_descrips, item_descrips);
         if (errLevel) {
             printf("Failed to allocate memory for the dungeon grid.\n");
             return errLevel;
@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
                     destroyDungeon(dungeon);
                     dungeon.monsterCount--; // PC was counted as a "monster".  He must be removed for reinitialisation.
                     // Build new dungeon
-                    errLevel = generateDungeon(&dungeon, monster_descrips);
+                    errLevel = generateDungeon(&dungeon, monster_descrips, item_descrips);
                     if (errLevel) {
                         endwin();
                         printf("Failed to allocate memory for the dungeon grid.\n");
