@@ -30,9 +30,9 @@ public:
     //int speed;
     int x;
     int y;
-    int lastPCX;
-    int lastPCY;
-    bool alive;
+    int lastPCX = 0;
+    int lastPCY = 0;
+    bool alive = true;
 
     std::string name;
     std::string description;
@@ -65,7 +65,6 @@ public:
         this->HP = HP;
         this->DAM_ptr = DAM_ptr;
         this->symb = SYMB;
-        this->alive = true;
     }
     virtual ~monster() {};
     char* toString(dungeon_t* dungeonPtr);
