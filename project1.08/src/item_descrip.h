@@ -8,6 +8,7 @@
 #include <string>
 #include "dice_set.h"
 #include "descrip.h"
+#include "item.h"
 
 class item_descrip : private descrip {
 public:
@@ -29,6 +30,8 @@ public:
     ~item_descrip();
     bool is_equipment();
     std::string to_string();
+    char get_char();
+    item* generate();
 private:
     int parse_type(std::string type_str);
 };

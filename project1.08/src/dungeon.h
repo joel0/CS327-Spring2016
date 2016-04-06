@@ -10,6 +10,7 @@
 
 #include "monster.h"
 #include "heap.h"
+#include "item.h"
 
 typedef struct monster_descrip monster_descrip;
 
@@ -44,6 +45,7 @@ typedef struct gridCell_struct {
     uint8_t hardness;
     material_t material;
     monster* monsterPtr;
+    item* itemPtr;
 } gridCell_t;
 
 typedef struct dungeon_struct {

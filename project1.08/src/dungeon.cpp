@@ -427,14 +427,19 @@ int validateTwoRooms(room_t room1, room_t room2) {
 void printDungeon(gridCell_t** world) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
-            if (world[y][x].monsterPtr == NULL) {
-                // No monster
-                mvaddch(y + 1, x, (char) world[y][x].material);
-            } else {
+            if (world[y][x].monsterPtr != NULL) {
                 // Monster (or PC)
                 attron(COLOR_PAIR(world[y][x].monsterPtr->color));
                 mvaddch(y + 1, x, world[y][x].monsterPtr->getChar());
                 attroff(COLOR_PAIR(world[y][x].monsterPtr->color));
+            } else if (world[y][x].itemPtr != NULL) {
+                // Item
+                attron(COLOR_PAIR(world[y][x].itemPtr->color));
+                mvaddch(y + 1, x, world[y][x].itemPtr->symb);
+                attroff(COLOR_PAIR(world[y][x].itemPtr->color));
+            } else {
+                // No monster
+                mvaddch(y + 1, x, (char) world[y][x].material);
             }
         }
     }
@@ -450,6 +455,7 @@ int populateGrid(dungeon_t* dungeonPtr) {
             dungeonPtr->grid[y][x].material = rock;
             dungeonPtr->grid[y][x].hardness = (uint8_t)(rand() % (ROCK_HARDNESS_MAX - 1) + 1);
             dungeonPtr->grid[y][x].monsterPtr = NULL;
+            dungeonPtr->grid[y][x].itemPtr = NULL;
         }
     }
     // Immutable border
@@ -457,17 +463,21 @@ int populateGrid(dungeon_t* dungeonPtr) {
         dungeonPtr->grid[y][0].material = rock;
         dungeonPtr->grid[y][0].hardness = ROCK_HARDNESS_IMMUTABLE;
         dungeonPtr->grid[y][0].monsterPtr = NULL;
+        dungeonPtr->grid[y][0].itemPtr = NULL;
         dungeonPtr->grid[y][WIDTH - 1].material = rock;
         dungeonPtr->grid[y][WIDTH - 1].hardness = ROCK_HARDNESS_IMMUTABLE;
         dungeonPtr->grid[y][WIDTH - 1].monsterPtr = NULL;
+        dungeonPtr->grid[y][WIDTH - 1].itemPtr = NULL;
     }
     for (int x = 0; x < WIDTH; x++) {
         dungeonPtr->grid[0][x].material = rock;
         dungeonPtr->grid[0][x].hardness = ROCK_HARDNESS_IMMUTABLE;
         dungeonPtr->grid[0][x].monsterPtr = NULL;
+        dungeonPtr->grid[0][x].itemPtr = NULL;
         dungeonPtr->grid[HEIGHT - 1][x].material = rock;
         dungeonPtr->grid[HEIGHT - 1][x].hardness = ROCK_HARDNESS_IMMUTABLE;
         dungeonPtr->grid[HEIGHT - 1][x].monsterPtr = NULL;
+        dungeonPtr->grid[HEIGHT - 1][x].itemPtr = NULL;
     }
 
     populateRooms(*dungeonPtr);

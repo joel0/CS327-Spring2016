@@ -25,7 +25,8 @@ typedef enum {
     TYPE_AMMUNITION = 0x08000,
     TYPE_FOOD       = 0x10000,
     TYPE_WAND       = 0x20000,
-    TYPE_CONTAINER  = 0x40000
+    TYPE_CONTAINER  = 0x40000,
+    TYPE_STACK      = 0x80000
 } type_enum;
 
 typedef struct {
@@ -52,7 +53,8 @@ static type_t types_table[] = {
         {"AMMUNITION", TYPE_AMMUNITION},
         {"FOOD", TYPE_FOOD},
         {"WAND", TYPE_WAND},
-        {"CONTAINER", TYPE_CONTAINER} };
+        {"CONTAINER", TYPE_CONTAINER},
+        {"STACK", TYPE_STACK} };
 
 item_descrip::item_descrip(std::ifstream &input) {
     std::string s;
@@ -187,8 +189,40 @@ std::string item_descrip::to_string() {
     std::stringstream out;
     out << "Name: " << name << std::endl;
     out << "Desc:" << std::endl << description << std::endl;
+    out << "Symb: " << get_char() << std::endl;
     return out.str();
 }
 
+char item_descrip::get_char() {
+    switch (type) {
+        case TYPE_WEAPON:       return '|';
+        case TYPE_OFFHAND:      return ')';
+        case TYPE_RANGED:       return '}';
+        case TYPE_ARMOR:        return '[';
+        case TYPE_HELMET:       return ']';
+        case TYPE_CLOAK:        return '(';
+        case TYPE_GLOVES:       return '{';
+        case TYPE_BOOTS:        return '\\';
+        case TYPE_RING:         return '=';
+        case TYPE_AMULET:       return '"';
+        case TYPE_LIGHT:        return '_';
+        case TYPE_SCROLL:       return '~';
+        case TYPE_BOOK:         return '?';
+        case TYPE_FLASK:        return '!';
+        case TYPE_GOLD:         return '$';
+        case TYPE_AMMUNITION:   return '/';
+        case TYPE_FOOD:         return ',';
+        case TYPE_WAND:         return '-';
+        case TYPE_CONTAINER:    return '%';
+        case TYPE_STACK:        return '&';
+        default:                return '*';
+    }
+}
+
+item *item_descrip::generate() {
+    return new item(name, description, type, color, hit_bonus_ptr->roll(), dam_bonus_ptr, dodge_bonus_ptr->roll(),
+                    def_bonus_ptr->roll(), weight_ptr->roll(), speed_bonus_ptr->roll(), special_attrib_ptr->roll(),
+                    value_ptr->roll(), get_char());
+}
 
 
