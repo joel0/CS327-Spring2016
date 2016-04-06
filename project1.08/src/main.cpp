@@ -17,15 +17,18 @@
 #include "turn.h"
 #include "screen.h"
 #include "utils.h"
-#include "monster_descrip.h"
+#include "item_descrip.h"
 
 bool parse_monster_descrip_file(std::vector<monster_descrip*> &monster_descrips);
+bool parse_item_descrip_file(std::vector<item_descrip*>& item_descrips);
+std::string itemDescFileName();
 std::string monsterDescFileName();
 
 int main(int argc, char* argv[]) {
     int errLevel;
     dungeon_t dungeon;
     std::vector<monster_descrip*> monster_descrips;
+    std::vector<item_descrip*> item_descrips;
     int numMonSpecified = 0;
 
     //init random
@@ -57,6 +60,10 @@ int main(int argc, char* argv[]) {
 
     if (!parse_monster_descrip_file(monster_descrips)) {
         std::cout << "Error parsing the monster descriptions." << std::endl;
+        return -1;
+    }
+    if (!parse_item_descrip_file(item_descrips)) {
+        std::cout << "Error parsing the object descriptions." << std::endl;
         return -1;
     }
 
@@ -195,6 +202,43 @@ bool parse_monster_descrip_file(std::vector<monster_descrip *> &monster_descrips
     return true;
 }
 
+bool parse_item_descrip_file(std::vector<item_descrip*>& item_descrips) {
+    std::ifstream f(itemDescFileName().c_str());
+    std::string str;
+    item_descrip* tempItemPtr;
+    std::vector<item_descrip*>::iterator item_iterator;
+
+    std::getline(f, str);
+    util_remove_cr(str);
+    // The \357\273\277 is the UTF-8 header.  Some Windows programs will append it at the start of a file.
+    if (str != "RLG327 OBJECT DESCRIPTION 1" && str != "\357\273\277RLG327 OBJECT DESCRIPTION 1") {
+        return false;
+    }
+
+    while (!f.eof()) {
+        try {
+            tempItemPtr = new item_descrip(f);
+            item_descrips.push_back(tempItemPtr);
+        } catch (std::string ex) {
+            std::cout << ex << std::endl;
+        } catch  (const char* ex) {
+            // EOF is expected when the file contains no more objects
+            if (strcmp(ex, "EOF") != 0) {
+                std::cout << ex << std::endl;
+            }
+        }
+    }
+
+    item_iterator = item_descrips.begin();
+    while (item_iterator != item_descrips.end()) {
+        std::cout << (*item_iterator)->to_string() << std::endl;
+        item_iterator++;
+    }
+
+    f.close();
+    return true;
+}
+
 void showUsage(char* name) {
     printf("Usage: %s [--save|--load] [--nummon num]\n\n", basename(name));
     printf("\t--save\tSaves a randomly generated dungeon to ~/.rlg327/dungeon\n");
@@ -217,6 +261,16 @@ std::string monsterDescFileName() {
     std::ostringstream out;
     char* homeDir;
     const char *relativePath = "/.rlg327/monster_desc.txt";
+
+    homeDir = getenv("HOME");
+    out << homeDir << relativePath;
+    return out.str();
+}
+
+std::string itemDescFileName() {
+    std::ostringstream out;
+    char* homeDir;
+    const char *relativePath = "/.rlg327/item_desc.txt";
 
     homeDir = getenv("HOME");
     out << homeDir << relativePath;

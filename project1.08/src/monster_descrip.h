@@ -8,10 +8,11 @@
 #include <fstream>
 #include <curses.h>
 #include "dice_set.h"
+#include "descrip.h"
 
 class monster_evil;
 
-class monster_descrip {
+class monster_descrip : private descrip {
 public:
     std::string name;
     std::string description;
@@ -28,7 +29,6 @@ public:
     std::string to_string();
     monster_evil* generate();
 private:
-    int parse_color(std::string color_str);
     int parse_abil(std::string abil_str);
 };
 

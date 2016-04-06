@@ -3,25 +3,8 @@
 //
 
 #include <sstream>
-#include <curses.h>
 #include "monster_descrip.h"
 #include "utils.h"
-#include "globals.h"
-
-typedef struct {
-    const char* name;
-    int color;
-} color_t;
-
-static color_t colors[] = {
-        {"BLACK", COLOR_FAKE_BLACK},
-        {"RED", COLOR_RED},
-        {"GREEN", COLOR_GREEN},
-        {"YELLOW", COLOR_YELLOW},
-        {"BLUE", COLOR_BLUE},
-        {"MAGENTA", COLOR_MAGENTA},
-        {"CYAN", COLOR_CYAN},
-        {"WHITE", COLOR_WHITE} };
 
 typedef struct {
     const char* name;
@@ -55,7 +38,7 @@ monster_descrip::monster_descrip(std::ifstream &input) {
         }
         std::getline(input, s);
         util_remove_cr(s);
-        if (input.eof()) { throw "EOF"; }
+        if (input.eof()) { throw std::string("EOF"); }
     }
 
     while (keyword != "END") {
@@ -70,31 +53,31 @@ monster_descrip::monster_descrip(std::ifstream &input) {
         //std::cout << "keyword: " << keyword << std::endl;
         if (keyword == "NAME") {
             if (has_name) {
-                std::cout << "Warning: duplicate name field";
                 throw "Duplicate name field";
             }
             has_name = true;
             std::getline(input, name);
             util_remove_cr(name);
         } else if (keyword == "DESC") {
-            std::string temp;
-            if (has_desc) {
-                throw "Duplicate desc field";
-            }
-            std::ostringstream temp_desc;
-            has_desc = true;
-            // finish the DESC line
-            std::getline(input, temp);
-            // Read the first line of the DESC contents
-            std::getline(input, temp);
-            do {
-                temp_desc << temp << std::endl;
-                std::getline(input, temp);
-                util_remove_cr(temp);
-            } while (temp != ".");
-            // remove the trailing '\n'
-            description = temp_desc.str();
-            description.erase(description.size() - 1);
+            read_multiline(input, description, has_desc);
+//            std::string temp;
+//            if (has_desc) {
+//                throw "Duplicate desc field";
+//            }
+//            std::ostringstream temp_desc;
+//            has_desc = true;
+//            // finish the DESC line
+//            std::getline(input, temp);
+//            // Read the first line of the DESC contents
+//            std::getline(input, temp);
+//            do {
+//                temp_desc << temp << std::endl;
+//                std::getline(input, temp);
+//                util_remove_cr(temp);
+//            } while (temp != ".");
+//            // remove the trailing '\n'
+//            description = temp_desc.str();
+//            description.erase(description.size() - 1);
         } else if (keyword == "COLOR") {
             if (has_color) {
                 throw "Duplicate color field";
@@ -139,7 +122,7 @@ monster_descrip::monster_descrip(std::ifstream &input) {
             symb = (char) input.get();
             std::getline(input, temp);
         } else if (keyword == "END") {
-            // Do nothing.  Loop wil be exited.
+            // Do nothing.  Loop will be exited.
         } else {
             std::string temp;
             std::getline(input, temp);
@@ -170,28 +153,18 @@ monster_descrip::~monster_descrip() {
 
 std::string monster_descrip::to_string() {
     std::stringstream out;
-    std::cout << "Name: " << name << std::endl;
-    std::cout << "Description: " << std::endl << description << std::endl;
-    std::cout << "Color: " << colors[color].name << std::endl;
-    std::cout << "Speed: " << speed_ptr->toString() << std::endl;
-    std::cout << "Abilities: " << abilities << std::endl;
-    std::cout << "Hitpoints: " << HP_ptr->toString() << std::endl;
-    std::cout << "Attack Damage: " << DAM_ptr->toString() << std::endl;
+    out << "Name: " << name << std::endl;
+    out << "Description: " << std::endl << description << std::endl;
+    out << "Color: " << colors[color].name << std::endl;
+    out << "Speed: " << speed_ptr->toString() << std::endl;
+    out << "Abilities: " << abilities << std::endl;
+    out << "Hitpoints: " << HP_ptr->toString() << std::endl;
+    out << "Attack Damage: " << DAM_ptr->toString() << std::endl;
     return out.str();
 }
 
 monster_evil* monster_descrip::generate() {
     return new monster_evil(name, description, color, speed_ptr->roll(), abilities, HP_ptr->roll(), DAM_ptr, symb);
-}
-
-int monster_descrip::parse_color(std::string color_str) {
-    for (uint i = 0; i < sizeof(colors); i++) {
-        if (color_str == colors[i].name) {
-            return colors[i].color;
-        }
-    }
-    std::cout << "Warning: Color not known: " << color_str;
-    return COLOR_WHITE;
 }
 
 int monster_descrip::parse_abil(std::string abil_str) {
