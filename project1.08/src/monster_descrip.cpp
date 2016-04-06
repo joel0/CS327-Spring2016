@@ -184,7 +184,7 @@ monster_evil* monster_descrip::generate() {
 }
 
 int monster_descrip::parse_color(std::string color_str) {
-    for (int i = 0; i < sizeof(colors); i++) {
+    for (uint i = 0; i < sizeof(colors); i++) {
         if (color_str == colors[i].name) {
             return colors[i].color;
         }
@@ -202,7 +202,7 @@ int monster_descrip::parse_abil(std::string abil_str) {
     while (!abil_strs.eof()) {
         abil_strs >> current_abil;
         found = false;
-        for (int i = 0; i < sizeof(abilities_table); i++) {
+        for (uint i = 0; i < sizeof(abilities_table); i++) {
             if (current_abil == abilities_table[i].name) {
                 out_val |= abilities_table[i].value;
                 found = true;

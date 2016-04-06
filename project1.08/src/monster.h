@@ -66,7 +66,7 @@ public:
         this->symb = SYMB;
         this->alive = true;
     }
-public:
+    virtual ~monster() {};
     char* toString(dungeon_t* dungeonPtr);
     // Override getChar
     virtual char getChar() = 0;

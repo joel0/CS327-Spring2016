@@ -7,7 +7,7 @@ CFLAGS=-g -Wall -Werror -std=gnu11
 CXXFLAGS=-g -Wall -Werror -std=gnu++11
 LDFLAGS = -lm -lcurses
 TARNAME=may_joel.assignment-1.08
-OFILES=$(ODIR)/main.o $(ODIR)/utils.o $(ODIR)/dungeon.o $(ODIR)/path.o $(ODIR)/heap.o $(ODIR)/monster.o $(ODIR)/movement.o $(ODIR)/turn.o $(ODIR)/screen.o $(ODIR)/dice_set.o $(ODIR)/monster_descript.o
+OFILES=$(ODIR)/main.o $(ODIR)/utils.o $(ODIR)/dungeon.o $(ODIR)/path.o $(ODIR)/heap.o $(ODIR)/monster.o $(ODIR)/movement.o $(ODIR)/turn.o $(ODIR)/screen.o $(ODIR)/dice_set.o $(ODIR)/monster_descrip.o
 
 all: environment $(OFILES)
 	$(CXX) -o $(EXEDIR)/main $(OFILES) $(LDFLAGS)
