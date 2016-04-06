@@ -58,7 +58,8 @@ char monster_evil::getChar() {
     return symb;
 }
 
-monster_PC::monster_PC(int x, int y) : monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, MONSTER_TUNNELING, 100, new dice_set(0, 0, 1), '@') {//  monster(MONSTER_TUNNELING, 10, x, y) {
+monster_PC::monster_PC(int x, int y) :
+        monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, MONSTER_TUNNELING, 100, new dice_set(0, 0, 1), '@') {
     malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
     for (int curY = 0; curY < HEIGHT; curY++) {
         for (int curX = 0; curX < WIDTH; curX++) {
@@ -72,6 +73,7 @@ monster_PC::monster_PC(int x, int y) : monster(std::string("PC"), std::string("Y
 
 monster_PC::~monster_PC() {
     free2DArray((void**) gridKnown, HEIGHT);
+    delete DAM_ptr;
 }
 
 void monster_PC::updateGridKnown(gridCell_t** world) {
