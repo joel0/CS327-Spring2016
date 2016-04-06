@@ -43,24 +43,21 @@ char* monster::toString(dungeon_t* dungeonPtr) {
     return returnStr;
 }
 
-monster_evil::monster_evil() {
-    //speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
-    type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
-    lastPCX = 0;
-    lastPCY = 0;
-    alive = true;
-    x = 0;
-    y = 0;
-}
+//monster_evil::monster_evil() {
+//    //speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
+//    type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
+//    lastPCX = 0;
+//    lastPCY = 0;
+//    alive = true;
+//    x = 0;
+//    y = 0;
+//}
 
 char monster_evil::getChar() {
-    if (type < 10) {
-        return '0' + type;
-    }
-    return (char) ('a' + type - 10);
+    return symb;
 }
 
-monster_PC::monster_PC(int x, int y) : monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, std::string(""), 100, new dice_set(0, 0, 1), '@') {//  monster(MONSTER_TUNNELING, 10, x, y) {
+monster_PC::monster_PC(int x, int y) : monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, MONSTER_TUNNELING, 100, new dice_set(0, 0, 1), '@') {//  monster(MONSTER_TUNNELING, 10, x, y) {
     malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
     for (int curY = 0; curY < HEIGHT; curY++) {
         for (int curX = 0; curX < WIDTH; curX++) {

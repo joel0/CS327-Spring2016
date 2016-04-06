@@ -27,7 +27,7 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster* monsterPtr) {
         // PC does not move here.  His logic is handled elsewhere.
         return;
     }
-    if (monsterPtr->type & MONSTER_ERRATIC) {
+    if (monsterPtr->abilities & MONSTER_ERRATIC) {
         if (rand() % 2) {
             // random movement
             generateRandMove(dungeonPtr, monsterPtr, &dstX, &dstY);
@@ -35,9 +35,9 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster* monsterPtr) {
             return;
         }
     }
-    if (monsterPtr->type & MONSTER_INTELLIGENT) {
+    if (monsterPtr->abilities & MONSTER_INTELLIGENT) {
         // intelligent
-        if (monsterPtr->type & MONSTER_TELEPATHIC) {
+        if (monsterPtr->abilities & MONSTER_TELEPATHIC) {
             generateShortestMove(dungeonPtr, monsterPtr, &dstX, &dstY);
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
@@ -55,7 +55,7 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster* monsterPtr) {
         }
     } else {
         // not intelligent
-        if (monsterPtr->type & MONSTER_TELEPATHIC) {
+        if (monsterPtr->abilities & MONSTER_TELEPATHIC) {
             generateDirectMove(dungeonPtr, monsterPtr, dungeonPtr->PCPtr->x, dungeonPtr->PCPtr->y, &dstX, &dstY);
             moveMonster(dungeonPtr, monsterPtr, dstX, dstY);
         } else {
@@ -124,7 +124,7 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
 
 void generateRandMove(dungeon_t* dungeonPtr, monster* monsterPtr, int* dstX, int* dstY) {
     direction_t movementDir;
-    int tunneling = monsterPtr->type & MONSTER_TUNNELING;
+    int tunneling = monsterPtr->abilities & MONSTER_TUNNELING;
     int targetX, targetY;
     do {
         movementDir = utilRandDir();
@@ -152,7 +152,7 @@ void generateShortestMove(dungeon_t* dungeonPtr, monster* monsterPtr, int* dstX,
     uint8_t shortestDist;
     direction_t shortestDirection;
 
-    if (monsterPtr->type & MONSTER_TUNNELING) {
+    if (monsterPtr->abilities & MONSTER_TUNNELING) {
         grid = dungeonPtr->tunnelingDist;
     } else {
         grid = dungeonPtr->nontunnelingDist;
@@ -219,7 +219,7 @@ void generateDirectMove(dungeon_t* dungeonPtr, monster* monsterPtr, int PCX, int
     if (direction & west) {
         targetX--;
     }
-    if (!(monsterPtr->type & MONSTER_TUNNELING)) {
+    if (!(monsterPtr->abilities & MONSTER_TUNNELING)) {
         // Nontuneling
         if (isRock(dungeonPtr->grid, targetX, targetY)) {
             // Direct path is blocked, try orthogonal

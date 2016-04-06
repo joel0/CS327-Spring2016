@@ -12,15 +12,27 @@ typedef struct {
     int color;
 } color_t;
 
-color_t colors[] = {
-                {"BLACK", COLOR_BLACK},
-                {"RED", COLOR_RED},
-                {"GREEN", COLOR_GREEN},
-                {"YELLOW", COLOR_YELLOW},
-                {"BLUE", COLOR_BLUE},
-                {"MAGENTA", COLOR_MAGENTA},
-                {"CYAN", COLOR_CYAN},
-                {"WHITE", COLOR_WHITE} };
+static color_t colors[] = {
+        {"BLACK", COLOR_BLACK},
+        {"RED", COLOR_RED},
+        {"GREEN", COLOR_GREEN},
+        {"YELLOW", COLOR_YELLOW},
+        {"BLUE", COLOR_BLUE},
+        {"MAGENTA", COLOR_MAGENTA},
+        {"CYAN", COLOR_CYAN},
+        {"WHITE", COLOR_WHITE} };
+
+typedef struct {
+    const char* name;
+    int value;
+} abil_t;
+
+static abil_t abilities_table[] = {
+        {"SMART", MONSTER_INTELLIGENT},
+        {"TELE", MONSTER_TELEPATHIC},
+        {"TUNNEL", MONSTER_TUNNELING},
+        {"ERRATIC", MONSTER_ERRATIC},
+        {"PASS", -1} }; //TODO implement "non-corporeal"
 
 monster_descrip::monster_descrip(std::ifstream &input) {
     std::string s;
@@ -29,7 +41,7 @@ monster_descrip::monster_descrip(std::ifstream &input) {
     bool has_desc = false;
     bool has_color = false; std::string color_str;
     bool has_speed = false; std::string speed_str;
-    bool has_abil = false;
+    bool has_abil = false; std::string abilities_str;
     bool has_hp = false; std::string hp_str;
     bool has_dam = false; std::string dam_str;
     bool has_symb = false;
@@ -101,8 +113,8 @@ monster_descrip::monster_descrip(std::ifstream &input) {
                 throw "Duplicate abil field";
             }
             has_abil = true;
-            std::getline(input, abilities);
-            util_remove_cr(abilities);
+            std::getline(input, abilities_str);
+            util_remove_cr(abilities_str);
         } else if (keyword == "HP") {
             if (has_hp) {
                 throw "Duplicate hp field";
@@ -144,6 +156,7 @@ monster_descrip::monster_descrip(std::ifstream &input) {
 
     color = parse_color(color_str);
     speed_ptr = new dice_set(speed_str.c_str());
+    abilities = parse_abil(abilities_str);
     HP_ptr = new dice_set(hp_str.c_str());
     DAM_ptr = new dice_set(dam_str.c_str());
 }
@@ -180,7 +193,27 @@ int monster_descrip::parse_color(std::string color_str) {
     return COLOR_WHITE;
 }
 
+int monster_descrip::parse_abil(std::string abil_str) {
+    int out_val = 0;
+    bool found;
+    std::stringstream abil_strs(abil_str);
+    std::string current_abil;
 
-
+    while (!abil_strs.eof()) {
+        abil_strs >> current_abil;
+        found = false;
+        for (int i = 0; i < sizeof(abilities_table); i++) {
+            if (current_abil == abilities_table[i].name) {
+                out_val |= abilities_table[i].value;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            std::cout << "Warning: Unknown ability: " << current_abil << std::endl;
+        }
+    }
+    return out_val;
+}
 
 

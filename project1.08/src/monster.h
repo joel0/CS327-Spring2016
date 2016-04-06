@@ -26,7 +26,6 @@ typedef struct dungeon_struct dungeon_t;
 
 class monster {
 public:
-    uint8_t type;
     //int speed;
     int x;
     int y;
@@ -38,7 +37,7 @@ public:
     std::string description;
     int color;
     int speed;
-    std::string abilities;
+    int abilities;
     int HP;
     dice_set* DAM_ptr;
     char symb;
@@ -56,7 +55,7 @@ public:
 //        this->lastPCY = y;
 //        this->alive = true;
 //    }
-    monster(std::string name, std::string desc, int color, int speed, std::string abil, int HP, dice_set* DAM_ptr, char SYMB) {
+    monster(std::string name, std::string desc, int color, int speed, int abil, int HP, dice_set* DAM_ptr, char SYMB) {
         this->name = name;
         this->description = desc;
         this->color = color;
@@ -76,9 +75,9 @@ public:
 
 class monster_evil : public monster {
 public:
-    monster_evil();
+    //monster_evil();
 //    monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
-    monster_evil(std::string name, std::string desc, int color, int speed, std::string abil, int HP, dice_set* DAM_ptr, char SYMB)
+    monster_evil(std::string name, std::string desc, int color, int speed, int abil, int HP, dice_set* DAM_ptr, char SYMB)
             : monster::monster(name, desc, color, speed, abil, HP, DAM_ptr, SYMB) {}
     char getChar();
     bool isPC() { return false; }
@@ -96,7 +95,7 @@ public:
     void updateGridKnown(gridCell_t** world);
 };
 
-//TODO below is C exprorts to remove
+//TODO below is C exports to remove
 
 typedef struct dungeon_struct dungeon_t;
 
