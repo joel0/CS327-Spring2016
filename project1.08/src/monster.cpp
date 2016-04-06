@@ -106,7 +106,7 @@ void initMonsters(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_
     dungeonPtr->monsterPtrs[0] = dungeonPtr->PCPtr;
 
     for (int i = 1; i < dungeonPtr->monsterCount; i++) {
-        randMonsterPtr = monster_descrips[0]->generate(); //new monster_evil();
+        randMonsterPtr = monster_descrips[rand() % monster_descrips.size()]->generate();
         dungeonPtr->monsterPtrs[i] = randMonsterPtr;
         dungeonRandomlyPlaceMonster(dungeonPtr, randMonsterPtr);
     }
