@@ -30,8 +30,8 @@ public:
     //int speed;
     int x;
     int y;
-    int lastPCX = 0;
-    int lastPCY = 0;
+    int lastPCX;
+    int lastPCY;
     bool alive = true;
 
     std::string name;
@@ -43,19 +43,7 @@ public:
     dice_set* DAM_ptr;
     char symb;
 
-protected:
-    monster() { }
-
 public:
-//    monster(uint8_t type, int speed, int x, int y) {
-//        this->type = type;
-//        this->speed = speed;
-//        this->x = x;
-//        this->y = y;
-//        this->lastPCX = x;
-//        this->lastPCY = y;
-//        this->alive = true;
-//    }
     monster(std::string name, std::string desc, int color, int speed, int abil, int HP, dice_set* DAM_ptr, char SYMB) {
         this->name = name;
         this->description = desc;
@@ -65,6 +53,11 @@ public:
         this->HP = HP;
         this->DAM_ptr = DAM_ptr;
         this->symb = SYMB;
+
+        this->lastPCX = 0;
+        this->lastPCY = 0;
+        this->x = 0;
+        this->y = 0;
     }
     virtual ~monster() {};
     char* toString(dungeon_t* dungeonPtr);
@@ -75,8 +68,6 @@ public:
 
 class monster_evil : public monster {
 public:
-    //monster_evil();
-//    monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
     monster_evil(std::string name, std::string desc, int color, int speed, int abil, int HP, dice_set* DAM_ptr, char SYMB)
             : monster::monster(name, desc, color, speed, abil, HP, DAM_ptr, SYMB) {}
     char getChar();
