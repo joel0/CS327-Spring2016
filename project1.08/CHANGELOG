@@ -1,0 +1,130 @@
+fbcb326 valgrind4
+e506799 valgrind3
+68954b3 valgrind2
+ad0f993 valgrind1
+3bd5f1a Bugfixes: dice can't divide by 0 and the PC's known items must be initialized to NULLs
+ebce358 Item infrastructure
+14b8c71 Item/object parsing (the assignment that gets me no points)
+f6f13e3 Color on Monsters Dialog
+dda90d5 Random monster selection
+785aa28 Color.  that was easy.  Literally took 2 lines of code to enable!
+96d06ad Fixed Makefile
+e9fd241 Character generation and ability mapping implemented/fixed
+78f0c3c Deleted old monster constructors
+1f37c6d Integrated the new C++ monster into the whole project mostly.
+ec35219 Started project 1.08 and did some work on it.
+b360888 Cleanup
+abb2a7c Done!
+c549b85 more memleak
+88b5c49 Maybe the memory leaks are gone now?
+e3c23e6 Ugh.  I don't know what is going on.  The destructor gets called like crazy.
+be29360 more memleak debugging
+6f2d9e8 memleak debugging
+b526686 this?
+b41c683 Ugh segfaults
+ecdf83d Memory leak fixed?
+a693d69 Memory leaks continued
+05e5992 Memory leaks
+5819103 Bugfix: function arguments
+6b15ab4 Started 1.07 Complete (memory leaks?)
+de50fe1 Started 1.07
+5511ed4 Delete dungeon.PCPtr
+dbe5b64 PC can't see through walls
+0300bec Fog of war
+6712253 Cleanup
+e1860c1 Code cleanup and delete instead of free
+e5a1bad Debugging code--
+6f98616 Yay!  C++ class works.  It was a stupid bug of calling the wrong C-wrapper.
+a2f5d92 C-wrapper functions work better now.  Still bugs galore.
+f1d36fc Started class transformation. Code compiles, but does not work due to incorrect casting.
+72e0b19 Converted monster.c to C++ and updated appropriate headers with extern "C"
+a4ab82f Started 1.06
+ddac04c README update
+68a219e Final clean up
+f6ca2b3 Cleanup
+2aa3d16 Switched from binheap to heap.
+56eb413 Test?
+1a23180 Monster list looks quite nice, if I do say so myself.  There's still the bug in pathNontunneling().
+36d845e endwin()
+a331d1a Merge remote-tracking branch 'origin/master'
+75df325 WHAT???
+2e9397e Makefile for screen.c
+4aac321 All possible user input is handled.  Still need a method to print all monsters.
+550e0b8 PC movement is controlled by a human.
+ce271d6 Dungeon printing works with curses.
+b9d8771 Start of project1.05 and stairs exist (they don't work yet)
+1e149b0 More memory leak fixes
+bd98578 Bugfix in monster movement
+41c0a26 Gotta close files
+ac206f1 Memory leak on file name
+019f061 Bugfix in path stepping
+5139131 Fixed the memory leak now?
+282718e Memory leaks are fixed?
+c9eada6 Finalized the features and added free() where nedded.
+632465b PC can tunnel instantly without boring through rock
+5795c67 Added intelligent monster paths
+9087ce9 Bugfix: sizeof(turn_t), not turn
+651bffa Bugfix: allow the PC to be killed.
+bb3bca7 (Debug code)--
+e03a3ea PC always moves randomly.
+07ecec1 Bugfix: non-intelligent, non-telepathic monsters move toward the PC when he is in line of sight.
+8bd3b29 Didn't need that sleep anymore at the end.
+542e6fd Direct path monsters work.
+3088848 I don't even know right now...
+1c95c65 PC is alive...
+bbe4fd4 End conditions and dungeon printing only happens after the PC's turns.
+e8a90c9 Queue is fixed.
+ad17d0d fixed crap
+535b16a Queue partially implemented.  Must submit now.
+29980e4 Changelog
+c6fa101 Coding marathon!  Enemies print.  PC can move. Enemies can move randomly.
+77d642e Readme
+9d98755 Bugfix from previous project
+52fb81b Merge remote-tracking branch 'origin/master'
+7fd8bad Workspace set up for project 1.04
+5709c22 Changelog
+6aaed16 Fixed memory leak with binheap nodes
+3d189b5 Readme
+e65b213 Grid drawing past the end of the drawable path.
+e0a1bc7 Moved random seeding to main.c instead of dungeon.c
+f236820 Gotta keep the documentation and Makefile fresh
+df956d4 Player Character (PC) random placement
+0ea07c7 Path finding finalized
+caf2f1b Created a datatype for a dungeon and changed the arguments and function calls appropriately.  Also updated the CMake config to compile in gnu11 instead of c11 for typeof() and int datatypes.
+a7923f9 Imported the provided priority queue and created a file for the path finding.
+cec666e Linux compatibility
+7e31b57 Split the dungeon generation, loading, and saving to its own file.
+578a858 Started project 1.03
+a57cebc Merge remote-tracking branch 'origin/master'
+bdc6aec Load and save together
+5217aa7 Better path finding based on the hardness of the rock
+b4f3ecf Makefile deletes old tar.gz in clean
+6eca75c README
+574b31f Compatible with Pyrite
+7c87866 Merge remote-tracking branch 'origin/master'
+dbb8415 Can't forget the Makefile
+92925e8 Removed hard coding of VERSION in dungeon loading
+2df0eb5 Saving is implemented
+d6e4117 Dungeon loading works!
+44db1da Set up workspace and imported code from project1.02
+1c749bc Better room generation and handness
+89a500c Merge branch 'master' of git.ece.iastate.edu:jmay/CS327
+a15a38b Makefile tar
+95aff09 Merge branch 'master' of https://git.ece.iastate.edu/jmay/CS327
+e2b5dc2 Math library to Makefile
+ff46d19 Readme and changelog
+924e4ec Room generation and rendering implemented.  Path finding for room linking implemented.  Dungeon printing implemented.
+bd6fb2a It generates rooms, but the overlap checking does not work.
+e733b2d Project 1.01 started
+966e408 Added the math library to gcc args
+8f7e04e Forgot to update a line in the Makefile when the name of the file changed.
+a834e09 Fixed part 2 to conform to the instructions.
+692f9be Renaming part 2 due to misunderstanding the assignment description.  Code changes are to come to reflect the description changes.
+60264df A bit of documentation
+f4181f8 Changelog
+7c62def Makefile and README
+ad01170 Folder restructuring
+0cef18f Project0 part 2
+5cea97e Documenting the change to part1
+372701d Corrected arguments for main()
+c120f22 Project0 part 1
