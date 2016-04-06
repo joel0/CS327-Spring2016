@@ -432,7 +432,9 @@ void printDungeon(gridCell_t** world) {
                 mvaddch(y + 1, x, (char) world[y][x].material);
             } else {
                 // Monster (or PC)
+                attron(COLOR_PAIR(world[y][x].monsterPtr->color));
                 mvaddch(y + 1, x, world[y][x].monsterPtr->getChar());
+                attroff(COLOR_PAIR(world[y][x].monsterPtr->color));
             }
         }
     }
