@@ -12,7 +12,7 @@
 
 class monster_evil;
 
-class monster_descrip : private descrip {
+class monster_descrip : public descrip {
 public:
     std::string name;
     std::string description;

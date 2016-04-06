@@ -10,7 +10,7 @@
 #include "descrip.h"
 #include "item.h"
 
-class item_descrip : private descrip {
+class item_descrip : public descrip {
 public:
     std::string name;
     std::string description;

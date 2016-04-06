@@ -17,7 +17,6 @@
 #include "turn.h"
 #include "screen.h"
 #include "utils.h"
-#include "item_descrip.h"
 
 bool parse_monster_descrip_file(std::vector<monster_descrip*> &monster_descrips);
 bool parse_item_descrip_file(std::vector<item_descrip*>& item_descrips);
@@ -160,6 +159,8 @@ int main(int argc, char* argv[]) {
     pathFreeDistGrid(dungeon.nontunnelingDist);
     pathFreeDistGrid(dungeon.tunnelingDist);
     destroyDungeon(dungeon);
+    delete_descrips(monster_descrips);
+    delete_descrips(item_descrips);
     return 0;
 }
 
@@ -237,6 +238,15 @@ bool parse_item_descrip_file(std::vector<item_descrip*>& item_descrips) {
 
     f.close();
     return true;
+}
+
+template<typename T> void delete_descrips(std::vector<T*>& descrips) {
+    typename std::vector<T*>::iterator item_iterator;
+    item_iterator = descrips.begin();
+    while (item_iterator != descrips.end()) {
+        delete *item_iterator;
+        item_iterator++;
+    }
 }
 
 void showUsage(char* name) {
