@@ -60,7 +60,7 @@ char monster_evil::getChar() {
     return (char) ('a' + type - 10);
 }
 
-monster_PC::monster_PC(int x, int y) : monster(MONSTER_TUNNELING, 10, x, y) {
+monster_PC::monster_PC(int x, int y) : monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, std::string(""), 100, new dice_set(0, 0, 1), '@') {//  monster(MONSTER_TUNNELING, 10, x, y) {
     malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
     for (int curY = 0; curY < HEIGHT; curY++) {
         for (int curX = 0; curX < WIDTH; curX++) {
@@ -111,7 +111,7 @@ void initMonsters(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_
     for (int i = 1; i < dungeonPtr->monsterCount; i++) {
         randMonsterPtr = monster_descrips[0]->generate(); //new monster_evil();
         dungeonPtr->monsterPtrs[i] = randMonsterPtr;
-        dungeonRandomlyPlaceMonster(dungeonPtr, (monster*) randMonsterPtr);
+        dungeonRandomlyPlaceMonster(dungeonPtr, randMonsterPtr);
     }
     totalMonsters = dungeonPtr->monsterCount;
 }

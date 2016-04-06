@@ -47,15 +47,15 @@ protected:
     monster() { }
 
 public:
-    monster(uint8_t type, int speed, int x, int y) {
-        this->type = type;
-        this->speed = speed;
-        this->x = x;
-        this->y = y;
-        this->lastPCX = x;
-        this->lastPCY = y;
-        this->alive = true;
-    }
+//    monster(uint8_t type, int speed, int x, int y) {
+//        this->type = type;
+//        this->speed = speed;
+//        this->x = x;
+//        this->y = y;
+//        this->lastPCX = x;
+//        this->lastPCY = y;
+//        this->alive = true;
+//    }
     monster(std::string name, std::string desc, int color, int speed, std::string abil, int HP, dice_set* DAM_ptr, char SYMB) {
         this->name = name;
         this->description = desc;
@@ -65,21 +65,23 @@ public:
         this->HP = HP;
         this->DAM_ptr = DAM_ptr;
         this->symb = SYMB;
+        this->alive = true;
     }
 public:
     char* toString(dungeon_t* dungeonPtr);
     // Override getChar
     virtual char getChar() = 0;
-    inline virtual bool isPC() { return false; }
+    virtual bool isPC() = 0;
 };
 
 class monster_evil : public monster {
 public:
     monster_evil();
-    monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
+//    monster_evil(uint8_t type, int speed, int x, int y) : monster(type, speed, x, y) {}
     monster_evil(std::string name, std::string desc, int color, int speed, std::string abil, int HP, dice_set* DAM_ptr, char SYMB)
             : monster::monster(name, desc, color, speed, abil, HP, DAM_ptr, SYMB) {}
     char getChar();
+    bool isPC() { return false; }
 };
 
 class monster_PC : public monster {
@@ -90,7 +92,7 @@ public:
     monster_PC(int x, int y);
     ~monster_PC();
 public:
-    inline bool isPC() { return true; }
+    bool isPC() { return true; }
     void updateGridKnown(gridCell_t** world);
 };
 
