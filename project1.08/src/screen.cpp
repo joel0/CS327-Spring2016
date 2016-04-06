@@ -22,7 +22,17 @@ void initTerminal() {
     init_pair(COLOR_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(COLOR_MAGENTA, COLOR_MAGENTA, COLOR_BLACK);
     init_pair(COLOR_WHITE, COLOR_WHITE, COLOR_BLACK);
-    init_pair(COLOR_BLACK, COLOR_WHITE, COLOR_BLACK);
+    init_pair(COLOR_FAKE_BLACK, COLOR_WHITE, COLOR_BLACK);
+
+    // On a white BG for the monsters list
+    init_pair(COLOR_RED + 10, COLOR_RED, COLOR_WHITE);
+    init_pair(COLOR_GREEN + 10, COLOR_GREEN, COLOR_WHITE);
+    init_pair(COLOR_BLUE + 10, COLOR_BLUE, COLOR_WHITE);
+    init_pair(COLOR_CYAN + 10, COLOR_CYAN, COLOR_WHITE);
+    init_pair(COLOR_YELLOW + 10, COLOR_YELLOW, COLOR_WHITE);
+    init_pair(COLOR_MAGENTA + 10, COLOR_MAGENTA, COLOR_WHITE);
+    init_pair(COLOR_WHITE + 10, COLOR_BLACK, COLOR_WHITE);
+    init_pair(COLOR_FAKE_BLACK + 10, COLOR_BLACK, COLOR_WHITE);
 }
 
 void screenClearRow(int row) {

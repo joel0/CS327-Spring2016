@@ -135,7 +135,9 @@ void monsterList(dungeon_t* dungeonPtr) {
     whline(monsterWin, ACS_HLINE, 58);
     for (int i = 0; i < dungeonPtr->monsterCount - 1; i++) {
         monsterDescrip = dungeonPtr->monsterPtrs[i + 1]->toString(dungeonPtr);
+        wattron(monsterWin, COLOR_PAIR(dungeonPtr->monsterPtrs[i + 1]->color + 10));
         mvwaddstr(monsterWin, i + 3, 1, monsterDescrip);
+        wattroff(monsterWin, COLOR_PAIR(dungeonPtr->monsterPtrs[i + 1]->color + 10));
         free(monsterDescrip);
     }
     wnoutrefresh(stdscr);

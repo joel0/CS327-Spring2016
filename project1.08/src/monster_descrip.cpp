@@ -6,6 +6,7 @@
 #include <curses.h>
 #include "monster_descrip.h"
 #include "utils.h"
+#include "globals.h"
 
 typedef struct {
     const char* name;
@@ -13,7 +14,7 @@ typedef struct {
 } color_t;
 
 static color_t colors[] = {
-        {"BLACK", COLOR_BLACK},
+        {"BLACK", COLOR_FAKE_BLACK},
         {"RED", COLOR_RED},
         {"GREEN", COLOR_GREEN},
         {"YELLOW", COLOR_YELLOW},

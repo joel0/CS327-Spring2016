@@ -22,6 +22,7 @@
 #define MIN_ROOMS 5
 #define MAX_ROOMS 7
 
-#define COLOR_INVERTED 8
+#define COLOR_INVERTED 9
+#define COLOR_FAKE_BLACK 8
 
 #endif //PROJECT_GLOBALS_H
