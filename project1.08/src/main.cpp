@@ -280,7 +280,7 @@ std::string monsterDescFileName() {
 std::string itemDescFileName() {
     std::ostringstream out;
     char* homeDir;
-    const char *relativePath = "/.rlg327/item_desc.txt";
+    const char *relativePath = "/.rlg327/object_desc.txt";
 
     homeDir = getenv("HOME");
     out << homeDir << relativePath;
