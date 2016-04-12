@@ -30,32 +30,26 @@ public:
     //int speed;
     int x;
     int y;
-    int lastPCX;
-    int lastPCY;
     bool alive = true;
 
     std::string name;
     std::string description;
     int color;
     int speed;
-    int abilities;
     int HP;
     dice_set* DAM_ptr;
     char symb;
 
 public:
-    monster(std::string name, std::string desc, int color, int speed, int abil, int HP, dice_set* DAM_ptr, char SYMB) {
+    monster(std::string name, std::string desc, int color, int speed, int HP, dice_set* DAM_ptr, char SYMB) {
         this->name = name;
         this->description = desc;
         this->color = color;
         this->speed = speed;
-        this->abilities = abil;
         this->HP = HP;
         this->DAM_ptr = DAM_ptr;
         this->symb = SYMB;
 
-        this->lastPCX = 0;
-        this->lastPCY = 0;
         this->x = 0;
         this->y = 0;
     }
@@ -68,8 +62,17 @@ public:
 
 class monster_evil : public monster {
 public:
+    int lastPCX;
+    int lastPCY;
+    int abilities;
+
+public:
     monster_evil(std::string name, std::string desc, int color, int speed, int abil, int HP, dice_set* DAM_ptr, char SYMB)
-            : monster::monster(name, desc, color, speed, abil, HP, DAM_ptr, SYMB) {}
+            : monster::monster(name, desc, color, speed, HP, DAM_ptr, SYMB) {
+        this->lastPCX = 0;
+        this->lastPCY = 0;
+        this->abilities = abil;
+    }
     char getChar();
     bool isPC() { return false; }
 };

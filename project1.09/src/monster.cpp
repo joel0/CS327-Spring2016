@@ -47,7 +47,7 @@ char monster_evil::getChar() {
 }
 
 monster_PC::monster_PC() :
-        monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, MONSTER_TUNNELING, 100, new dice_set(0, 1, 4), '@') {
+        monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, 100, new dice_set(0, 1, 4), '@') {
     malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
     for (int curY = 0; curY < HEIGHT; curY++) {
         for (int curX = 0; curX < WIDTH; curX++) {
