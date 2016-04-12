@@ -79,14 +79,12 @@ public:
     gridCell_t** gridKnown;
     inline char getChar() { return '@'; }
 
-    monster_PC(int x, int y);
+    monster_PC();
     ~monster_PC();
 public:
     bool isPC() { return true; }
     void updateGridKnown(gridCell_t** world);
 };
-
-//TODO below is C exports to remove
 
 typedef struct dungeon_struct dungeon_t;
 
@@ -94,23 +92,6 @@ void initMonsters(dungeon_t *dungeonPtr, std::vector<monster_descrip*>& monster_
 void initItems(dungeon_t& dungeon, std::vector<item_descrip*>& item_descrips);
 void monstersDestroy(dungeon_t *dungeonPtr);
 void itemsDestroy(dungeon_t& dungeon);
-//char monsterGetChar(monster_t* m);
 void monsterList(dungeon_t *dungeonPtr);
-//char *monsterDescription(dungeon_t *dungeonPtr, monster_t *monsterPtr);
-//int monsterGetX(monster_t* monsterRef);
-//int monsterGetY(monster_t* monsterRef);
-//int monsterGetLastPCX(monster_t* monsterPtr);
-//int monsterGetLastPCY(monster_t* monsterPtr);
-//void monsterSetX(monster_t* monsterPtr, int x);
-//void monsterSetY(monster_t* monsterPtr, int x);
-//void monsterSetLastPCX(monster_t* monsterPtr, int x);
-//void monsterSetLastPCY(monster_t* monsterPtr, int x);
-//int monsterIsAlive(monster_t* monsterRef);
-//int monsterIsPC(monster_t* monsterRef);
-//int monsterSpeed(monster_t* monsterPtr);
-//void monsterKill(monster_t* monsterPtr);
-//uint8_t monsterGetType(monster_t* monsterPtr);
-//void monsterUpdatePCGridKnown(monster_t* monsterPtr, gridCell_t** world);
-//gridCell_t** monsterGetPCGridKnown(monster_t* monsterPtr);
 
 #endif //PROJECT_MONSTER_H

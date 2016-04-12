@@ -11,9 +11,7 @@
 #include "monster.h"
 #include "dungeon.h"
 #include "utils.h"
-#include "globals.h"
 #include "movement.h"
-#include "item_descrip.h"
 
 char* monster::toString(dungeon_t* dungeonPtr) {
     int offX = ((monster*) dungeonPtr->PCPtr)->x - x;
@@ -44,22 +42,12 @@ char* monster::toString(dungeon_t* dungeonPtr) {
     return returnStr;
 }
 
-//monster_evil::monster_evil() {
-//    //speed = MONSTER_MIN_SPEED + (rand() % (MONSTER_MAX_SPEED - MONSTER_MIN_SPEED + 1));
-//    type = (uint8_t) (rand() & 0x0F); // 50% chance of each bit being 1
-//    lastPCX = 0;
-//    lastPCY = 0;
-//    alive = true;
-//    x = 0;
-//    y = 0;
-//}
-
 char monster_evil::getChar() {
     return symb;
 }
 
-monster_PC::monster_PC(int x, int y) :
-        monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, MONSTER_TUNNELING, 100, new dice_set(0, 0, 1), '@') {
+monster_PC::monster_PC() :
+        monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, MONSTER_TUNNELING, 100, new dice_set(0, 1, 4), '@') {
     malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
     for (int curY = 0; curY < HEIGHT; curY++) {
         for (int curX = 0; curX < WIDTH; curX++) {
@@ -103,7 +91,7 @@ static int totalMonsters;
 
 void initMonsters(dungeon_t* dungeonPtr, std::vector<monster_descrip*>& monster_descrips) {
     monster* randMonsterPtr;
-    dungeonPtr->PCPtr = new monster_PC(0, 0);
+    dungeonPtr->PCPtr = new monster_PC();
     dungeonRandomlyPlaceMonster(dungeonPtr, dungeonPtr->PCPtr);
     dungeonPtr->monsterCount++; // +1 for the PC
     dungeonPtr->monsterPtrs = (monster**) malloc(sizeof(monster*) * dungeonPtr->monsterCount);
@@ -190,45 +178,3 @@ void monsterList(dungeon_t* dungeonPtr) {
     delwin(monsterWin);
     refresh();
 }
-
-// +----------------------------------------------------+
-// | C EXPORTS                                          |
-// +----------------------------------------------------+
-
-//char monsterGetChar(monster_t* monsterPtr) {
-//    return ((monster*) monsterPtr)->getChar();
-//}
-//
-//char* monsterDescription(dungeon_t* dungeonPtr, monster_t* monsterPtr) {
-//    return ((monster*) monsterPtr)->toString(dungeonPtr);
-//}
-//
-//int monsterGetX(monster_t* monsterPtr) { return ((monster*) monsterPtr)->x; }
-//int monsterGetY(monster_t* monsterPtr) { return ((monster*) monsterPtr)->y; }
-//
-//int monsterGetLastPCX(monster_t* monsterPtr) { return ((monster*) monsterPtr)->lastPCX; }
-//int monsterGetLastPCY(monster_t* monsterPtr) { return ((monster*) monsterPtr)->lastPCY; }
-//
-//void monsterSetX(monster_t* monsterPtr, int x) { ((monster*) monsterPtr)->x = x; }
-//void monsterSetY(monster_t* monsterPtr, int y) { ((monster*) monsterPtr)->y = y; }
-//
-//void monsterSetLastPCX(monster_t* monsterPtr, int x) { ((monster*) monsterPtr)->lastPCX = x; }
-//void monsterSetLastPCY(monster_t* monsterPtr, int y) { ((monster*) monsterPtr)->lastPCY = y; }
-//
-//int monsterIsAlive(monster_t* monsterPtr) { return ((monster*) monsterPtr)->alive; }
-//
-//int monsterIsPC(monster_t* monsterPtr) { return ((monster*) monsterPtr)->isPC(); }
-//
-//int monsterSpeed(monster_t* monsterPtr) { return ((monster*) monsterPtr)->speedPtr->roll(); }
-//
-//void monsterKill(monster_t* monsterPtr) { ((monster*) monsterPtr)->alive = false; }
-//
-//uint8_t monsterGetType(monster_t* monsterPtr) { return ((monster_evil*) monsterPtr)->type; }
-//
-//void monsterUpdatePCGridKnown(monster_t* monsterPtr, gridCell_t** world) {
-//    ((monster_PC*) monsterPtr)->updateGridKnown(world);
-//}
-//
-//gridCell_t** monsterGetPCGridKnown(monster_t* monsterPtr) {
-//    return ((monster_PC*) monsterPtr)->gridKnown;
-//}
