@@ -23,6 +23,8 @@ typedef enum PC_action_enum {
     actionDropItem,
     actionInspectItem,
     actionExpungeItem,
+    actionWearItem,
+    actionTakeOffItem,
     actionSave,
     actionMovement
 } PC_action;

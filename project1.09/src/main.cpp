@@ -152,6 +152,12 @@ int main(int argc, char* argv[]) {
                 case actionExpungeItem:
                     dungeon.PCPtr->expunge_item();
                     break;
+                case actionWearItem:
+                    dungeon.PCPtr->wear_item();
+                    break;
+                case actionTakeOffItem:
+                    dungeon.PCPtr->take_off_item();
+                    break;
                 default: break;
             }
         } else {

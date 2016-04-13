@@ -41,6 +41,7 @@ public:
         this->value = value;
         this->symb = symb;
     }
+    bool is_equipment();
 };
 
 #endif //PROJECT0_ITEM_H

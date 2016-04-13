@@ -72,7 +72,7 @@ monster_PC::monster_PC() :
         inventory[i] = NULL;
     }
     for (int i = 0; i < 12; i++) {
-        eqipment[i] = NULL;
+        equipment[i] = NULL;
     }
 }
 
@@ -172,14 +172,14 @@ int monster_PC::show_equipment(bool esc_only) {
     wmove(monsterWin, 2, 1);
     whline(monsterWin, ACS_HLINE, 58);
     for (int i = 0; i < 12; i++) {
-        if (eqipment[i] == NULL) {
+        if (equipment[i] == NULL) {
             sprintf(eqipmentLine, "%c. Empty", i + 'a');
             mvwaddstr(monsterWin, i + 3, 1, eqipmentLine);
         } else {
-            sprintf(eqipmentLine, "%c. %s", i + 'a', eqipment[i]->name.c_str());
-            wattron(monsterWin, COLOR_PAIR(eqipment[i]->color + 10));
+            sprintf(eqipmentLine, "%c. %s", i + 'a', equipment[i]->name.c_str());
+            wattron(monsterWin, COLOR_PAIR(equipment[i]->color + 10));
             mvwaddstr(monsterWin, i + 3, 1, eqipmentLine);
-            wattroff(monsterWin, COLOR_PAIR(eqipment[i]->color + 10));
+            wattroff(monsterWin, COLOR_PAIR(equipment[i]->color + 10));
         }
     }
     wnoutrefresh(stdscr);
@@ -274,6 +274,85 @@ void monster_PC::expunge_item() {
     inventory[choice] = NULL;
 }
 
+void monster_PC::wear_item() {
+    int choice_char = show_inventory(false);
+    if (choice_char == 27) {
+        // ESC is valid
+        return;
+    }
+    if (choice_char < '0' || choice_char > '9') {
+        message_queue::instance()->enqueue("That is not a valid item to wear.");
+        return;
+    }
+    int choice = choice_char - '0';
+    if (inventory[choice] == NULL) {
+        message_queue::instance()->enqueue("There is no item in that slot to wear.");
+        return;
+    }
+    if (!inventory[choice]->is_equipment()) {
+        message_queue::instance()->enqueue("That is not wearable equipment.");
+        return;
+    }
+    int slot = equipment_slot(inventory[choice]->type);
+    std::stringstream msg_str;
+    if (equipment[slot] != NULL) {
+        msg_str << "You have equipped " << inventory[choice]->name << " and removed " << equipment[slot]->name;
+        item* temp = equipment[slot];
+        equipment[slot] = inventory[choice];
+        inventory[choice] = temp;
+    } else {
+        msg_str << "You have equipped " << inventory[choice]->name;
+        equipment[slot] = inventory[choice];
+        inventory[choice] = NULL;
+    }
+    message_queue::instance()->enqueue(msg_str);
+}
+
+int monster_PC::equipment_slot(int type) {
+    if (type == TYPE_RING) {
+        // Two ring slots.  Choose the empty one if one is empty.
+        if (equipment[10] == NULL) {
+            return 10;
+        }
+        return 11;
+    }
+    int i = -1;
+    while (type != 0) {
+        type = type / 2;
+        i++;
+    }
+    return i;
+}
+
+void monster_PC::take_off_item() {
+    if (is_inventory_full()) {
+        message_queue::instance()->enqueue("You cannot take off an item because your inventory is full.");
+        return;
+    }
+    int choice_char = show_equipment(false);
+    if (choice_char == 27) {
+        // ESC is valid
+        return;
+    }
+    if (choice_char < 'a' || choice_char > 'l') {
+        message_queue::instance()->enqueue("That is not a valid item to take off.");
+        return;
+    }
+    int choice = choice_char - 'a';
+    if (equipment[choice] == NULL) {
+        message_queue::instance()->enqueue("There is no item in that slot to take off.");
+        return;
+    }
+    std::stringstream msg_str;
+    msg_str << "You have taken off " << equipment[choice]->name;
+    message_queue::instance()->enqueue(msg_str);
+    int target_slot = -1;
+    while (inventory[++target_slot] != NULL)
+        ;
+    inventory[target_slot] = equipment[choice];
+    equipment[choice] = NULL;
+}
+
 void monster_PC::inspect_item() {
     int choice_char = show_inventory(false);
     if (choice_char == 27) {
@@ -291,6 +370,15 @@ void monster_PC::inspect_item() {
     }
     screen_show_dialog(inventory[choice]->name, inventory[choice]->desc);
 }
+
+bool monster_PC::is_inventory_full() {
+    for (int i = 0; i < 10; i++) {
+        if (inventory[i] == NULL) {
+            return false;
+        }
+    }
+    return true;
+};
 
 // To keep track of how many monsters to free in the destroy
 static int totalMonsters;

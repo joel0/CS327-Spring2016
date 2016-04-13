@@ -79,7 +79,7 @@ public:
 class monster_PC : public monster {
 private:
     item* inventory[10];
-    item* eqipment[12];
+    item* equipment[12];
 public:
     gridCell_t** gridKnown;
 
@@ -93,8 +93,12 @@ public:
     bool pick_up(item& object);
     void drop_item(dungeon_t& dungeon);
     void expunge_item();
+    void wear_item();
     void take_off_item();
     void inspect_item();
+private:
+    int equipment_slot(int type);
+    bool is_inventory_full();
 };
 
 typedef struct dungeon_struct dungeon_t;
