@@ -153,7 +153,54 @@ void monster_PC::show_inventory() {
 }
 
 void monster_PC::show_eqipment() {
-
+    int exit = 0;
+    int userChar;
+    int offset = 0;
+    int maxOffset = 12 + 4 - 11;
+    char eqipmentLine[60];
+    WINDOW* monsterWin = newpad(12 + 4, 60);
+    wbkgd(monsterWin, COLOR_PAIR(COLOR_INVERTED));
+    wborder(monsterWin, 0, 0, 0, 0, 0, 0, 0, 0);
+    mvwaddstr(monsterWin, 1, 60 / 2 - 9 / 2, "EQUIPMENT");
+    wmove(monsterWin, 2, 1);
+    whline(monsterWin, ACS_HLINE, 58);
+    for (int i = 0; i < 12; i++) {
+        if (eqipment[i] == NULL) {
+            sprintf(eqipmentLine, "%c. Empty", i + 'a');
+            mvwaddstr(monsterWin, i + 3, 1, eqipmentLine);
+        } else {
+            sprintf(eqipmentLine, "%c. %s", i + 'a', eqipment[i]->name.c_str());
+            wattron(monsterWin, COLOR_PAIR(eqipment[i]->color + 10));
+            mvwaddstr(monsterWin, i + 3, 1, eqipmentLine);
+            wattroff(monsterWin, COLOR_PAIR(eqipment[i]->color + 10));
+        }
+    }
+    wnoutrefresh(stdscr);
+    do {
+        pnoutrefresh(monsterWin, offset, 0, 5, 10, 15, 70);
+        doupdate();
+        userChar = getch();
+        switch (userChar) {
+            case KEY_DOWN:
+                offset++;
+                if (offset > maxOffset) {
+                    offset = maxOffset;
+                }
+                break;
+            case KEY_UP:
+                offset--;
+                if (offset < 0) {
+                    offset = 0;
+                }
+                break;
+            case 27:
+                exit = 1;
+                break;
+            default: break;
+        }
+    } while (!exit);
+    delwin(monsterWin);
+    refresh();
 }
 
 bool monster_PC::pick_up(item &object) {
