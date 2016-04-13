@@ -14,6 +14,7 @@
 
 int isRock(gridCell_t** grid, int x, int y);
 int isImmutable(gridCell_t **grid, int x, int y);
+void shove_monster(dungeon_t& dungeon, int srcX, int srcY, int dstX, int dstY, int* shoveX, int* shoveY);
 void generateRandMove(dungeon_t* dungeonPtr, monster_evil* monsterPtr, int* dstX, int* dstY);
 void generateShortestMove(dungeon_t* dungeonPtr, monster_evil* monsterPtr, int* dstX, int* dstY);
 void generateDirectMove(dungeon_t* dungeonPtr, monster_evil* monsterPtr, int targetX, int targetY, int* dstX, int* dstY);
@@ -87,8 +88,8 @@ void moveMonsterLogic(dungeon_t* dungeonPtr, monster* monsterPtr) {
 void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY) {
     int srcX = monsterPtr->x;
     int srcY = monsterPtr->y;
+    monster* src_monster_ptr = dungeonPtr->grid[srcY][srcX].monsterPtr;
     gridCell_t** grid = dungeonPtr->grid;
-    monster* replacement_ptr = NULL;
 
     // Do not do anything if the "move" is nothing
     if (monsterPtr->x == dstX && monsterPtr->y == dstY) {
@@ -99,47 +100,51 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
         return;
     }
 
-    if (grid[dstY][dstX].monsterPtr != NULL) {
-        // A monster is eating another.
-        if (!monsterPtr->isPC() && !grid[dstY][dstX].monsterPtr->isPC()) {
-            // This combat does not involve the PC.  We must move the monster out of the way.
-            // TODO shove the monster instead of switching positions
-            replacement_ptr = grid[dstY][dstX].monsterPtr;
-        } else {
-            // Combat with the PC
-            std::stringstream msg_str;
-
-            int dam = monsterPtr->attack(*grid[dstY][dstX].monsterPtr);
-            if (grid[dstY][dstX].monsterPtr->alive) {
-                // The monster in the target location did not die.  No movement happens.
-                msg_str << monsterPtr->name << " attacked " << grid[dstY][dstX].monsterPtr->name << " for " <<
-                dam << ". HP: " << grid[dstY][dstX].monsterPtr->HP;
-                message_queue::instance()->enqueue(msg_str);
-                return;
-            }
-
-            msg_str << monsterPtr->name << " attacked and killed " << grid[dstY][dstX].monsterPtr->name <<
-            " with " << dam << " damage";
-            message_queue::instance()->enqueue(msg_str);
-
-            int toRemove = -1;
-            while (dungeonPtr->monsterPtrs[++toRemove] != grid[dstY][dstX].monsterPtr);
-            dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
-        }
-    }
     if (grid[dstY][dstX].hardness > 85) {
         // The rock must be bored through
         grid[dstY][dstX].hardness -= 85;
         pathTunneling(dungeonPtr);
     } else {
-        grid[dstY][dstX].monsterPtr = grid[srcY][srcX].monsterPtr;
-        grid[srcY][srcX].monsterPtr = replacement_ptr;
+        if (grid[dstY][dstX].monsterPtr != NULL) {
+            // A monster is eating another.
+            if (!monsterPtr->isPC() && !grid[dstY][dstX].monsterPtr->isPC()) {
+                // This combat does not involve the PC.  We must move the monster out of the way.
+                int shoveX, shoveY;
+                grid[srcY][srcX].monsterPtr = NULL;
+                shove_monster(*dungeonPtr, srcX, srcY, dstX, dstY, &shoveX, &shoveY);
+                dungeonPtr->grid[shoveY][shoveX].monsterPtr = dungeonPtr->grid[dstY][dstX].monsterPtr;
+                dungeonPtr->grid[shoveY][shoveX].monsterPtr->x = shoveX;
+                dungeonPtr->grid[shoveY][shoveX].monsterPtr->y = shoveY;
+            } else {
+                // Combat with the PC
+                std::stringstream msg_str;
+
+                int dam = monsterPtr->attack(*grid[dstY][dstX].monsterPtr);
+                if (grid[dstY][dstX].monsterPtr->alive) {
+                    // The monster in the target location did not die.  No movement happens.
+                    msg_str << monsterPtr->name << " attacked " << grid[dstY][dstX].monsterPtr->name << " for " <<
+                    dam << ". HP: " << grid[dstY][dstX].monsterPtr->HP;
+                    message_queue::instance()->enqueue(msg_str);
+                    return;
+                }
+
+                msg_str << monsterPtr->name << " attacked and killed " << grid[dstY][dstX].monsterPtr->name <<
+                " with " << dam << " damage";
+                message_queue::instance()->enqueue(msg_str);
+
+                int toRemove = -1;
+                while (dungeonPtr->monsterPtrs[++toRemove] != grid[dstY][dstX].monsterPtr)
+                    ;
+                dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
+                grid[srcY][srcX].monsterPtr = NULL;
+            }
+        } else {
+            grid[srcY][srcX].monsterPtr = NULL;
+        }
+
+        grid[dstY][dstX].monsterPtr = src_monster_ptr;
         grid[dstY][dstX].monsterPtr->x = dstX;
         grid[dstY][dstX].monsterPtr->y = dstY;
-        if (replacement_ptr != NULL) {
-            replacement_ptr->x = srcX;
-            replacement_ptr->y = srcY;
-        }
 
         // tunneling
         if (grid[dstY][dstX].material == rock) {
@@ -149,6 +154,33 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
             pathNontunneling(dungeonPtr);
         }
     }
+}
+
+void shove_monster(dungeon_t& dungeon, int srcX, int srcY, int dstX, int dstY, int* shoveX, int* shoveY) {
+    typedef struct { int x; int y; } offset;
+    offset offsets[] = {
+            {-1, -1},
+            {-1, 0},
+            {-1, 1},
+            {0, -1},
+            {0, 1},
+            {1, -1},
+            {1, 0},
+            {1, 1}
+    };
+    int x, y;
+    int r = rand() % 8;
+    for (int i = 0; i < 8; i++) {
+        x = dstX + offsets[(i + r) % 8].x;
+        y = dstY + offsets[(i + r) % 8].y;
+        if (dungeon.grid[y][x].monsterPtr == NULL && dungeon.grid[y][x].material != rock) {
+            *shoveX = x;
+            *shoveY = y;
+            return;
+        }
+    }
+    *shoveX = srcX;
+    *shoveY = srcY;
 }
 
 void generateRandMove(dungeon_t* dungeonPtr, monster_evil* monsterPtr, int* dstX, int* dstY) {
