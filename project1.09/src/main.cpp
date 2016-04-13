@@ -17,6 +17,7 @@
 #include "turn.h"
 #include "screen.h"
 #include "utils.h"
+#include "message_queue.h"
 
 bool parse_monster_descrip_file(std::vector<monster_descrip*> &monster_descrips);
 bool parse_item_descrip_file(std::vector<item_descrip*>& item_descrips);
@@ -182,6 +183,7 @@ int main(int argc, char* argv[]) {
     destroyDungeon(dungeon);
     delete_descrips(monster_descrips);
     delete_descrips(item_descrips);
+    delete message_queue::instance();
     return 0;
 }
 

@@ -1,0 +1,26 @@
+Dungeon Game Now Items Do Things!
+
+The Dungeon Game has been expanded to allow you to pick up items and equip them.
+Equipping them increases your attack damage.  The items have other properties
+that could affect combat, visibilty, or locomotion, but the I did not implement
+any of those because they are not required by the assignment description (and
+it's almost 1 AM).  When an NPC wants to occupy a position occupid by another
+NPC, the one in the destination gets shoved to a random adjacent location that
+does not contain a monster or wall.  I created a message queue to display
+events, such as combat and item actions.  Each message requires being dismissed
+by pressing a key.  The message queue's behavior is fairly annoying and could be
+improved, but it functions well enough right now.
+
+The PC has an inventory and equipment he's currently wearing.  He can equip one
+of each wearable item (except rings, where two are allowed).  He can remove an
+item to his inventory.  He can expunge an item from the game.
+
+Instructions:
+	1. make
+	2. bin/main
+
+Usage: main [--save|--load] [--nummon num]
+
+        --save  Saves a randomly generated dungeon to ~/.rlg327/dungeon
+        --load  Loads ~/.rgl327/dungeon and displays it
+        --nummon        Specifies the number of monitors to place in the dungeon
