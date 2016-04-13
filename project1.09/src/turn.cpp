@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <curses.h>
+#include <sstream>
 
 #include "turn.h"
 #include "movement.h"
@@ -156,6 +157,10 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
                 returnValue = actionListMonsters;
                 validChar = 1;
                 break;
+            case 'i':
+                returnValue = actionListInventory;
+                validChar = 1;
+                break;
             case 's':
                 returnValue = actionSave;
                 validChar = 1;
@@ -167,6 +172,20 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
 
     if (returnValue == actionMovement) {
         moveMonster(dungeonPtr, turnPtr->monsterPtr, dstX, dstY);
+        if (turnPtr->monsterPtr->isPC() && turnPtr->monsterPtr->x == dstX && turnPtr->monsterPtr->y == dstY) {
+            // The PC has just moved into the desired location
+            if (dungeonPtr->grid[dstY][dstX].itemPtr != NULL) {
+                // Try to pick up the item
+                std::stringstream msg_str;
+                if (dungeonPtr->PCPtr->pick_up(*dungeonPtr->grid[dstY][dstX].itemPtr)) {
+                    msg_str << "You picked up " << dungeonPtr->grid[dstY][dstX].itemPtr->name;
+                    dungeonPtr->grid[dstY][dstX].itemPtr = NULL;
+                } else {
+                    msg_str << "You have no room to pick up " << dungeonPtr->grid[dstY][dstX].itemPtr->name;
+                }
+                message_queue::instance()->enqueue(msg_str);
+            }
+        }
         pathTunneling(dungeonPtr);
         pathNontunneling(dungeonPtr);
         turnPtr->nextTurn += 100 / turnPtr->monsterPtr->speed;

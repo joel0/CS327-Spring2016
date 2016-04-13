@@ -55,7 +55,7 @@ public:
     virtual ~monster() {};
     char* toString(dungeon_t* dungeonPtr);
     // Override getChar
-    virtual char getChar() = 0;
+    virtual char getChar();
     virtual bool isPC() = 0;
     int attack(monster& other);
 };
@@ -73,20 +73,24 @@ public:
         this->lastPCY = 0;
         this->abilities = abil;
     }
-    char getChar();
     bool isPC() { return false; }
 };
 
 class monster_PC : public monster {
+private:
+    item* inventory[10];
+    item* eqipment[12];
 public:
     gridCell_t** gridKnown;
-    inline char getChar() { return '@'; }
 
+public:
     monster_PC();
     ~monster_PC();
-public:
     bool isPC() { return true; }
     void updateGridKnown(gridCell_t** world);
+    void show_inventory();
+    void show_eqipment();
+    bool pick_up(item& object);
 };
 
 typedef struct dungeon_struct dungeon_t;

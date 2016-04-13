@@ -22,6 +22,10 @@ int monster::attack(monster& other) {
     return dam;
 }
 
+char monster::getChar() {
+    return symb;
+}
+
 char* monster::toString(dungeon_t* dungeonPtr) {
     int offX = ((monster*) dungeonPtr->PCPtr)->x - x;
     int offY = ((monster*) dungeonPtr->PCPtr)->y - y;
@@ -51,10 +55,6 @@ char* monster::toString(dungeon_t* dungeonPtr) {
     return returnStr;
 }
 
-char monster_evil::getChar() {
-    return symb;
-}
-
 monster_PC::monster_PC() :
         monster(std::string("PC"), std::string("You"), COLOR_WHITE, 10, 1000, new dice_set(0, 1, 4), '@') {
     malloc2DArray((void***) &gridKnown, sizeof(**gridKnown), WIDTH, HEIGHT);
@@ -65,6 +65,12 @@ monster_PC::monster_PC() :
             gridKnown[curY][curX].monsterPtr = NULL;
             gridKnown[curY][curX].itemPtr = NULL;
         }
+    }
+    for (int i = 0; i < 10; i++) {
+        inventory[i] = NULL;
+    }
+    for (int i = 0; i < 12; i++) {
+        eqipment[i] = NULL;
     }
 }
 
@@ -93,6 +99,73 @@ void monster_PC::updateGridKnown(gridCell_t** world) {
             }
         }
     }
+}
+
+void monster_PC::show_inventory() {
+    int exit = 0;
+    int userChar;
+    int offset = 0;
+    int maxOffset = 10 + 4 - 11;
+    char itemLine[60];
+    WINDOW* monsterWin = newpad(10 + 4, 60);
+    wbkgd(monsterWin, COLOR_PAIR(COLOR_INVERTED));
+    wborder(monsterWin, 0, 0, 0, 0, 0, 0, 0, 0);
+    mvwaddstr(monsterWin, 1, 60 / 2 - 9 / 2, "INVENTORY");
+    wmove(monsterWin, 2, 1);
+    whline(monsterWin, ACS_HLINE, 58);
+    for (int i = 0; i < 10; i++) {
+        if (inventory[i] == NULL) {
+            sprintf(itemLine, "%d. Empty", i);
+            mvwaddstr(monsterWin, i + 3, 1, itemLine);
+        } else {
+            sprintf(itemLine, "%d. %s", i, inventory[i]->name.c_str());
+            wattron(monsterWin, COLOR_PAIR(inventory[i]->color + 10));
+            mvwaddstr(monsterWin, i + 3, 1, itemLine);
+            wattroff(monsterWin, COLOR_PAIR(inventory[i]->color + 10));
+        }
+    }
+    wnoutrefresh(stdscr);
+    do {
+        pnoutrefresh(monsterWin, offset, 0, 5, 10, 15, 70);
+        doupdate();
+        userChar = getch();
+        switch (userChar) {
+            case KEY_DOWN:
+                offset++;
+                if (offset > maxOffset) {
+                    offset = maxOffset;
+                }
+                break;
+            case KEY_UP:
+                offset--;
+                if (offset < 0) {
+                    offset = 0;
+                }
+                break;
+            case 27:
+                exit = 1;
+                break;
+            default: break;
+        }
+    } while (!exit);
+    delwin(monsterWin);
+    refresh();
+}
+
+void monster_PC::show_eqipment() {
+
+}
+
+bool monster_PC::pick_up(item &object) {
+    int i = 0;
+    while (i < 10) {
+        if (inventory[i] == NULL) {
+            inventory[i] = &object;
+            return true;
+        }
+        i++;
+    }
+    return false;
 }
 
 // To keep track of how many monsters to free in the destroy

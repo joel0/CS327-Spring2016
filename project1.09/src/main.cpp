@@ -137,6 +137,12 @@ int main(int argc, char* argv[]) {
                 case actionListMonsters:
                     monsterList(&dungeon);
                     break;
+                case actionListInventory:
+                    dungeon.PCPtr->show_inventory();
+                    break;
+                case actionListEquipment:
+                    dungeon.PCPtr->show_eqipment();
+                    break;
                 default: break;
             }
         } else {

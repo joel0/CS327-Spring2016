@@ -18,6 +18,8 @@ typedef enum PC_action_enum {
     actionStairsDn,
     actionStairsUp,
     actionListMonsters,
+    actionListInventory,
+    actionListEquipment,
     actionSave,
     actionMovement
 } PC_action;
