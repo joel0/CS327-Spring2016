@@ -67,7 +67,7 @@ void screen_show_dialog(std::string title, std::string msg) {
 
 static int count_lines(std::string msg) {
     int count = 1;
-    for (int i = 0; i < msg.length(); i++) {
+    for (uint i = 0; i < msg.length(); i++) {
         if (msg[i] == '\n') {
             count++;
         }
