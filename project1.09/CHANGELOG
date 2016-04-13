@@ -1,0 +1,893 @@
+commit ec798397c9bc400567422d361527282e01c61038
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 13 01:25:03 2016 -0500
+
+    Memory Leak
+
+commit bd5b3e626653d339ff3e67791b56ae762a918ba2
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 13 01:18:26 2016 -0500
+
+    Memory leak & README
+
+commit d761ede9ddf0abb8a0740643df0d9e65ba40a145
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 13 00:38:11 2016 -0500
+
+    Monster shoving is random now
+
+commit 184baa6986670206e61ad3d1a4b08d42f43c1ace
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 23:55:32 2016 -0500
+
+    int with uint comparison warning
+
+commit 5fa60e041b78973a52b02ae27bc4d5c46a7b0c8e
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 23:52:15 2016 -0500
+
+    PC attack uses equipment
+
+commit f77febe2954569071481253d6510eb09e7ff09c2
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 23:24:26 2016 -0500
+
+    Equipment wearing and taking off
+
+commit f0653f5d73a00fe0ff91735f959e053ce9eab4f5
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 22:38:23 2016 -0500
+
+    Item expunge
+
+commit 6be43c6b8b6ab0aa90cbb452e895c00d2a78297f
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 22:28:42 2016 -0500
+
+    Item inspection
+
+commit 0b715fadc7c96688fede50b052fadafe2e5de48f
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 21:35:10 2016 -0500
+
+    Drop item
+
+commit 288947cb7b697568e4bcd6e81ea2836cdca2122e
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 21:04:45 2016 -0500
+
+    Eqipment list
+
+commit f916dd7dae04f5181af415f71c61871860d5abdb
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 20:53:22 2016 -0500
+
+    Item pick up and listing
+
+commit 161539f70ce6c2927e8e85488db181cf50a01f6f
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 19:56:54 2016 -0500
+
+    Basic combat
+
+commit cfe5a5f0cf01e047fd400af0db3db61247cbc662
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 18:07:04 2016 -0500
+
+    Message queue
+
+commit 4ca70196d1b9c42fa3bdc7c7364ccd88a8ee792f
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 16:31:25 2016 -0500
+
+    Moved ability to monster_evil instead of monster
+
+commit 0109730ce80ee90e58e5f98eb12655c8173fbf77
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 16:11:07 2016 -0500
+
+    PC does not initialize with x and y
+
+commit 13b2a48bf884bdec17970f2d0b6c307fe8d5b49d
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 15:58:07 2016 -0500
+
+    Started 1.09
+
+commit 4da8fd1fd7f3f2baff081edf84ad6ca9e74589be
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 12 15:49:59 2016 -0500
+
+    Item descrip file name
+
+commit d93ad0f62e2e0f1ab734047a9a35a4b194d6e78c
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 03:45:52 2016 -0500
+
+    Documentation
+
+commit fbcb326429761b1cd4644e595ea64b9f94f99578
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 03:31:39 2016 -0500
+
+    valgrind4
+
+commit e506799c39dbd6e937a0f57a0c2efd91c12daeb4
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 03:28:44 2016 -0500
+
+    valgrind3
+
+commit 68954b3fbc64c768d752825fd0b777e0edd37f8d
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 03:23:18 2016 -0500
+
+    valgrind2
+
+commit ad0f993b16945dbe8b7c2fc5d0042579c84a5ec0
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 02:59:02 2016 -0500
+
+    valgrind1
+
+commit 3bd5f1a93ebc4fb5bbf59ce9f9efa508b10762d3
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 02:51:16 2016 -0500
+
+    Bugfixes: dice can't divide by 0 and the PC's known items must be initialized to NULLs
+
+commit ebce358bc318b14415d67533e0428e796a8f6b8e
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 02:00:56 2016 -0500
+
+    Item infrastructure
+
+commit 14b8c71cccebdc044d3786a01ae1c9295ad7a33a
+Author: Joel May <joel.may@live.com>
+Date:   Wed Apr 6 01:22:08 2016 -0500
+
+    Item/object parsing (the assignment that gets me no points)
+
+commit f6f13e327c0c6fc8ab1d79c10eb8758b8f59d025
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 23:25:42 2016 -0500
+
+    Color on Monsters Dialog
+
+commit dda90d59082294a4bbad3b608b63d63d789b3892
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 22:56:48 2016 -0500
+
+    Random monster selection
+
+commit 785aa28d1cc40f7e544340d8f0f145eaca6758e4
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 22:51:54 2016 -0500
+
+    Color.  that was easy.  Literally took 2 lines of code to enable!
+
+commit 96d06ad326d7e3d5331c29a78429946084e7f155
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 22:46:56 2016 -0500
+
+    Fixed Makefile
+
+commit e9fd2418d6445ade5c3f13412486c77e9450794b
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 22:37:51 2016 -0500
+
+    Character generation and ability mapping implemented/fixed
+
+commit 78f0c3c012b7c06fb5d95b7e4065727ad55ad7b2
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 21:54:06 2016 -0500
+
+    Deleted old monster constructors
+
+commit 1f37c6d6e7c863c3125a7a4ba5b750e6323c5224
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 21:36:08 2016 -0500
+
+    Integrated the new C++ monster into the whole project mostly.
+
+commit ec35219d624f67cd6ccdcfbff7b2931e13c6881c
+Author: Joel May <joel.may@live.com>
+Date:   Tue Apr 5 20:29:23 2016 -0500
+
+    Started project 1.08 and did some work on it.
+
+commit b3608883c9811ccda649a5ff2be0e663bf437268
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 03:08:10 2016 -0500
+
+    Cleanup
+
+commit abb2a7ce414af9318aaee84eae66c6525dbbb8fa
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 03:06:30 2016 -0500
+
+    Done!
+
+commit c549b85d61f67f90faec6fcad11f3524e921d583
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 02:59:02 2016 -0500
+
+    more memleak
+
+commit 88b5c49a953ecf785553d7aaced8696c25190310
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 02:53:11 2016 -0500
+
+    Maybe the memory leaks are gone now?
+
+commit e3c23e64886c45e589250bc239801c38f04a9c3b
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 02:47:45 2016 -0500
+
+    Ugh.  I don't know what is going on.  The destructor gets called like crazy.
+
+commit be29360ca9943ab2cce2b5f97e30aebb936ae77d
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 02:28:29 2016 -0500
+
+    more memleak debugging
+
+commit 6f2d9e869e27588afd47da69b25deb171491d836
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 02:22:42 2016 -0500
+
+    memleak debugging
+
+commit b526686e3317dc911b396840dd4b2618a7263a57
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 01:46:25 2016 -0500
+
+    this?
+
+commit b41c683ddd92d4f3b7023c256e97b30be3c94e0d
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 01:41:45 2016 -0500
+
+    Ugh segfaults
+
+commit ecdf83d24154380e6c78de95f6de9f1eebb3e3b1
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 01:37:00 2016 -0500
+
+    Memory leak fixed?
+
+commit a693d694a187848c191d8899b74eafda6a6381ac
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 01:19:51 2016 -0500
+
+    Memory leaks continued
+
+commit 05e59926fcb5ff31f1dda5c73e319dc88c594b6c
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 01:16:17 2016 -0500
+
+    Memory leaks
+
+commit 5819103222b3356ace2bb21899d8c842f3767004
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 01:00:47 2016 -0500
+
+    Bugfix: function arguments
+
+commit 6b15ab4797b3501ec448721435e9a4314c0bd718
+Author: Joel May <joel.may@live.com>
+Date:   Wed Mar 30 00:58:41 2016 -0500
+
+    Started 1.07 Complete (memory leaks?)
+
+commit de50fe160ef04b27330d373a444d431ac7d0b67c
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 29 20:46:55 2016 -0500
+
+    Started 1.07
+
+commit 5511ed4c2ef1ee8b86746d3c480628a8629a712b
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 22 00:12:53 2016 -0500
+
+    Delete dungeon.PCPtr
+
+commit dbe5b64f87a4a903d8ab79015962f76297c48677
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 23:44:58 2016 -0500
+
+    PC can't see through walls
+
+commit 0300bec93c2a65d4ff2aeb1e809722557d8fc8aa
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 23:19:24 2016 -0500
+
+    Fog of war
+
+commit 6712253d7c32e4e21eb6771148e0bb3b2e92a0d8
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 21:42:48 2016 -0500
+
+    Cleanup
+
+commit e1860c1a8d681080b771b7c037bad230025ebc2b
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 21:24:33 2016 -0500
+
+    Code cleanup and delete instead of free
+
+commit e5a1bad468810b599fad34e045fe631c997b7866
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 20:19:58 2016 -0500
+
+    Debugging code--
+
+commit 6f986160424c20fb9507dc2d96f5d6f1cdd34a8b
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 20:16:57 2016 -0500
+
+    Yay!  C++ class works.  It was a stupid bug of calling the wrong C-wrapper.
+
+commit a2f5d924cdd0f86c379b32001bbe724228a775df
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 21 15:52:01 2016 -0500
+
+    C-wrapper functions work better now.  Still bugs galore.
+
+commit f1d36fc82fb3c1e187aad197b3552228684993c9
+Author: Joel May <joel.may@live.com>
+Date:   Sat Mar 19 22:47:20 2016 -0500
+
+    Started class transformation. Code compiles, but does not work due to incorrect casting.
+
+commit 72e0b1967bdd1cc4c8736c3762d354a31550bd6d
+Author: Joel May <joel.may@live.com>
+Date:   Sat Mar 19 12:54:14 2016 -0500
+
+    Converted monster.c to C++ and updated appropriate headers with extern "C"
+
+commit a4ab82fb5b9444eec637d49fa1a5dce53eba1c86
+Author: Joel May <joel.may@live.com>
+Date:   Fri Mar 18 22:18:18 2016 -0500
+
+    Started 1.06
+
+commit ddac04cb47b723fb395729856067300963cb61f3
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 8 19:30:26 2016 -0600
+
+    README update
+
+commit 68a219e13d4f588ac961e09ab77ba47a36fed698
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 8 19:28:42 2016 -0600
+
+    Final clean up
+
+commit f6ca2b3409be31f593f0ac2824ecc53b02d5d7fd
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 8 19:10:57 2016 -0600
+
+    Cleanup
+
+commit 2aa3d1675bca09f28c900dc469b51889de57afed
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 8 19:02:38 2016 -0600
+
+    Switched from binheap to heap.
+
+commit 56eb413fff3c1d63f322c19a3c9b4f17ee0ba45a
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 8 16:56:21 2016 -0600
+
+    Test?
+
+commit 1a23180579ba07bc16bb51058918adf4faf9e615
+Author: Joel May <joel.may@live.com>
+Date:   Tue Mar 8 01:18:02 2016 -0600
+
+    Monster list looks quite nice, if I do say so myself.  There's still the bug in pathNontunneling().
+
+commit 36d845e2f60c6ace0971efe5c0ef375102ed54bb
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 7 22:54:15 2016 -0600
+
+    endwin()
+
+commit a331d1ada8d0ea34bae0024106ae4a7dfe053d60
+Merge: 75df325 2e9397e
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 7 22:24:56 2016 -0600
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 75df325baabefeccd576d476c50c63a2bff742e1
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 7 22:24:47 2016 -0600
+
+    WHAT???
+
+commit 2e9397efd55978a721fab0f40ef07e4dec5844a9
+Author: Joel May <jmay@iastate.edu>
+Date:   Mon Mar 7 20:49:37 2016 -0600
+
+    Makefile for screen.c
+
+commit 4aac32150924f6d45ed20d74414b18537c46946f
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 7 20:46:56 2016 -0600
+
+    All possible user input is handled.  Still need a method to print all monsters.
+
+commit 550e0b868465601d656fdad1763ef12ab3be1946
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 7 13:51:37 2016 -0600
+
+    PC movement is controlled by a human.
+
+commit ce271d62738c03c7ad135d40b6c2382a7b178bc6
+Author: Joel May <joel.may@live.com>
+Date:   Mon Mar 7 00:28:25 2016 -0600
+
+    Dungeon printing works with curses.
+
+commit b9d87713b37463a837fafa650716a68e5c5150b7
+Author: Joel May <joel.may@live.com>
+Date:   Sun Mar 6 23:49:31 2016 -0600
+
+    Start of project1.05 and stairs exist (they don't work yet)
+
+commit 1e149b080d6bf9ff1535ab2d5ddb7b6b41f1a80a
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:55:53 2016 -0600
+
+    More memory leak fixes
+
+commit bd985789eadf8c4082e003b769b23e4953253a46
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:47:43 2016 -0600
+
+    Bugfix in monster movement
+
+commit 41c0a26aa8ad9b236eb8e48ee10c37f2debff551
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:29:34 2016 -0600
+
+    Gotta close files
+
+commit ac206f185cb196fcfbd80699de5399c4cf6d14cd
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:26:45 2016 -0600
+
+    Memory leak on file name
+
+commit 019f0618fb2092dae96fafb75c9e55099d4c4c74
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:21:01 2016 -0600
+
+    Bugfix in path stepping
+
+commit 51391315ae20c5eb3a417bc6a484aeb3b4c57775
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:09:37 2016 -0600
+
+    Fixed the memory leak now?
+
+commit 282718e52ec7e50fa9840b71624f134bd6aabbca
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 02:06:47 2016 -0600
+
+    Memory leaks are fixed?
+
+commit c9eada6a3ce2e64d56b0c2b163562e923bf88ce6
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 01:48:02 2016 -0600
+
+    Finalized the features and added free() where nedded.
+
+commit 632465b3590ac92256099a06e1b6c817262bc4bb
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 01:02:33 2016 -0600
+
+    PC can tunnel instantly without boring through rock
+
+commit 5795c6718b1d553aac30a221906fd839e72907d9
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 00:50:03 2016 -0600
+
+    Added intelligent monster paths
+
+commit 9087ce94d0d007fe60db2b38f9be0ec1ea3fdd38
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 00:30:48 2016 -0600
+
+    Bugfix: sizeof(turn_t), not turn
+
+commit 651bffadfb1ed9eb7aac87f7a687febb7dbc6036
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 00:27:25 2016 -0600
+
+    Bugfix: allow the PC to be killed.
+
+commit bb3bca79aad977c47aa2ad962fea0867981f121e
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 00:08:16 2016 -0600
+
+    (Debug code)--
+
+commit e03a3ea3dec28315802795793d7211c2d3461887
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 00:07:25 2016 -0600
+
+    PC always moves randomly.
+
+commit 07ecec140efccf72f6a9fe4908e33444086b54e4
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 24 00:05:27 2016 -0600
+
+    Bugfix: non-intelligent, non-telepathic monsters move toward the PC when he is in line of sight.
+
+commit 8bd3b29e1dc732179c503e0e980ea9d986bd1c39
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 23:56:01 2016 -0600
+
+    Didn't need that sleep anymore at the end.
+
+commit 542e6fd99917c1af89b902ce15861ba44e20b1c8
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 23:54:40 2016 -0600
+
+    Direct path monsters work.
+
+commit 308884810693990246ba9d7ef34ec1af1a49b277
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 22:44:57 2016 -0600
+
+    I don't even know right now...
+
+commit 1c95c65fdba015157ba41f6eb7d8e1772231a119
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 22:31:52 2016 -0600
+
+    PC is alive...
+
+commit bbe4fd4822495aba04db6997cabaedb46a9621ef
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 22:27:39 2016 -0600
+
+    End conditions and dungeon printing only happens after the PC's turns.
+
+commit e8a90c90e3ff2aeaec7cb19af0e8471cb4b29301
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 22:20:36 2016 -0600
+
+    Queue is fixed.
+
+commit ad17d0d9e3e1e789ad991ed05c8f64d3da6cc3fa
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Feb 23 22:11:31 2016 -0600
+
+    fixed crap
+
+commit 535b16af446299ed980dfb4eefc6ba570096e42e
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 21:54:57 2016 -0600
+
+    Queue partially implemented.  Must submit now.
+
+commit 29980e48017142b87624f45ab3787d29689a2d12
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 21:17:57 2016 -0600
+
+    Changelog
+
+commit c6fa1010da46fbc8361bc1e6013ce2a7d38e17f1
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 21:16:43 2016 -0600
+
+    Coding marathon!  Enemies print.  PC can move. Enemies can move randomly.
+
+commit 77d642e537e2785ce84d2328160bf0ebd0059de6
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 12:16:13 2016 -0600
+
+    Readme
+
+commit 9d98755adb80b857f41c8396f3cd350e03d7ad74
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 12:15:35 2016 -0600
+
+    Bugfix from previous project
+
+commit 52fb81b4e8998c668c03ab0fd8def7e0a7f3015f
+Merge: 7fd8bad 5709c22
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 12:14:26 2016 -0600
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 7fd8bade3135f207df6b18f14ce707e6ee4c49c8
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 23 12:14:07 2016 -0600
+
+    Workspace set up for project 1.04
+
+commit 5709c22e5188074197e4cf99298edb295c551a32
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 16 15:05:39 2016 -0600
+
+    Changelog
+
+commit 6aaed162613ce57bbf22bc0c641b94499836d634
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Feb 16 15:01:54 2016 -0600
+
+    Fixed memory leak with binheap nodes
+
+commit 3d189b57111727313a983fd9b51f056bce34e931
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 14 16:17:31 2016 -0600
+
+    Readme
+
+commit e65b2137a91217fa1953548ed278c09b0cf1d37e
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 14 15:58:40 2016 -0600
+
+    Grid drawing past the end of the drawable path.
+
+commit e0a1bc7625fdbe41e64ca5cab865923b201963ca
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 14 15:50:03 2016 -0600
+
+    Moved random seeding to main.c instead of dungeon.c
+
+commit f236820d3cfe6d59d92e15474fb7caea4213b0e0
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 14 15:45:02 2016 -0600
+
+    Gotta keep the documentation and Makefile fresh
+
+commit df956d4b6bd461016ae2fdd2e82c0a95a73a9938
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 14 15:42:25 2016 -0600
+
+    Player Character (PC) random placement
+
+commit 0ea07c735d07ea851794f3714f2b470dc0b31715
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 14 15:31:18 2016 -0600
+
+    Path finding finalized
+
+commit caf2f1beefb59513610c0d92b1b8f9d19f5cafd3
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 9 19:47:28 2016 -0600
+
+    Created a datatype for a dungeon and changed the arguments and function calls appropriately.  Also updated the CMake config to compile in gnu11 instead of c11 for typeof() and int datatypes.
+
+commit a7923f9fd852bbcda595356daa9ce7f621f79da0
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 7 23:54:07 2016 -0600
+
+    Imported the provided priority queue and created a file for the path finding.
+
+commit cec666e152ecb2d3c24fe5e4941f61ee7060c277
+Author: Joel May <jmay@iastate.edu>
+Date:   Sun Feb 7 23:40:16 2016 -0600
+
+    Linux compatibility
+
+commit 7e31b571e5ea18c710e68b50d5c2181b26741319
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 7 23:33:35 2016 -0600
+
+    Split the dungeon generation, loading, and saving to its own file.
+
+commit 578a858621562ac70e28659ec90fdcfdd897e9ed
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 7 23:05:05 2016 -0600
+
+    Started project 1.03
+
+commit a57cebc0f3b1d1dbdd3a053b286820fcba94b266
+Merge: bdc6aec 5217aa7
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 7 22:57:37 2016 -0600
+
+    Merge remote-tracking branch 'origin/master'
+
+commit bdc6aec2facefdb50b43c44e0179899addb52609
+Author: Joel May <joel.may@live.com>
+Date:   Sun Feb 7 22:57:23 2016 -0600
+
+    Load and save together
+
+commit 5217aa7bda5781eee5adf4da7124f693597e8be9
+Author: Joel May <joel.may@live.com>
+Date:   Wed Feb 3 15:38:25 2016 -0600
+
+    Better path finding based on the hardness of the rock
+
+commit b4f3ecf250d6c08864168081f1f527f592a28ebe
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Feb 2 11:59:06 2016 -0600
+
+    Makefile deletes old tar.gz in clean
+
+commit 6eca75c903d6e8ae7620a91e6fea57f0b7a3951b
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 2 11:48:47 2016 -0600
+
+    README
+
+commit 574b31f188fdcc460163b0043e1d098f9fe23121
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Feb 2 11:38:22 2016 -0600
+
+    Compatible with Pyrite
+
+commit 7c87866291ee4c194ff12db4f09e7bab98173f13
+Merge: dbb8415 92925e8
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 2 11:26:50 2016 -0600
+
+    Merge remote-tracking branch 'origin/master'
+
+commit dbb84155c2fb116e0b7b247eaf901eeb6d17607a
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 2 11:26:32 2016 -0600
+
+    Can't forget the Makefile
+
+commit 92925e82c74c512cc601dfc1b1b3f4b8fe1dff69
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 2 11:21:47 2016 -0600
+
+    Removed hard coding of VERSION in dungeon loading
+
+commit 2df0eb560aa3d24bd517ae031718589b7114b46a
+Author: Joel May <joel.may@live.com>
+Date:   Tue Feb 2 11:18:25 2016 -0600
+
+    Saving is implemented
+
+commit d6e4117567d2fa704cb78179165e666a46f56738
+Author: Joel May <joel.may@live.com>
+Date:   Mon Feb 1 23:11:43 2016 -0600
+
+    Dungeon loading works!
+
+commit 44db1daa968eb32463e006d8e62bbeb644adfa3d
+Author: Joel May <joel.may@live.com>
+Date:   Mon Feb 1 19:16:53 2016 -0600
+
+    Set up workspace and imported code from project1.02
+
+commit 1c749bce5bead2eaf81b94171ddd85ee3a4fe1b5
+Author: Joel May <joel.may@live.com>
+Date:   Wed Jan 27 15:58:41 2016 -0600
+
+    Better room generation and handness
+
+commit 89a500ce90c40f81c92de69b4a7a1337a8310738
+Merge: a15a38b 95aff09
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Jan 26 21:07:18 2016 -0600
+
+    Merge branch 'master' of git.ece.iastate.edu:jmay/CS327
+
+commit a15a38bf204f63d832b76b15d996cb80df0b4f38
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Jan 26 21:07:05 2016 -0600
+
+    Makefile tar
+
+commit 95aff09979e64d568ad41ea36362d2f27161c95e
+Merge: ff46d19 e2b5dc2
+Author: Joel May <joel.may@live.com>
+Date:   Tue Jan 26 21:05:19 2016 -0600
+
+    Merge branch 'master' of https://git.ece.iastate.edu/jmay/CS327
+
+commit e2b5dc2aea7cdaf9201abea690010baabaf8573f
+Author: Joel May <jmay@iastate.edu>
+Date:   Tue Jan 26 20:55:16 2016 -0600
+
+    Math library to Makefile
+
+commit ff46d19b5b7a45c691a2110fe6943dcf523800f7
+Author: Joel May <joel.may@live.com>
+Date:   Tue Jan 26 20:47:01 2016 -0600
+
+    Readme and changelog
+
+commit 924e4ec44f126740927be454b749184d670b24fc
+Author: Joel May <joel.may@live.com>
+Date:   Tue Jan 26 20:33:50 2016 -0600
+
+    Room generation and rendering implemented.  Path finding for room linking implemented.  Dungeon printing implemented.
+
+commit bd6fb2aa06a759d95f68dbf69bea9bfaae4e0c95
+Author: Joel May <joel.may@live.com>
+Date:   Mon Jan 25 23:51:48 2016 -0600
+
+    It generates rooms, but the overlap checking does not work.
+
+commit e733b2d90918ce618f60c080a66e457a6d29f50d
+Author: Joel May <joel.may@live.com>
+Date:   Mon Jan 25 21:04:23 2016 -0600
+
+    Project 1.01 started
+
+commit 966e408aac77aa7a9ebcca5f30e573ad67c17863
+Author: Joel May <jmay@iastate.edu>
+Date:   Fri Jan 15 02:09:22 2016 -0600
+
+    Added the math library to gcc args
+
+commit 8f7e04e5b286da4c9b6f964b3accff1a03bc7a16
+Author: Joel May <jmay@iastate.edu>
+Date:   Fri Jan 15 01:58:33 2016 -0600
+
+    Forgot to update a line in the Makefile when the name of the file changed.
+
+commit a834e09413e5cb8a9ba24b0a558a99f32ab5c81b
+Author: Joel May <joel.may@live.com>
+Date:   Fri Jan 15 01:53:56 2016 -0600
+
+    Fixed part 2 to conform to the instructions.
+
+commit 692f9be16656a53e426ad5f9151d1be1174392c2
+Author: Joel May <joel.may@live.com>
+Date:   Fri Jan 15 00:11:47 2016 -0600
+
+    Renaming part 2 due to misunderstanding the assignment description.  Code changes are to come to reflect the description changes.
+
+commit 60264df8653b613b70bd7b819654005bd832b7e0
+Author: Joel May <joel.may@live.com>
+Date:   Thu Jan 14 02:16:17 2016 -0600
+
+    A bit of documentation
+
+commit f4181f8968ad6d689677d81d7ca14f8046563538
+Author: Joel May <joel.may@live.com>
+Date:   Thu Jan 14 02:00:07 2016 -0600
+
+    Changelog
+
+commit 7c62def32dd5b8c1f5a99ba291775a9fcc76718d
+Author: Joel May <jmay@iastate.edu>
+Date:   Thu Jan 14 01:56:19 2016 -0600
+
+    Makefile and README
+
+commit ad01170662c71e983c8e854d601982326d65d3c6
+Author: Joel May <joel.may@live.com>
+Date:   Thu Jan 14 00:36:39 2016 -0600
+
+    Folder restructuring
+
+commit 0cef18f92d39c39af04c050baf93d423be8de016
+Author: Joel May <joel.may@live.com>
+Date:   Wed Jan 13 01:39:21 2016 -0600
+
+    Project0 part 2
+
+commit 5cea97ed0d39cea9875ee8847e82e10a94edc3d3
+Author: Joel May <joel.may@live.com>
+Date:   Wed Jan 13 01:24:03 2016 -0600
+
+    Documenting the change to part1
+
+commit 372701d3e4e06a904c71708f00565e15c3484e4c
+Author: Joel May <joel.may@live.com>
+Date:   Wed Jan 13 01:13:18 2016 -0600
+
+    Corrected arguments for main()
+
+commit c120f22f35ba525b4f5fe763eb8e870680c2437c
+Author: Joel May <joel.may@live.com>
+Date:   Tue Jan 12 23:55:49 2016 -0600
+
+    Project0 part 1
