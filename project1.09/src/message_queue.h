@@ -10,11 +10,12 @@
 class message_queue {
 private:
     static message_queue* queue_instance;
-    std::vector<std::string> queue;
+    std::vector<std::string*> queue;
 
 public:
     static message_queue* instance();
     void enqueue(std::string* msg);
+    void enqueue(const char* msg);
     void enqueue(std::stringstream& stream);
     void print_all();
 };

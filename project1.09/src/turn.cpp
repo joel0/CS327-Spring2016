@@ -165,6 +165,10 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
                 returnValue = actionListEquipment;
                 validChar = 1;
                 break;
+            case 'd':
+                returnValue = actionDropItem;
+                validChar = 1;
+                break;
             case 's':
                 returnValue = actionSave;
                 validChar = 1;

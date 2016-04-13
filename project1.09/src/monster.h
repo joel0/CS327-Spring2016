@@ -88,9 +88,11 @@ public:
     ~monster_PC();
     bool isPC() { return true; }
     void updateGridKnown(gridCell_t** world);
-    void show_inventory();
-    void show_eqipment();
+    int show_inventory(bool esc_only);
+    int show_equipment(bool esc_only);
     bool pick_up(item& object);
+    void drop_item(dungeon_t& dungeon);
+    void take_off_item();
 };
 
 typedef struct dungeon_struct dungeon_t;

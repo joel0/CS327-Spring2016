@@ -12,6 +12,7 @@
 #include "dungeon.h"
 #include "utils.h"
 #include "movement.h"
+#include "message_queue.h"
 
 int monster::attack(monster& other) {
     int dam = DAM_ptr->roll();
@@ -101,7 +102,7 @@ void monster_PC::updateGridKnown(gridCell_t** world) {
     }
 }
 
-void monster_PC::show_inventory() {
+int monster_PC::show_inventory(bool esc_only) {
     int exit = 0;
     int userChar;
     int offset = 0;
@@ -145,14 +146,19 @@ void monster_PC::show_inventory() {
             case 27:
                 exit = 1;
                 break;
-            default: break;
+            default:
+                if (!esc_only) {
+                    exit = 1;
+                }
+                break;
         }
     } while (!exit);
     delwin(monsterWin);
     refresh();
+    return userChar;
 }
 
-void monster_PC::show_eqipment() {
+int monster_PC::show_equipment(bool esc_only) {
     int exit = 0;
     int userChar;
     int offset = 0;
@@ -196,11 +202,42 @@ void monster_PC::show_eqipment() {
             case 27:
                 exit = 1;
                 break;
-            default: break;
+            default:
+                if (!esc_only) {
+                    exit = 1;
+                }
+                break;
         }
     } while (!exit);
     delwin(monsterWin);
     refresh();
+    return userChar;
+}
+
+void monster_PC::drop_item(dungeon_t& dungeon) {
+    if (dungeon.grid[y][x].itemPtr != NULL) {
+        message_queue::instance()->enqueue("I can not drop an item onto another item. Please move to an empty area.");
+        return;
+    }
+    int choice_char = show_inventory(false);
+    if (choice_char == 27) {
+        // ESC is valid
+        return;
+    }
+    if (choice_char < '0' || choice_char > '9') {
+        message_queue::instance()->enqueue("That is not a valid item to drop.");
+        return;
+    }
+    int choice = choice_char - '0';
+    if (inventory[choice] == NULL) {
+        message_queue::instance()->enqueue("There is no item in that slot to drop.");
+        return;
+    }
+    std::stringstream msg_str;
+    msg_str << "You have dropped " << inventory[choice]->name;
+    message_queue::instance()->enqueue(msg_str);
+    dungeon.grid[y][x].itemPtr = inventory[choice];
+    inventory[choice] = NULL;
 }
 
 bool monster_PC::pick_up(item &object) {

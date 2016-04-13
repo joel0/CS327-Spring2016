@@ -138,10 +138,13 @@ int main(int argc, char* argv[]) {
                     monsterList(&dungeon);
                     break;
                 case actionListInventory:
-                    dungeon.PCPtr->show_inventory();
+                    dungeon.PCPtr->show_inventory(true);
                     break;
                 case actionListEquipment:
-                    dungeon.PCPtr->show_eqipment();
+                    dungeon.PCPtr->show_equipment(true);
+                    break;
+                case actionDropItem:
+                    dungeon.PCPtr->drop_item(dungeon);
                     break;
                 default: break;
             }
