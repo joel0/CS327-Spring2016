@@ -57,7 +57,7 @@ public:
     // Override getChar
     virtual char getChar();
     virtual bool isPC() = 0;
-    int attack(monster& other);
+    virtual int attack(monster& other);
 };
 
 class monster_evil : public monster {
@@ -87,6 +87,7 @@ public:
     monster_PC();
     ~monster_PC();
     bool isPC() { return true; }
+    int attack(monster& other);
     void updateGridKnown(gridCell_t** world);
     int show_inventory(bool esc_only);
     int show_equipment(bool esc_only);

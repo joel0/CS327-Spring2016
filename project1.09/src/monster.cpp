@@ -81,6 +81,20 @@ monster_PC::~monster_PC() {
     delete DAM_ptr;
 }
 
+int monster_PC::attack(monster &other) {
+    int dam = DAM_ptr->roll();
+    for (item* i : equipment) {
+        if (i != NULL) {
+            dam += i->dam_bonus_ptr->roll();
+        }
+    }
+    other.HP -= dam;
+    if (other.HP < 0) {
+        other.alive = false;
+    }
+    return dam;
+}
+
 void monster_PC::updateGridKnown(gridCell_t** world) {
     int minX, minY, maxX, maxY;
     // Remove any monsters that may be out of visibility
