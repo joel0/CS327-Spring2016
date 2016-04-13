@@ -10,6 +10,7 @@
 #include "movement.h"
 #include "screen.h"
 #include "path.h"
+#include "message_queue.h"
 
 int turnCompare(const void* d1, const void* d2);
 void turnDelete(void* d);
@@ -55,6 +56,10 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
     turnPtr = (turn_t *) heap_remove_min(dungeonPtr->turnsHeapPtr);
     dstX = turnPtr->monsterPtr->x;
     dstY = turnPtr->monsterPtr->y;
+
+    // Print any messages
+    message_queue::instance()->print_all();
+    mvprintw(0, 0, "Your HP: %d", dungeonPtr->PCPtr->HP);
 
     do {
         userChar = getch();

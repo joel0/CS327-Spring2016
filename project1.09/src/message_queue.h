@@ -5,7 +5,6 @@
 #ifndef PROJECT0_MESSAGE_QUEUE_H
 #define PROJECT0_MESSAGE_QUEUE_H
 
-#include <string>
 #include <vector>
 
 class message_queue {
@@ -16,6 +15,7 @@ private:
 public:
     static message_queue* instance();
     void enqueue(std::string* msg);
+    void enqueue(std::stringstream& stream);
     void print_all();
 };
 

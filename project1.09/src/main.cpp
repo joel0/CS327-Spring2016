@@ -17,7 +17,6 @@
 #include "turn.h"
 #include "screen.h"
 #include "utils.h"
-#include "message_queue.h"
 
 bool parse_monster_descrip_file(std::vector<monster_descrip*> &monster_descrips);
 bool parse_item_descrip_file(std::vector<item_descrip*>& item_descrips);

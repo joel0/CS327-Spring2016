@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include <sstream>
 
 #include "movement.h"
 #include "utils.h"
 #include "path.h"
+#include "message_queue.h"
 
 int isRock(gridCell_t** grid, int x, int y);
 int isImmutable(gridCell_t **grid, int x, int y);
@@ -86,6 +88,7 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
     int srcX = monsterPtr->x;
     int srcY = monsterPtr->y;
     gridCell_t** grid = dungeonPtr->grid;
+    monster* replacement_ptr = NULL;
 
     // Do not do anything if the "move" is nothing
     if (monsterPtr->x == dstX && monsterPtr->y == dstY) {
@@ -97,11 +100,31 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
     }
 
     if (grid[dstY][dstX].monsterPtr != NULL) {
-        // A monster is eating another.  We must delete the eaten one.
-        int toRemove = -1;
-        while (dungeonPtr->monsterPtrs[++toRemove] != grid[dstY][dstX].monsterPtr)
-            ;
-        dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
+        // A monster is eating another.
+        if (!monsterPtr->isPC() && !grid[dstY][dstX].monsterPtr->isPC()) {
+            // This combat does not involve the PC.  We must move the monster out of the way.
+            // TODO shove the monster instead of switching positions
+            replacement_ptr = grid[dstY][dstX].monsterPtr;
+        } else {
+            // Combat with the PC
+            std::stringstream msg_str;
+
+            int dam = monsterPtr->attack(*grid[dstY][dstX].monsterPtr);
+            if (grid[dstY][dstX].monsterPtr->alive) {
+                // The monster in the target location did not die.  No movement happens.
+                msg_str << monsterPtr->name << " attacked " << grid[dstY][dstX].monsterPtr->name << " for " <<
+                dam << ". HP: " << grid[dstY][dstX].monsterPtr->HP;
+                message_queue::instance()->enqueue(msg_str);
+                return;
+            }
+
+            msg_str << monsterPtr->name << " attacked and killed " << grid[dstY][dstX].monsterPtr->name <<
+            " with " << dam << " damage";
+
+            int toRemove = -1;
+            while (dungeonPtr->monsterPtrs[++toRemove] != grid[dstY][dstX].monsterPtr);
+            dungeonRemoveMonster(dungeonPtr->monsterPtrs, toRemove, &dungeonPtr->monsterCount);
+        }
     }
     if (grid[dstY][dstX].hardness > 85) {
         // The rock must be bored through
@@ -109,9 +132,13 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
         pathTunneling(dungeonPtr);
     } else {
         grid[dstY][dstX].monsterPtr = grid[srcY][srcX].monsterPtr;
-        grid[srcY][srcX].monsterPtr = NULL;
+        grid[srcY][srcX].monsterPtr = replacement_ptr;
         grid[dstY][dstX].monsterPtr->x = dstX;
         grid[dstY][dstX].monsterPtr->y = dstY;
+        if (replacement_ptr != NULL) {
+            replacement_ptr->x = srcX;
+            replacement_ptr->y = srcY;
+        }
 
         // tunneling
         if (grid[dstY][dstX].material == rock) {

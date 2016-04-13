@@ -27,7 +27,6 @@ typedef struct dungeon_struct dungeon_t;
 
 class monster {
 public:
-    //int speed;
     int x;
     int y;
     bool alive = true;
@@ -58,6 +57,7 @@ public:
     // Override getChar
     virtual char getChar() = 0;
     virtual bool isPC() = 0;
+    int attack(monster& other);
 };
 
 class monster_evil : public monster {
