@@ -8,6 +8,12 @@
 #include "message_queue.h"
 #include "screen.h"
 
+message_queue::~message_queue() {
+    for (uint i = 0; i < queue.size(); i++) {
+        delete queue[i];
+    }
+}
+
 void message_queue::enqueue(std::string* msg) {
     std::string* str = new std::string(*msg);
     queue.push_back(str);

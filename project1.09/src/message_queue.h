@@ -13,6 +13,7 @@ private:
     std::vector<std::string*> queue;
 
 public:
+    ~message_queue();
     static message_queue* instance();
     void enqueue(std::string* msg);
     void enqueue(const char* msg);
