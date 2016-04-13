@@ -146,6 +146,9 @@ int main(int argc, char* argv[]) {
                 case actionDropItem:
                     dungeon.PCPtr->drop_item(dungeon);
                     break;
+                case actionInspectItem:
+                    dungeon.PCPtr->inspect_item();
+                    break;
                 default: break;
             }
         } else {

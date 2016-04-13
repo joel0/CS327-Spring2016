@@ -93,6 +93,7 @@ public:
     bool pick_up(item& object);
     void drop_item(dungeon_t& dungeon);
     void take_off_item();
+    void inspect_item();
 };
 
 typedef struct dungeon_struct dungeon_t;

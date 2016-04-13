@@ -13,6 +13,7 @@
 #include "utils.h"
 #include "movement.h"
 #include "message_queue.h"
+#include "screen.h"
 
 int monster::attack(monster& other) {
     int dam = DAM_ptr->roll();
@@ -214,6 +215,18 @@ int monster_PC::show_equipment(bool esc_only) {
     return userChar;
 }
 
+bool monster_PC::pick_up(item &object) {
+    int i = 0;
+    while (i < 10) {
+        if (inventory[i] == NULL) {
+            inventory[i] = &object;
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
 void monster_PC::drop_item(dungeon_t& dungeon) {
     if (dungeon.grid[y][x].itemPtr != NULL) {
         message_queue::instance()->enqueue("I can not drop an item onto another item. Please move to an empty area.");
@@ -240,16 +253,22 @@ void monster_PC::drop_item(dungeon_t& dungeon) {
     inventory[choice] = NULL;
 }
 
-bool monster_PC::pick_up(item &object) {
-    int i = 0;
-    while (i < 10) {
-        if (inventory[i] == NULL) {
-            inventory[i] = &object;
-            return true;
-        }
-        i++;
+void monster_PC::inspect_item() {
+    int choice_char = show_inventory(false);
+    if (choice_char == 27) {
+        // ESC is valid
+        return;
     }
-    return false;
+    if (choice_char < '0' || choice_char > '9') {
+        message_queue::instance()->enqueue("That is not a valid item to drop.");
+        return;
+    }
+    int choice = choice_char - '0';
+    if (inventory[choice] == NULL) {
+        message_queue::instance()->enqueue("There is no item in that slot to inspect.");
+        return;
+    }
+    screen_show_dialog(inventory[choice]->name, inventory[choice]->desc);
 }
 
 // To keep track of how many monsters to free in the destroy

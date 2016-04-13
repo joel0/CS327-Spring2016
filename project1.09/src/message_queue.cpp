@@ -25,7 +25,7 @@ void message_queue::enqueue(const char *msg) {
 
 void message_queue::print_all() {
     if (queue.size() > 1) {
-        for (int i = 0; i < queue.size(); i++) {
+        for (uint i = 0; i < queue.size(); i++) {
             screenClearRow(0);
             mvprintw(0, 0, "(%d/%d) %s", i + 1, queue.size(), queue[i]->c_str());
             delete queue[i];

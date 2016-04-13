@@ -21,6 +21,7 @@ typedef enum PC_action_enum {
     actionListInventory,
     actionListEquipment,
     actionDropItem,
+    actionInspectItem,
     actionSave,
     actionMovement
 } PC_action;
