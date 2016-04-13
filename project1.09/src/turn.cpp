@@ -173,6 +173,10 @@ PC_action turnDoPC(dungeon_t* dungeonPtr) {
                 returnValue = actionInspectItem;
                 validChar = 1;
                 break;
+            case 'x':
+                returnValue = actionExpungeItem;
+                validChar = 1;
+                break;
             case 's':
                 returnValue = actionSave;
                 validChar = 1;

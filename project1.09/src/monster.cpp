@@ -253,6 +253,27 @@ void monster_PC::drop_item(dungeon_t& dungeon) {
     inventory[choice] = NULL;
 }
 
+void monster_PC::expunge_item() {
+    int choice_char = show_inventory(false);
+    if (choice_char == 27) {
+        // ESC is valid
+        return;
+    }
+    if (choice_char < '0' || choice_char > '9') {
+        message_queue::instance()->enqueue("That is not a valid item to expunge.");
+        return;
+    }
+    int choice = choice_char - '0';
+    if (inventory[choice] == NULL) {
+        message_queue::instance()->enqueue("There is no item in that slot to expunge.");
+        return;
+    }
+    std::stringstream msg_str;
+    msg_str << "You have expunged " << inventory[choice]->name;
+    message_queue::instance()->enqueue(msg_str);
+    inventory[choice] = NULL;
+}
+
 void monster_PC::inspect_item() {
     int choice_char = show_inventory(false);
     if (choice_char == 27) {

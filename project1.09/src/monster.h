@@ -92,6 +92,7 @@ public:
     int show_equipment(bool esc_only);
     bool pick_up(item& object);
     void drop_item(dungeon_t& dungeon);
+    void expunge_item();
     void take_off_item();
     void inspect_item();
 };

@@ -120,6 +120,7 @@ void moveMonster(dungeon_t* dungeonPtr, monster* monsterPtr, int dstX, int dstY)
 
             msg_str << monsterPtr->name << " attacked and killed " << grid[dstY][dstX].monsterPtr->name <<
             " with " << dam << " damage";
+            message_queue::instance()->enqueue(msg_str);
 
             int toRemove = -1;
             while (dungeonPtr->monsterPtrs[++toRemove] != grid[dstY][dstX].monsterPtr);

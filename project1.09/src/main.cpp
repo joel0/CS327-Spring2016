@@ -149,6 +149,9 @@ int main(int argc, char* argv[]) {
                 case actionInspectItem:
                     dungeon.PCPtr->inspect_item();
                     break;
+                case actionExpungeItem:
+                    dungeon.PCPtr->expunge_item();
+                    break;
                 default: break;
             }
         } else {
