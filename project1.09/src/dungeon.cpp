@@ -14,7 +14,7 @@
 #include "globals.h"
 #include "utils.h"
 #include "turn.h"
-#include "../../project1.06/src/monster.h"
+#include "monster.h"
 #include "item_descrip.h"
 
 int saveDungeon(dungeon_t dungeon, char* fileName) { //(gridCell_t** grid, int roomCount, room_t* rooms, char* fileName) {
